@@ -1,0 +1,398 @@
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    }
+
+body {
+    background : white;
+    color: black;
+    font-family:sans-serif;
+    margin:0;
+    padding:0;
+}
+
+/* Styles for header including the navgiation menus */
+
+header {
+    display: grid;
+    background-color: white;
+    color: black;
+    font-size:12px;
+    position: fixed;
+    width: 1080px;
+    z-index: 100;
+    grid-template-columns: 60% 40%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+
+}
+
+.main-section {
+    text-decoration:none;  
+    padding-left: 90px;  
+    margin-left: 20px;    
+}
+
+.menu-section {
+    display: flex;
+    justify-content: space-evenly;
+    color:black;
+}
+
+a{
+    text-decoration:none;
+    color:black;
+    text-decoration: none;
+}
+
+.change-color:hover {
+    color:#af9453;
+
+}
+
+
+/* Styles for the first image and text written on it */
+
+
+.img-container{
+    background: url('./images/image3.png') no-repeat;
+    background-size: 1080px 750px;
+    background-attachment: fixed;
+    position: relative;
+    width: 1080px;
+    height: 650px;
+    margin: 0;
+    z-index: -1;
+}
+
+.text-overlay{
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform : translate(-50%, -50%);
+    color: white;
+    text-align : center;
+    font-family: 'EB Garamond', serif;
+    font-size: 50px;
+    text-align: center;
+    z-index: 1;
+    letter-spacing: 15px;
+    line-height: 65px;
+    
+
+}
+
+/* BEGIN-----Services and image styles */
+
+.services{
+    width: 1080px;
+    padding: 60px;
+    display: grid;
+    z-index: 1;
+}
+
+.img-container-2{
+     position: absolute;
+     margin-left: 15px;     
+}
+
+.img_container2{
+    height: 483px;
+    width: 300px;
+}
+
+.image1 {
+    margin-left: 420px;
+    margin-right: 20px;
+    width: 10px;
+    
+    
+}
+
+.img1{
+    width: 540px;
+    height: 483px;
+    
+}
+
+.text-overlay-flower{
+    position: absolute;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align : center;
+    z-index: 2;
+    padding: 20px;
+}
+
+.line1{
+    bottom: 325px;
+    left: 155px;
+    position: relative;
+    font-family:sans-serif;
+    font-size: 20px;
+    letter-spacing: 10px;
+}
+.line2{
+    position: relative;
+    bottom: 235px;
+    left: 155px;
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    font-weight: lighter;
+    letter-spacing: 2px;
+    line-height: 15px;
+
+}
+.line3{
+    position: relative;
+    bottom: 240px;
+    left: 155px;
+    font-family: 'EB Garamond', serif;
+    font-size: 18px;
+    font-weight: lighter;
+
+}
+.discover-button1{
+    position: absolute;
+    bottom: 200px; 
+    left: 175px;
+    padding: 8px 16px;
+    color: white;
+    font-family:sans-serif;
+    font-size: 12px; 
+    text-decoration: none;
+    border: 1px solid white;
+    z-index: 10;
+    width: 210px;
+    text-align: center;
+
+}
+
+
+/* END-----Services and image styles */
+
+
+/* BEGIN--- testimonial SECTION */
+
+div span::after {
+    content: "\A\A"; 
+    white-space: pre;
+}
+
+.testimonial {
+    width: 800px;
+    padding: 80px 0px 80px 0px;
+    padding-left: 275px;
+    padding-top: 0px;
+    padding-bottom: 100px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.content {
+    text-align: center;
+    margin: 0 20px;
+    width: 800px; 
+}
+
+.test{
+    text-align : center;
+    font-family: 'EB Garamond', serif;
+    font-size: 30px;
+    letter-spacing: 3px;
+    display:block;
+    line-height: 45px;
+    width: 487.78px;
+
+
+}
+.quotes {
+    display: inline-block;
+    font-size: 64px; 
+    vertical-align: middle;
+    font-family: 'Times New Roman', Times, serif;
+    
+    
+}
+.leftarrow {
+    text-align: left;
+    margin-right: 200px; 
+    font-size: 23px;
+    line-height: 1;
+    color:#af9453;
+    margin-top: 85px;
+}
+
+.rightarrow {
+    margin-top: 85px;
+    text-align: right;
+    line-height: 1;
+    margin-left: 200px; 
+    font-size: 23px;
+    color:#af9453;
+    font-family:sans-serif;
+}
+
+.author{
+    margin-top: 40px;
+    color:#af9453;
+    font-size: 13px;
+    
+}
+
+
+/* END--- testimonial SECTION */
+
+
+/* BEGIN--- gallery SECTION */
+
+.gallery-container{
+    background: url('./images/image2.png');
+    background-repeat: no-repeat;
+    background-size: 1080px 980px;
+    height: 650px;
+    background-attachment: fixed;
+    width: 980px;
+    left: 50px;
+    position: relative;
+    z-index: -1;
+    margin-right: 95px;
+}
+
+.small_img_container {
+    height: 100%;
+}
+
+.small-image{
+    position: absolute;
+    top:55px;
+    right: 75px;
+    width: 300px;
+    height: 520px;
+}
+
+.text-container {
+    position: absolute;
+    left: -275px; 
+    color: white;
+}
+
+.gallery-text {
+    position: absolute;
+    font-family: sans-serif;
+    font-size: 30px;
+    color:white;
+    z-index: 10;
+    top: 175px;
+    right: 100px;
+    letter-spacing: 15px;
+}
+
+.memories-text {
+    position: absolute;
+    font-family: 'EB Garamond', serif;
+    color: white;
+    font-size: 20px;
+    margin-top: 10px; 
+    z-index: 10;
+    bottom: 255px;
+    right: 135px;
+    display: block;
+    text-align: center;
+    letter-spacing: 5px;
+    line-height: 29px;
+}
+
+
+.discover-button {
+    position: absolute;
+    bottom: 200px; 
+    right: 120px; 
+    padding: 8px 16px;
+    color: white;
+    font-family: sans-serif;
+    font-size: 12px; 
+    text-decoration: none;
+    border: 1px solid white;
+    z-index: 10;
+    width: 210px;
+    text-align: center;
+
+}
+
+
+/* END--- gallery SECTION */
+
+
+
+/* BEGIN--- footer SECTION */
+.footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    margin-left: 50px;
+    margin-top: 100px;
+    width: 984px;
+    background-color: #af9453;
+    color: white;
+    font-size: 13px;
+}
+
+.left_sec{
+    display: flex;
+    align-items: center;
+    
+}
+.right_sec{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    
+}
+.foot1{
+    margin-right: 25px;
+    margin-left: 25px;
+    border-right: 1px solid white;
+    padding-right: 35px;
+    line-height: 18px;
+
+}
+.foot2{
+    margin-right: 25px;
+    margin-left: 25px;
+    padding-right: 35px;
+    line-height: 18px;
+
+}
+
+.vl {
+    border-right: 1px solid white;
+    height: 50px;
+}
+
+.button_consult{
+    border: white solid 1px;
+    padding: 10px;
+    margin-right: 60px;
+}
+
+#copyright{
+    margin-right: 120px;
+    margin-bottom: 35px;
+}
+
+.small_img_container{
+    max-width: 1080px;
+    width: 800px;
+}
+
+.flower-image-text {
+    max-width: 100%;
+    width: 984px;
+}
+
+/* END--- footer SECTION */
