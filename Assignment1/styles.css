@@ -57,7 +57,7 @@ a{
 
 
 .img-container{
-    background: url('./images/image3.png') no-repeat;
+    background: url('./Images/image3.png') no-repeat;
     background-size: 1080px 750px;
     background-attachment: fixed;
     position: relative;
@@ -250,7 +250,7 @@ div span::after {
 /* BEGIN--- gallery SECTION */
 
 .gallery-container{
-    background: url('./images/image2.png');
+    background: url('./Images/image2.png');
     background-repeat: no-repeat;
     background-size: 1080px 980px;
     height: 650px;
