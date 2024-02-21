@@ -1,0 +1,156 @@
+body {
+    background-image: url('/static/images/back.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    /* background-size: cover;
+    background-attachment: fixed; */
+    font-family: sans-serif;
+}
+
+#stock-search {
+    text-align: center;
+    margin-bottom: 20px;
+    size: 120px;
+    /* not working */
+}
+
+#page-container {
+    text-align: center;
+    padding-top: 50px;
+    position: relative;
+    width: 500px;
+    margin: 0 auto;
+}
+
+#search-form {
+    position: relative;
+    display: inline-block;
+    width: 500px;
+}
+
+#search-form input[type="text"] {
+    padding: 10px;
+    padding-left: 40px;
+    /* Make room for search icon */
+    padding-right: 40px;
+    /* Make room for clear icon */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: calc(100% - 80px);
+    /* Adjust width accounting for buttons */
+}
+
+.icon-button {
+    position: absolute;
+    top: 1px;
+    /* Align with the input field */
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    outline: none;
+    width: 40px;
+    /* Width of the icon area */
+    height: calc(100% - 2px);
+    /* Height matches input field */
+}
+
+#search-button {
+    left: 1px;
+    /* Positioning the search button */
+    z-index: 10;
+}
+
+#clear-button {
+    right: 1px;
+    /* Positioning the clear button */
+}
+
+.icon-button svg {
+    width: 20px;
+    /* Set the width of the SVG */
+    height: 20px;
+    /* Set the height of the SVG */
+    fill: #000;
+    /* This sets the color of the SVG */
+    opacity: 0.5;
+    /* Adjust the opacity as needed */
+}
+
+#results {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    /* Or any color you want */
+    background-color: #fff;
+    /* Or any background color you want */
+    border: 1px solid #ccc;
+    /* Optional: if you want a border around the message */
+    padding: 10px;
+    margin-top: 20px;
+    /* Space above the error message */
+    display: inline-block;
+    /* Or block, depending on how you want it displayed */
+    border-radius: 4px;
+    /* Optional: if you want rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Optional: if you want a shadow for some depth */
+}
+
+
+/* Style the tab */
+
+.tab {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    margin: 170px 120px 0px 80px;
+}
+
+
+/* Style the buttons that are used to open the tab content */
+
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+}
+
+
+/* Change background color of buttons on hover */
+
+.tab button:hover {
+    background-color: #ddd;
+}
+
+
+/* Create an active/current tablink class */
+
+.tab button.active {
+    background-color: #ccc;
+}
+
+
+/* Style the tab content */
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-top: none;
+}
+
+
+/* Style for when a tab content is displayed */
+
+.tabcontent.show {
+    display: block;
+}
