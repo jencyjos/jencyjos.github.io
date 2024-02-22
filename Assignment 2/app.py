@@ -4,6 +4,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from flask_cors import CORS
 
+
 app = Flask(__name__)
 CORS(app)
 
@@ -14,20 +15,44 @@ def index():
 FINNHUB_API_KEY = 'cn970v9r01qoee99qev0cn970v9r01qoee99qevg'
 POLYGON_API_KEY = 'HBp4N5C5bsRuA9F3iLdmlRZKAwhXJOd8'
 
+# @app.route('/company', methods=['GET'])
+# def get_company():
+#     symbol = request.args.get('symbol')
+#     api_endpoint = f"https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={FINNHUB_API_KEY}"
+#     res = requests.get(api_endpoint)
+#     response = res.json()
+#     return jsonify(response), 200
+
+
 @app.route('/company', methods=['GET'])
 def get_company():
     symbol = request.args.get('symbol')
+    # if not symbol:
+    #     return jsonify({'error': 'No symbol provided'}), 400
     api_endpoint = f"https://finnhub.io/api/v1/stock/profile2?symbol={symbol}&token={FINNHUB_API_KEY}"
     res = requests.get(api_endpoint)
+    if res.status_code != 200:
+        return jsonify({'error': 'Failed to fetch data from Finnhub'}), res.status_code
     response = res.json()
+    # Check if the response is empty which indicates no data found for the symbol
+    if not response:
+        # Return a 404 Not Found without an error message
+        return jsonify({}), 404
     return jsonify(response), 200
+
 
 @app.route('/stock_summary', methods=['GET'])
 def stock_summary():
     symbol = request.args.get('symbol')
     api_endpoint = f"https://finnhub.io/api/v1/quote?symbol={symbol}&token={FINNHUB_API_KEY}"
     res = requests.get(api_endpoint)
+    if res.status_code != 200:
+        return jsonify({'error': 'Failed to fetch data from Finnhub'}), res.status_code
     response = res.json()
+    # Check if the response is empty which indicates no data found for the symbol
+    if not response:
+        # Return a 404 Not Found without an error message
+        return jsonify({}), 404
     return jsonify(response), 200
 
 @app.route('/stock_summary/recommendation', methods=['GET'])
@@ -35,7 +60,13 @@ def stock_summary_recommendation():
     symbol = request.args.get('symbol')
     api_endpoint = f"https://finnhub.io/api/v1/stock/recommendation?symbol={symbol}&token={FINNHUB_API_KEY}"
     res = requests.get(api_endpoint)
+    if res.status_code != 200:
+        return jsonify({'error': 'Failed to fetch data from Finnhub'}), res.status_code
     response = res.json()
+    # Check if the response is empty which indicates no data found for the symbol
+    if not response:
+        # Return a 404 Not Found without an error message
+        return jsonify({}), 404
     return jsonify(response), 200
 
 @app.route('/historydata', methods=['GET'])
