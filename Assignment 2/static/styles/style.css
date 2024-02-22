@@ -1,23 +1,23 @@
 body {
     background-image: url('/static/images/back.svg');
     background-repeat: no-repeat;
-    background-position: center;
-    /* background-size: cover;
-    background-attachment: fixed; */
+    background-size: 1600px 250px;
+    background-attachment: fixed; 
     font-family: sans-serif;
 }
 
 #stock-search {
     text-align: center;
     margin-bottom: 20px;
-    size: 120px;
+    font-size: 30px; 
+    
     /* not working */
 }
 
 #page-container {
     text-align: center;
     padding-top: 50px;
-    position: relative;
+    /* position: relative; */
     width: 500px;
     margin: 0 auto;
 }
@@ -40,6 +40,7 @@ body {
     width: calc(100% - 80px);
     /* Adjust width accounting for buttons */
 }
+
 
 .icon-button {
     position: absolute;
@@ -77,16 +78,13 @@ body {
     /* Adjust the opacity as needed */
 }
 
-#results {
+#not-found-error {
     margin-top: 20px;
     text-align: center;
 }
 
 .error-message {
-    color: red;
-    /* Or any color you want */
-    background-color: #fff;
-    /* Or any background color you want */
+    color: black;
     border: 1px solid #ccc;
     /* Optional: if you want a border around the message */
     padding: 10px;
@@ -106,7 +104,7 @@ body {
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
-    background-color: #f1f1f1;
+    /* background-color: #f1f1f1; */
     margin: 170px 120px 0px 80px;
 }
 
@@ -134,9 +132,9 @@ body {
 
 /* Create an active/current tablink class */
 
-.tab button.active {
+/* .tab button.active {
     background-color: #ccc;
-}
+} */
 
 
 /* Style the tab content */
@@ -154,3 +152,90 @@ body {
 .tabcontent.show {
     display: block;
 }
+
+/* Initially hide the #page-container-2 */
+#page-container-2.inactive {
+    display: none; /* Hide the container */
+}
+
+/* When active, show the #page-container-2 */
+#page-container-2.active {
+    display: block; /* Show the container */
+}
+
+/* 
+.recommendation-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.recommendation-item {
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+
+}
+
+
+.strong-sell { background-color: #f44336; }
+.sell { background-color: #ff9800; }
+.hold { background-color: #ffeb3b; }
+.buy { background-color: #4caf50; }
+.strong-buy { background-color: #2196f3; }
+
+.recommendation-labels {
+    display: flex;
+    justify-content: center;
+}
+
+.label {
+    margin: 0 5px;
+
+} */
+
+
+.recommendation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.recommendation-item {
+    margin: 0 10px; /* Adjust spacing between items */
+    padding: 10px; /* Adjust the padding to increase the size of the boxes */
+    border-radius: 5px;
+    width: 40px; /* Set a fixed width for the boxes */
+    text-align: center; /* Center the text horizontally */
+    color: #fff; /* Set text color to white for better contrast */
+    font-weight: bold; /* Make the text bold */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em; /* Adjust font size as needed */
+}
+
+.strong-sell { background-color: #d9534f; }
+.sell { background-color: #f0ad4e; }
+.hold { background-color: #5bc0de; }
+.buy { background-color: #5cb85c; }
+.strong-buy { background-color: #337ab7; }
+
+.recommendation-labels {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em; /* Adjust font size as needed */
+}
+
+.label {
+    margin: 0 10px; /* Adjust spacing between labels */
+    display: inline-block; /* Align the labels properly */
+}
+
+
+
+
+
+
