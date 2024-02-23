@@ -1,10 +1,20 @@
-// Function to initialize the page (hide tabs and clear error message)
-function initializePage() {
+// Modify the function signature to include a parameter for clearing error messages
+function initializePage(clearErrorMessage = true) {
     document.getElementById('page-container-2').classList.add('inactive');
     document.getElementById('page-container-2').classList.remove('active');
     clearAndHideTabs();
-    document.getElementById('not-found-error').textContent = '';
+    if (clearErrorMessage) {
+        document.getElementById('not-found-error').textContent = '';
+    }
 }
+
+// Update the clear-button event listener to pass false when you don't want to clear the error message
+document.getElementById('clear-button').addEventListener('click', function() {
+    document.getElementById('stock-symbol-input').value = ''; 
+    // Pass false here if you want to clear the error message explicitly in this context
+    initializePage();
+});
+
 
 // Call initializePage when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializePage);
@@ -13,6 +23,7 @@ document.addEventListener('DOMContentLoaded', initializePage);
 function activatePageContainer2() {
     document.getElementById('page-container-2').classList.remove('inactive');
     document.getElementById('page-container-2').classList.add('active');
+    document.querySelector('.tab').style.display = 'block'; 
     activateTabs(); // Assuming you want to activate the tabs at the same time
 }
 
@@ -21,24 +32,20 @@ function clearAndHideTabs() {
     var tabcontents = document.getElementsByClassName("tabcontent");
     for (var i = 0; i < tabcontents.length; i++) {
         tabcontents[i].innerHTML = ''; // Clear the content
-        tabcontents[i].style.display = 'none'; // Hide the tab content
     }
     var tablinks = document.getElementsByClassName("tablinks");
     for (var j = 0; j < tablinks.length; j++) {
+        tabcontents[i].style.display = 'none'; // Hide the tab content
         tablinks[j].classList.add('disabled'); // Disable the tab buttons
     }
 }
 
 document.getElementById('clear-button').addEventListener('click', function() {
-    document.getElementById('stock-symbol-input').value = ''; // Clear the input field
-    document.getElementById('not-found-error').innerHTML = ''; // Clear any error messages
 
-    // Add the functionality to make #page-container-2 inactive again
-    document.getElementById('page-container-2').classList.add('inactive');
-    document.getElementById('page-container-2').classList.remove('active');
-
-    // Optionally, you can also clear the content of the tabs or reset their state
-    clearAndHideTabs();
+    
+    document.getElementById('stock-symbol-input').value = ''; 
+    document.getElementById('not-found-error').innerHTML = ''; 
+    initializePage();
 });
 
 // Function to activate tab buttons
@@ -60,10 +67,8 @@ function displayError(message) {
 
 document.getElementById('search-button').addEventListener('click', async function(event) {
     event.preventDefault(); // Prevent the form from submitting via HTTP GET
-    let stockSymbol = document.getElementById('stock-symbol-input').value.trim();
-    // if (stockSymbol === '') {
-    //     alert('Please fill out this field.');
-    // } else {
+    let stockSymbol = document.getElementById('stock-symbol-input').value.trim().toUpperCase();
+
     if(stockSymbol != '')
     {
         try {
@@ -74,13 +79,13 @@ document.getElementById('search-button').addEventListener('click', async functio
                 fetchAndDisplayStockSummaryRecommendation(stockSymbol),
                 fetchAndDisplayHighCharts(stockSymbol),
                 fetchAndDisplayLatestNews(stockSymbol)
-                // You can add additional fetch calls here for other APIs
             ]);
             activatePageContainer2(); // Activate the container only if all fetch calls are successful
             activateCompanyTab(); // Activate the "Company" tab by default
             
         } catch (error) {
             displayError(error.message); // Handle any errors from the fetch calls
+            initializePage(false);
         }
     }
 });
@@ -156,7 +161,7 @@ async function fetchAndDisplayStockSummary(symbol) {
 }
 
 function displayStockSummaryData(symbol,data) {
-    let stockSummaryContent = document.getElementById('StockSummary');
+    let stockSummaryContent = document.getElementById("StockSummary");
     let month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     let myDate = new Date(data.t * 1000); // If your epoch time is in seconds, multiply by 1000
     let dateStr = myDate.getUTCDate() + " " + month[(myDate.getUTCMonth())] + "," + myDate.getUTCFullYear();
@@ -187,8 +192,6 @@ function displayStockSummaryData(symbol,data) {
     </table>
     `;
 }
-
-
 
 // ------------------------STOCK SUMMARY RECOMMENDATION-------------------------------------------
 
@@ -280,21 +283,12 @@ function displayStockSummaryRecommendationData(data) {
 
 
 
-
 // -----------------------------------------HIGH CHARTS-------------------------------------------
 
 async function fetchAndDisplayHighCharts(symbol) {
     const response = await fetch(`/historydata?symbol=${encodeURIComponent(symbol)}`);
     const jsonData = await response.json();
 
-    // const response = await fetch(`/history_data?symbol=${encodeURIComponent(symbol)}`);
-    // const data = await response.json();
-    // if (Object.keys(data).length === 0) {
-    //     throw new Error('Error: No record has been found, please enter a valid symbol'); // Use throw to jump to catch block
-    // } else {
-    //     document.getElementById('not-found-error').textContent = '';
-    //     displayHighCharts(data);
-    // }
     if (jsonData.results && jsonData.results.length > 0) {
         // Extract the price and volume data
         const priceData = jsonData.results.map(point => [point.t, point.c]);
@@ -344,42 +338,42 @@ async function fetchAndDisplayHighCharts(symbol) {
             yAxis: [
                 {
                   // This will be the primary (left) y-axis for the stock price
-                  labels: {
+                labels: {
                     align: "right",
                     x: -3,
-                  },
-                  title: {
+                },
+                title: {
                     text: "Stock Price",
-                  },
-                  startOnTick: false,
-                  endOnTick: false,
+                },
+                startOnTick: false,
+                endOnTick: false,
                   // height: '60%',
-                  lineWidth: 2,
-                  resize: {
+                lineWidth: 2,
+                resize: {
                     enabled: true,
-                  },
-                  opposite: false,
+                },
+                opposite: false,
                 },
                 {
                   // This will be the secondary (right) y-axis for the volume
-                  tickPixelInterval: 10,
-                  labels: {
+                tickPixelInterval: 10,
+                labels: {
                     align: "right",
                     x: -3,
-                  },
-                  title: {
-                    text: "Volume",
-                  },
-                  startOnTick: false,
-                  endOnTick: false,
-                  // height: '55%',
-                  offset: 0,
-                  lineWidth: 2,
                 },
-              ],
-              tooltip: {
+                title: {
+                    text: "Volume",
+                },
+                startOnTick: false,
+                endOnTick: false,
+                  // height: '55%',
+                offset: 0,
+                lineWidth: 2,
+                },
+            ],
+            tooltip: {
                 split: true,
-              },
+            },
         
             series: [{
                 type: 'area',
@@ -405,6 +399,7 @@ async function fetchAndDisplayHighCharts(symbol) {
                 type: 'column',
                 name: 'Volume',
                 data: volumeData,
+                color:'black', pointPlacement: 'on',
                 yAxis: 1,
                 tooltip: {
                     valueDecimals: 0
@@ -433,6 +428,7 @@ async function fetchAndDisplayLatestNews(symbol) {
 
 function displayLatestNews(data) {
     let latestNewsContent = document.getElementById('LatestNews');
+    latestNewsContent.innerHTML = ''; //Clearing previous news
     let month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     let count = 0;
 
@@ -452,9 +448,9 @@ function displayLatestNews(data) {
                 </div>
             </div>
             `;
-            count++; //
+            count++; 
         }
 
-      }
+    }
     
 }
