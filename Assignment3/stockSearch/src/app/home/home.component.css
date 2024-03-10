@@ -1,0 +1,39 @@
+/* Ensure the input group buttons are flush against the input */
+.input-group .btn {
+    border: 1px solid #ced4da;
+    background-color: white;
+    color: #495057;
+    border-left: none; /* Removes border between buttons and input */
+  }
+  
+  /* For rounded input and buttons */
+  .input-group .form-control {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+  
+  .input-group .btn:first-child {
+    border-radius: 0 0.25rem 0.25rem 0;
+  }
+  
+  .input-group .btn:last-child {
+    border-radius: 0.25rem 0 0 0.25rem;
+  }
+  
+  /* Custom styles for the input group */
+  .input-group {
+    border-radius: 3rem;
+    overflow: hidden;
+    border: 3.9px solid #282cb4; /* Border color for the whole input group */
+  }
+  
+  /* Custom styles for the buttons to override Bootstrap's default */
+  .btn-outline-primary {
+    border-color: #495057;
+    
+  }
+  
+  .btn-outline-primary:hover {
+    background-color: #495057;
+    color: white;
+  }
+  
