@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms'; //To use two-way data binding with [(ngModel)] for form inputs
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; //navbar
 
 import { HomeComponent } from './home/home.component';
 import { SearchDetailsComponent } from './search-details/search-details.component';
@@ -21,7 +22,8 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
   imports: [
     BrowserModule,
     AppRoutingModule, // make sure AppRoutingModule is listed in imports
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]

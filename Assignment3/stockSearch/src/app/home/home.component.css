@@ -1,39 +1,93 @@
-/* Ensure the input group buttons are flush against the input */
-.input-group .btn {
-    border: 1px solid #ced4da;
-    background-color: white;
-    color: #495057;
-    border-left: none; /* Removes border between buttons and input */
-  }
-  
-  /* For rounded input and buttons */
-  .input-group .form-control {
-    border-radius: 0.25rem 0 0 0.25rem;
-  }
-  
-  .input-group .btn:first-child {
-    border-radius: 0 0.25rem 0.25rem 0;
-  }
-  
-  .input-group .btn:last-child {
-    border-radius: 0.25rem 0 0 0.25rem;
-  }
-  
-  /* Custom styles for the input group */
-  .input-group {
+/* ------------- navbar styles---------- */
+
+.navbar.bg-light {
+    background-color: #282cb4 !important;
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: white; /* Keeps the link white on hover and focus */
+    background-color: transparent; /* No background color change on hover and focus */
+}
+
+.navbar .nav-link.active {
+    color: white;
+    /* background-color: #fff; White background for the active state */
+    border: 1.75px solid white; /* Border color for the active state */
+    border-radius: 1rem; /* Rounded corners for the active state */
+    padding: 0.375rem 0.75rem; /* Padding to match the height of the search bar */
+}
+
+/* Adjust the padding for the brand name */
+.navbar-brand {
+    padding-left: 1rem; /* Adjust the value as needed */
+}
+
+/* Adjust the space between menu items */
+.navbar-nav .nav-link {
+    margin-right: 1rem; /* Adjust the value as needed */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.55)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+.navbar-toggler {
+    border: 2px solid rgba(255, 255, 255, 0.5); /* Adjust alpha for transparency */
+}
+.navbar-toggler:active {
+    border-width: 3px; /* Adjust as needed */
+}
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+/* ---------stock search styles------------ */
+
+.input-group {
     border-radius: 3rem;
     overflow: hidden;
     border: 3.9px solid #282cb4; /* Border color for the whole input group */
-  }
-  
-  /* Custom styles for the buttons to override Bootstrap's default */
-  .btn-outline-primary {
-    border-color: #495057;
-    
-  }
-  
-  .btn-outline-primary:hover {
-    background-color: #495057;
-    color: white;
-  }
-  
+}
+
+.input-group-text {
+    background-color: white;
+    border: none; /* No border for the input group prepend/append */
+    color: #495057;
+}
+
+.input-group .form-control {
+    border: none; /* Removes border around input */
+}
+
+/* Custom styles for the buttons to override Bootstrap's default */
+.btn-outline-primary {
+    border-color:white;  /*Match the border color of the input group */
+    color: black;
+}
+
+.btn-outline-primary:hover {
+    background-color:white;
+    color: black;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.form-control:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Responsive styles */
+@media (max-width: 575.98px) {
+    .navbar .nav-link.active {
+        border-radius: 0.5rem; /* Smaller border-radius for mobile screens */
+        padding: 0.375rem 0.75rem; /* Adjust padding for mobile screens */
+    }
+}
