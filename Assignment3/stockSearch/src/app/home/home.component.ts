@@ -9,6 +9,8 @@ import { Component } from '@angular/core';
 export class HomeComponent {
   searchQuery: string = '';
 
+  isNavbarCollapsed = true;
+
   constructor() {
     // Inject any necessary services
   }
