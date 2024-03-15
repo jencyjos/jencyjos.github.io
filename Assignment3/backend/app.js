@@ -16,7 +16,28 @@ app.get('/', (req, res) => {
   res.send('backend is running!');
 });
 
-app.get('/api/stock/:ticker', async(req,res) => {
+
+//API Call to display company details upon search above tabs
+app.get('/api/stock/profile:ticker', async(req,res) => {
+  const ticker = req.params.ticker;
+  const finnhubApi = `https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
+
+  try {
+    const response = await fetch(finnhubApi);
+    if (!response.ok) {
+      throw new Error(`Error from Finnhub API: ${response.statusText}`);
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+//API call for summary tab
+app.get('/api/stock/quote:ticker', async(req,res) => {
   const ticker = req.params.ticker;
   const finnhubApi = `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
 
@@ -31,7 +52,6 @@ app.get('/api/stock/:ticker', async(req,res) => {
     console.error(error);
     res.status(500).json({ message: error.message });
   }
-
 });
 
 app.listen(port, () => {
