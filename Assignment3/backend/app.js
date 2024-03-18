@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 // import fetch from 'node-fetch';
 
 const app = express();
-const port = process.env.port || 3000; 
+const port = process.env.PORT || 3000; 
 
 // middleware to enable cors and json body parsing
 app.use(cors());
@@ -17,11 +17,10 @@ app.get('/', (req, res) => {
 });
 
 
-//API Call to display company details upon search above tabs
-app.get('/api/stock/profile:ticker', async(req,res) => {
+//API Call for company details upon search above tabs
+app.get('/api/stock/profile/:ticker', async(req,res) => {
   const ticker = req.params.ticker;
   const finnhubApi = `https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
-
   try {
     const response = await fetch(finnhubApi);
     if (!response.ok) {
@@ -37,10 +36,9 @@ app.get('/api/stock/profile:ticker', async(req,res) => {
 
 
 //API call for summary tab
-app.get('/api/stock/quote:ticker', async(req,res) => {
+app.get('/api/stock/quote/:ticker', async(req,res) => {
   const ticker = req.params.ticker;
   const finnhubApi = `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
-
   try {
     const response = await fetch(finnhubApi);
     if (!response.ok) {

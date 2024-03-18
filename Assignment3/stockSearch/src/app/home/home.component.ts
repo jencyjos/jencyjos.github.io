@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { StockService } from '../services/stock.service';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +13,7 @@ export class HomeComponent {
 
   isNavbarCollapsed = true;
 
-  constructor() {
-    // Inject any necessary services
-  }
+  constructor(private stockService: StockService, private router: Router) {}
 
   onSearch(): void {
     if (!this.searchQuery) {
@@ -21,7 +21,8 @@ export class HomeComponent {
       console.log("no search query")
       return;
     }
-    console.log("searching for",this.searchQuery)
+    console.log("searching for",this.searchQuery);
+    this.router.navigate(['/search', this.searchQuery]);
     // Perform the search using the searchQuery
     // This usually involves calling a service that handles HTTP requests
   }
