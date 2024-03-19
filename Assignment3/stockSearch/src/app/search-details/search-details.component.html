@@ -1,3 +1,4 @@
+
 <!-- Conditionally display the entire details section only if stockProfile and stockQuote data is available -->
 <div *ngIf="stockProfile && stockQuote" class="stock-details">
 
@@ -28,56 +29,40 @@
       <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo">
       <p>Market is {{ marketOpen ? 'Open' : 'Closed' }}</p>
     </div>
-    
-    <!-- Tabs section for summary, news, charts, and insights -->
-    <div class="tabs-section">
-      <ul class="nav nav-tabs">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Summary</a>
-        </li>
-        <!-- Additional tabs as needed -->
-      </ul>
-      
-      <!-- Content for the selected tab -->
-      <div class="tab-content">
-        <!-- Summary tab content -->
-        <div class="tab-pane active" id="summary" role="tabpanel">
-          <!-- Summary content will go here -->
-        </div>
-        <!-- Additional tab panes as needed -->
-      </div>
-    </div>
-    
-  </div>
-  
 
+    <mat-tab-group>
 
+        <mat-tab label="Summary">
+            <div class="summary-content">
+                <!-- Stock Quote Information -->
+                <div class ="summary-section">
+                    <p>High Price: {{ stockQuote.h }}</p>
+                    <p>Low Price: {{ stockQuote.l }}</p>
+                    <p>Open Price: {{ stockQuote.o }}</p>
+                    <p>Prev. Price: {{ stockQuote.pc }}</p>
+                </div>
+                <!-- Company Basic Information -->
+                <div class="company-info">
+                    <h3>About the Company</h3>
+                    <p>IPO Date: {{ stockProfile.ipo | date }}</p>
+                    <p>Industry: {{ stockProfile.finnhubIndustry }}</p>
+                    <p>Webpage: {{ stockProfile.weburl }}</p>
+                    <!-- <p>Company peers: <br> {{ companyPeers.response }}</p> -->
+                </div>
+            </div>
 
+        </mat-tab>
 
-  
+        <mat-tab label="Top News">
+          <!-- Top News tab content goes here -->
+        </mat-tab>
 
-<!-- <div *ngIf="stockProfile">
-    <h2>{{ stockProfile.ticker }}</h2>
-    <p> {{ stockProfile.name }}
-        {{ stockProfile.exchange }}
-    </p>
-</div>
+        <mat-tab label="Charts">
+          <!-- Charts tab content goes here -->
+        </mat-tab>
 
-<div *ngIf="stockProfile">
-    <p> {{ stockProfile.logo }}
-    </p>
-</div>
-  
-<div *ngIf="stockQuote">
-    <h2> Summary </h2>
-    <p> High Price : {{ stockQuote.h}} <br>
-        Low Price : {{ stockQuote.c}} <br>
-        Open Price : {{ stockQuote.o}} <br>
-        Prev. Close : {{ stockQuote.pc}} <br>
-        About the company <br>
-        IPO Start Date : {{ stockProfile.ipo}}
-    </p>
-</div>
+        <mat-tab label="Insights">
+          <!-- Insights tab content goes here -->
+        </mat-tab>
 
-
-   -->
+    </mat-tab-group>

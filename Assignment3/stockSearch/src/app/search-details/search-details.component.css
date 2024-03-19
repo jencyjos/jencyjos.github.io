@@ -1,3 +1,5 @@
+
+
 /* Overall layout */
 .stock-details {
     font-family: Arial, sans-serif;
@@ -46,11 +48,12 @@
 .center-section img {
     max-width: 100px; /* Adjust as needed */
     margin-bottom: 10px;
+
 }
 
-/* Tabs section */
+/* Tabs section
 .tabs-section {
-    /* border-bottom: 1px solid #ccc; */
+    
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -61,14 +64,67 @@
 
 .nav-link {
     margin-right: 20px;
-    color: #007bff; /* Bootstrap primary color */
+    color: #007bff; 
     border: none;
     padding-bottom: 5px;
 }
 
 .nav-link.active {
     border-bottom: 2px solid #007bff;
+} */
+
+
+
+/* Center the tab labels within the tab group */
+.mat-tab-group {
+    display: flex;           /* Enables flexbox */
+    justify-content: center; /* Centers flex items on the main axis (horizontally) */
+    border-bottom: 1px solid #007bff; /* Same as your nav-tabs */
 }
+
+/* Ensure the tab labels take up equal space and are centered */
+.mat-tab-labels {
+    display: flex;           /* Enables flexbox */
+    justify-content: center; /* Centers flex items on the main axis (horizontally) */
+}
+
+/* Individual tab label styling */
+.mat-tab-label {
+    padding: 20px; /* Adjust padding to match your design */
+    color: #007bff; /* Set the default color to blue */
+    flex: 1;        /* Distribute space evenly */
+    text-align: center; /* Center the text inside the tab label */
+}
+
+.mat-tab-label-active {
+    color: #007bff; /* Set the active color to blue */
+    border-bottom: 2px solid #007bff; /* Blue underline for active tab */
+}
+
+/* Override ink bar (the moving underline) color to blue */
+.mat-ink-bar {
+    background-color: #007bff !important;
+}
+
+/* Adjust mat-tab-body content padding if needed */
+.mat-tab-body-content {
+    padding: 10px; /* Adjust padding to match your design */
+}
+
+.summary-content h3 {
+    color: #333;
+    font-size: 1.2rem;
+    margin-top: 1rem;
+}
+
+.summary-content p {
+    color: #555;
+    margin: 0.5rem 0;
+}
+
+
+
+
 
 /* Price and percentage changes */
 .positive {
@@ -78,6 +134,8 @@
 .negative {
     color: red;
 }
+
+  
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
