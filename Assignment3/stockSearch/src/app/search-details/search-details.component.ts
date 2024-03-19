@@ -9,10 +9,11 @@ import { StockService } from '../services/stock.service';
   
 })
 export class SearchDetailsComponent implements OnInit {
-  // ticker: string;
   ticker: string = '';
-  stockData: any;
+  stockProfile: any;
   stockQuote: any;
+  inPortfolio: boolean = false; // Determine if stock is in portfolio
+  marketOpen: boolean = false; // Determine if market is open
 
   constructor(
     private route: ActivatedRoute,
@@ -44,18 +45,42 @@ export class SearchDetailsComponent implements OnInit {
   // }
 
 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.ticker = params['ticker'];
-      this.stockService.getStockQuote(this.ticker).subscribe(data => {
+      ngOnInit(): void {
+        this.route.params.subscribe(params => {
+        this.ticker = params['ticker'];
+
+        if (this.ticker === null) {
+          throw new Error('Ticker parameter is missing');
+        }
+
+        this.stockService.getStockQuote(this.ticker).subscribe(data => {
         this.stockQuote = data;
-        console.log(this.stockQuote);
+          console.log(this.stockQuote);
       });
 
-      this.stockService.getStockProfile(this.ticker).subscribe(data => {
-        this.stockData = data;
-        console.log(this.stockData);
+        this.stockService.getStockProfile(this.ticker).subscribe(data => {
+          this.stockProfile = data;
+          this.determineMarketStatus();
+          console.log(this.stockProfile);
+        });
       });
-    });
-  }
+    }
+
+
+    // Check if stock is in portfolio
+    // You would typically have a service to check your portfolio
+    // This is just a placeholder implementation
+    // this.inPortfolio = this.portfolioService.checkStock(ticker);
+  
+    determineMarketStatus() {
+      // Logic to determine if market is open based on stockQuote data
+      // This could involve checking the current time against the 't' property
+      // in the stockQuote object, which would require some date conversion
+      // Assuming stockQuote.t is a timestamp
+      let currentTime = new Date().getTime();
+      let marketCloseTime = new Date(this.stockQuote.t).getTime();
+      this.marketOpen = currentTime < marketCloseTime;
+    }
+
+  
 }

@@ -1,5 +1,83 @@
-<p>search-details works!</p>
-<div *ngIf="stockData">
-    <h2>{{ ticker }}</h2>
-    <!-- Your other elements for displaying stock data -->
+<!-- Conditionally display the entire details section only if stockProfile and stockQuote data is available -->
+<div *ngIf="stockProfile && stockQuote" class="stock-details">
+
+    <!-- Top section with symbol, name, exchange, buy/sell buttons -->
+    <div class="top-section">
+      <!-- Left side for stock symbol, name, exchange -->
+      <div class="left-side">
+        <h2>{{ stockProfile.ticker }}</h2>
+        <p>{{ stockProfile.name }}</p>
+        <p>{{ stockProfile.exchange }}</p>
+        <button class="buy-btn">Buy</button>
+        <!-- Sell button shows only if inPortfolio is true -->
+        <button *ngIf="inPortfolio" class="sell-btn">Sell</button>
+      </div>
+      
+      <!-- Right side for stock quote details -->
+      <div class="right-side">
+        <p>Last price: {{ stockQuote.c }}</p>
+        <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
+          Change: {{ stockQuote.d }} ({{ stockQuote.dp }}%)
+        </p>
+        <p>Date/Time: {{ stockQuote.t | date:'short' }}</p>
+      </div>
+    </div>
+    
+    <!-- Center section with logo and market status indication -->
+    <div class="center-section">
+      <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo">
+      <p>Market is {{ marketOpen ? 'Open' : 'Closed' }}</p>
+    </div>
+    
+    <!-- Tabs section for summary, news, charts, and insights -->
+    <div class="tabs-section">
+      <ul class="nav nav-tabs">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Summary</a>
+        </li>
+        <!-- Additional tabs as needed -->
+      </ul>
+      
+      <!-- Content for the selected tab -->
+      <div class="tab-content">
+        <!-- Summary tab content -->
+        <div class="tab-pane active" id="summary" role="tabpanel">
+          <!-- Summary content will go here -->
+        </div>
+        <!-- Additional tab panes as needed -->
+      </div>
+    </div>
+    
+  </div>
+  
+
+
+
+
+  
+
+<!-- <div *ngIf="stockProfile">
+    <h2>{{ stockProfile.ticker }}</h2>
+    <p> {{ stockProfile.name }}
+        {{ stockProfile.exchange }}
+    </p>
 </div>
+
+<div *ngIf="stockProfile">
+    <p> {{ stockProfile.logo }}
+    </p>
+</div>
+  
+<div *ngIf="stockQuote">
+    <h2> Summary </h2>
+    <p> High Price : {{ stockQuote.h}} <br>
+        Low Price : {{ stockQuote.c}} <br>
+        Open Price : {{ stockQuote.o}} <br>
+        Prev. Close : {{ stockQuote.pc}} <br>
+        About the company <br>
+        IPO Start Date : {{ stockProfile.ipo}}
+    </p>
+</div>
+
+
+   -->

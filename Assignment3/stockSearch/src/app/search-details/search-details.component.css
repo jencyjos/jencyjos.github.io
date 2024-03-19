@@ -1,0 +1,96 @@
+/* Overall layout */
+.stock-details {
+    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Top section with symbol, company name, exchange, buy/sell buttons */
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.top-section .left-side {
+    text-align: left;
+}
+
+.top-section .right-side {
+    text-align: right;
+    color: #333; /* Change as needed */
+}
+
+/* Buy/Sell buttons */
+.buy-btn, .sell-btn {
+    background-color: #28a745; /* Bootstrap primary color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.sell-btn {
+    background-color: #28a745; /* Bootstrap success color */
+}
+
+/* Center section with logo and market status */
+.center-section {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.center-section img {
+    max-width: 100px; /* Adjust as needed */
+    margin-bottom: 10px;
+}
+
+/* Tabs section */
+.tabs-section {
+    /* border-bottom: 1px solid #ccc; */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.nav-tabs {
+    border-bottom: none;
+}
+
+.nav-link {
+    margin-right: 20px;
+    color: #007bff; /* Bootstrap primary color */
+    border: none;
+    padding-bottom: 5px;
+}
+
+.nav-link.active {
+    border-bottom: 2px solid #007bff;
+}
+
+/* Price and percentage changes */
+.positive {
+    color: green;
+}
+
+.negative {
+    color: red;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .top-section .left-side, .top-section .right-side {
+        text-align: center;
+    }
+
+    .center-section img {
+        margin-bottom: 20px;
+    }
+}
