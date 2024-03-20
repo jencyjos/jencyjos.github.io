@@ -1,0 +1,30 @@
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .close-button {
+    margin-left: auto; /* Pushes the close button to the right */
+  }
+  
+  hr {
+    border: 0;
+    height: 1px;
+    background-color: #ccc; /* Line color */
+    margin: 10px 0; /* Spacing above and below the line */
+  }
+  
+  .share-section {
+    border: 1px solid #ccc; /* Light grey border */
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between elements */
+  }
+  
+  .social-icon img {
+    width: 24px; /* Size of the icons */
+    height: 24px;
+  }
+  

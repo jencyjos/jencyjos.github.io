@@ -1,12 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StockService } from '../services/stock.service';
+import { MatDialog } from '@angular/material/dialog';
+
+
+import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
+
+
+interface NewsArticle {
+  headline: string;
+  image: string;
+  // ... other properties
+}
 
 @Component({
   selector: 'app-search-details',
   templateUrl: './search-details.component.html',
-  styleUrl: './search-details.component.css'
-  
+  styleUrls: ['./search-details.component.css']
 })
 export class SearchDetailsComponent implements OnInit {
   ticker: string = '';
@@ -14,57 +24,54 @@ export class SearchDetailsComponent implements OnInit {
   stockQuote: any;
   inPortfolio: boolean = false; // Determine if stock is in portfolio
   marketOpen: boolean = false; // Determine if market is open
+  topNews : any[] =[];
+  
 
   constructor(
     private route: ActivatedRoute,
-    private stockService: StockService
+    private stockService: StockService,
+    public dialog: MatDialog
   ) {}
 
-  // ngOnInit(): void {
-  //   const ticker = this.route.snapshot.paramMap.get('ticker');
-  //   if (ticker === null) {
-  //     throw new Error('Ticker parameter is missing');
-  //   }
   
-  //   this.ticker = ticker;
-  //   console.log(`Initiating search for ticker: ${this.ticker}`);
+  openNewsModal(newsArticle : NewsArticle): void {
+    const dialogRef = this.dialog.open(NewsDetailModalComponent, {
+      width: '30%',
+      height: '40%',
+      data: newsArticle // Pass the newsArticle as data to the modal
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+    this.ticker = params['ticker'];
 
-  //       // If you need profile data:
-  //   this.stockService.getStockProfile(this.ticker).subscribe(
-  //     data => { this.stockData = data; },
-  //     error => { console.error('Error fetching stock profile', error); }
-  //   );
-
-  //   // If you need quote data:
-  //   this.stockService.getStockQuote(this.ticker).subscribe(
-  //     data => { this.stockQuote = data; },
-  //     error => { console.error('Error fetching stock quote', error); }
-  //   );
-
-  // }
-
-
-      ngOnInit(): void {
-        this.route.params.subscribe(params => {
-        this.ticker = params['ticker'];
-
-        if (this.ticker === null) {
-          throw new Error('Ticker parameter is missing');
-        }
-
-        this.stockService.getStockQuote(this.ticker).subscribe(data => {
-        this.stockQuote = data;
-          console.log(this.stockQuote);
-      });
-
-        this.stockService.getStockProfile(this.ticker).subscribe(data => {
-          this.stockProfile = data;
-          this.determineMarketStatus();
-          console.log(this.stockProfile);
-        });
-      });
+    if (this.ticker === null) {
+      throw new Error('Ticker parameter is missing');
     }
+
+    this.stockService.getTopNews(this.ticker).subscribe(data => {
+      this.topNews = data;
+    }, error => {
+      console.error('Error fetching top news', error);
+    });
+
+    this.stockService.getStockQuote(this.ticker).subscribe(data => {
+    this.stockQuote = data;
+      console.log(this.stockQuote);
+  });
+
+    this.stockService.getStockProfile(this.ticker).subscribe(data => {
+      this.stockProfile = data;
+      this.determineMarketStatus();
+      console.log(this.stockProfile);
+    });
+  });
+  }
 
 
     // Check if stock is in portfolio

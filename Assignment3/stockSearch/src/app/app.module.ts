@@ -10,9 +10,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { HomeComponent } from './home/home.component';
 import { SearchDetailsComponent } from './search-details/search-details.component';
+import { NewsDetailModalComponent } from './news-detail-modal-component/news-detail-modal-component.component';
 import { WatchlistComponent } from './watchlist/watchlist.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
@@ -22,6 +27,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     AppComponent,
     HomeComponent,
     SearchDetailsComponent,
+    NewsDetailModalComponent,
     WatchlistComponent,
     PortfolioComponent
     // list all your components here
@@ -36,7 +42,11 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatIconModule,
+    HighchartsChartModule
   ],
   providers: [
     provideAnimationsAsync('noop')

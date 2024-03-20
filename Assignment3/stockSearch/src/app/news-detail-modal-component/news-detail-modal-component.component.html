@@ -1,0 +1,43 @@
+<h1 mat-dialog-title>{{ data.source }}</h1>
+
+<div class="modal-header">
+    <p>{{ data.datetime | date: 'longDate' }}</p>
+    <button mat-icon-button class="close-button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+</div>
+  <hr>
+
+<div mat-dialog-content>
+  <p>{{ data.headline }}</p>
+  <p>{{ data.summary }}</p>
+  <a href="{{data.url}}" target="_blank">For more details click here</a>
+</div>
+
+<!-- <div mat-dialog-actions>
+  
+  <span>Share</span>
+  <a href="https://twitter.com/intent/tweet?text={{data.headline}} {{data.url}}"
+     target="_blank" mat-icon-button>
+    <mat-icon>twitter</mat-icon>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{data.url}}"
+     target="_blank" mat-icon-button>
+    <mat-icon>share</mat-icon>
+  </a>
+  
+</div> -->
+
+<div class="share-section">
+    <span>Share</span>
+    <a href="https://twitter.com/intent/tweet?text={{data.headline}} {{data.url}}"
+       target="_blank" class="social-icon">
+      <img src="path/to/twitter-icon.png" alt="Twitter">
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{data.url}}"
+       target="_blank" class="social-icon">
+      <img src="path/to/facebook-icon.png" alt="Facebook">
+    </a>
+  </div>
+  
+

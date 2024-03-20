@@ -53,9 +53,29 @@
 
         </mat-tab>
 
+        <!-- <mat-tab label="Top News">
+          <div class="top-news-container">
+            <div *ngFor="let newsArticle of topNews" class="news-card">
+              <img [src]="newsArticle.image" alt="news image">
+              <div class="news-info">
+                <h3>{{ newsArticle.headline }}</h3>
+              </div>
+            </div>
+          </div>
+        </mat-tab> -->
         <mat-tab label="Top News">
-          <!-- Top News tab content goes here -->
+          <div class="news-container">
+            <!-- Iterate over topNews to create cards for each article -->
+            <div *ngFor="let newsArticle of topNews" class="news-card" (click)="openNewsModal(newsArticle)">
+              <img [src]="newsArticle.image" alt="news image">
+              
+              <div>
+                <h3>{{ newsArticle.headline }}</h3>
+              </div>
+            </div>
+          </div>
         </mat-tab>
+        
 
         <mat-tab label="Charts">
           <!-- Charts tab content goes here -->
