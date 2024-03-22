@@ -21,6 +21,9 @@ import { NewsDetailModalComponent } from './news-detail-modal-component/news-det
 import { WatchlistComponent } from './watchlist/watchlist.component';
 import { PortfolioComponent } from './portfolio/portfolio.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { BuyModalComponent } from './buy-modal/buy-modal.component';
+import { SellModalComponent } from './sell-modal/sell-modal.component';
+
 
 @NgModule({
   declarations: [
@@ -29,8 +32,10 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     SearchDetailsComponent,
     NewsDetailModalComponent,
     WatchlistComponent,
-    PortfolioComponent
-    // list all your components here
+    PortfolioComponent,
+    BuyModalComponent,
+    SellModalComponent 
+   
   ],
   imports: [
     BrowserModule,

@@ -3,10 +3,12 @@ require('dotenv').config(); //load env variables from .env file
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-// import fetch from 'node-fetch';
+const { connect } = require('./mongo');
 
 const app = express();
 const port = process.env.PORT || 3000; 
+
+connect(); //mongodb
 
 // middleware to enable cors and json body parsing
 app.use(cors());
@@ -15,8 +17,6 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('backend is running!');
 });
-
-
 
 // Autocomplete API for symbol search
 app.get('/api/autocomplete/:query', async (req, res) => {

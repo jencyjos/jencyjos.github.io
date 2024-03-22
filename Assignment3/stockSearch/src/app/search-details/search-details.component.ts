@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StockService } from '../services/stock.service';
 import { MatDialog } from '@angular/material/dialog';
-
-
+import * as Highcharts from 'highcharts';
+import HC_exporting from 'highcharts/modules/exporting'; 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
 
+HC_exporting(Highcharts);
 
 interface NewsArticle {
   headline: string;
@@ -25,6 +26,11 @@ export class SearchDetailsComponent implements OnInit {
   inPortfolio: boolean = false; // Determine if stock is in portfolio
   marketOpen: boolean = false; // Determine if market is open
   topNews : any[] =[];
+  Highcharts: typeof Highcharts = Highcharts; // required
+  chartOptions?: Highcharts.Options = {}; 
+  @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
+
+
   
 
   constructor(
@@ -70,6 +76,24 @@ export class SearchDetailsComponent implements OnInit {
       this.determineMarketStatus();
       console.log(this.stockProfile);
     });
+
+    this.chartOptions = {
+      // Highcharts options go here
+      series: [
+        {
+          data: [1,2,3,4],
+          type: 'line'
+          // Other series options...
+        }
+        // ... more series if necessary
+      ],
+      // ... other chart options
+    };
+
+    // When your data is ready, create the chart
+    //setTimeout(() => Highcharts.chart(this.chartContainer.nativeElement, this.chartOptions), 0);
+
+
   });
   }
 
@@ -87,6 +111,16 @@ export class SearchDetailsComponent implements OnInit {
       let currentTime = new Date().getTime();
       let marketCloseTime = new Date(this.stockQuote.t).getTime();
       this.marketOpen = currentTime < marketCloseTime;
+    }
+
+    ngAfterViewInit(): void {
+      // Ensure ngAfterViewInit is implemented by adding the AfterViewInit interface to your component class.
+      if (this.chartContainer.nativeElement) {
+        // Only proceed if chartContainer and chartOptions are both defined.
+        setTimeout(() => {
+          //Highcharts.chart(this.chartContainer.nativeElement, this.chartOptions);
+        }, 0);
+      }
     }
 
   
