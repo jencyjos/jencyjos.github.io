@@ -5,6 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting'; 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { BuyModalComponent } from '../buy-modal/buy-modal.component';
+import { SellModalComponent } from '../sell-modal/sell-modal.component';
 
 HC_exporting(Highcharts);
 
@@ -38,7 +41,8 @@ export class SearchDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private stockService: StockService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private modalService: NgbModal 
   ) {}
 
 
@@ -51,11 +55,11 @@ export class SearchDetailsComponent {
   fetchStockDetails(ticker: string): void {
     this.stockService.getStockQuote(ticker).subscribe(data => {
       this.stockQuote = data;
+      this.determineMarketStatus();
     });
 
     this.stockService.getStockProfile(ticker).subscribe(data => {
       this.stockProfile = data;
-      this.determineMarketStatus();
     });
 
     this.stockService.getTopNews(ticker).subscribe(data => {
@@ -64,9 +68,8 @@ export class SearchDetailsComponent {
       console.error('Error fetching top news', error);
     });
 
-  
-    
-    // Additional logic for fetching chart data, if needed
+  // Additional logic for fetching chart data, if needed
+
   }
 
 
@@ -113,4 +116,13 @@ export class SearchDetailsComponent {
       }
     });
   }
+
+  openBuyModal() {
+    // Logic to open the Buy Modal
+    const buyModalRef = this.modalService.open(BuyModalComponent);
+    buyModalRef.componentInstance.stock = this.stockQuote; // Pass the current stock details to the modal
+  }
+
+
+  
 }

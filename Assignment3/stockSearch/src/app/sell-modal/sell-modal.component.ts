@@ -9,6 +9,7 @@ import { Stock } from '../../../../backend/models/stock.model';
   templateUrl: './sell-modal.component.html',
   styleUrls: ['./sell-modal.component.css']
 })
+
 export class SellModalComponent {
   @Input() stock!: Stock;
   quantity: number = 1;

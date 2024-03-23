@@ -9,8 +9,6 @@ const port = process.env.PORT || 3000;
 const { MongoClient } = require('mongodb');
 const uri = process.env.MONGODB_URI;
 const dbName = 'StockSearchDB'; 
-
-// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 const client = new MongoClient(uri);
 
 let db;
@@ -252,12 +250,29 @@ app.get('/api/earnings/:ticker', async (req, res) => {
   }
 });
 
+// Endpoint to fetch user wallet balance
+app.get('/wallet', async (req, res) => {
+  try {
+    const db = await connectToDatabase(); // Assuming you have a method to connect to your DB
+    const portfolio = await db.collection('portfolio').findOne({}); // Assuming single user
+
+    if (!portfolio || portfolio.balance === undefined) {
+      return res.status(404).json({ message: 'Portfolio not found or balance undefined' });
+    }
+
+    res.json({ balance: portfolio.balance });
+  } catch (error) {
+    console.error('Error fetching wallet balance:', error);
+    res.status(500).json({ message: 'Error fetching wallet balance' });
+  }
+});
+
 // Endpoint for buying stocks
 app.post('/api/buy', async (req, res) => {
   try {
-    const { ticker, quantity } = req.body;
+    const { ticker, quantity, price } = req.body;
     // buyStock is a function you should implement that handles the buy operation
-    const result = await buyStock(ticker, quantity);
+    const result = await buyStock(ticker, quantity, price);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -267,9 +282,9 @@ app.post('/api/buy', async (req, res) => {
 // Endpoint for selling stocks
 app.post('/api/sell', async (req, res) => {
   try {
-    const { ticker, quantity } = req.body;
+    const { ticker, quantity, price } = req.body;
     // sellStock is a function you should implement that handles the sell operation
-    const result = await sellStock(ticker, quantity);
+    const result = await sellStock(ticker, quantity, price);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ message: error.message });

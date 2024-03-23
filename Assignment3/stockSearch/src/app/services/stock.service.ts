@@ -51,6 +51,17 @@ import { Observable } from 'rxjs';
       return this.http.get(`${this.quoteUrl}/${ticker}`);
     }
 
+    buyStock(ticker: string, quantity: number): Observable<any> {
+      return this.http.post(`${this.apiUrl}/api/buy`, { ticker, quantity });
+    }
+  
+    sellStock(ticker: string, quantity: number): Observable<any> {
+      return this.http.post(`${this.apiUrl}/api/sell`, { ticker, quantity });
+    }
+    // getUserWallet(): Observable<number> {
+    //   // This should be an API call to get the actual wallet amount from the database.
+    //   return of(this.userWallet);
 
-  }
+      
+    }
   

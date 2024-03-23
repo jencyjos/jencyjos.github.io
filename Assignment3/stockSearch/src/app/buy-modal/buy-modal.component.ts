@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { Stock } from '../../../../backend/models/stock.model';
@@ -8,28 +8,65 @@ import { Stock } from '../../../../backend/models/stock.model';
   templateUrl: './buy-modal.component.html',
   styleUrls: ['./buy-modal.component.css']
 })
-export class BuyModalComponent {
+export class BuyModalComponent implements OnInit {
   @Input() stock!: Stock;
-
-  quantity!: number;
-
+  private _quantity: number = 1;
+  userWallet!: number; // This will now be fetched dynamically
+  totalPrice: number = 0;
 
   constructor(
     public activeModal: NgbActiveModal,
     private portfolioService: PortfolioService
   ) {}
 
-  onSubmit() {
-    this.portfolioService.buyStock(this.stock.ticker, this.quantity).subscribe({
-      next: (result) => {
-        // Handle successful buy
-        // Maybe refresh the portfolio or emit an event
-        this.activeModal.close(result);
+  ngOnInit(): void {
+    // Fetch the user's wallet balance on component initialization
+    this.fetchUserWallet();
+  }
+
+  fetchUserWallet() {
+    // Assume getUserWallet is implemented in your PortfolioService
+    this.portfolioService.getUserWallet().subscribe({
+      next: (walletResponse) => {
+        this.userWallet = walletResponse.balance; // Access the balance property
       },
       error: (error) => {
-        // Handle error
-        console.error('Error buying stock', error);
+        console.error('Failed to fetch user wallet', error);
       }
     });
+  }
+
+  get quantity(): number {
+    return this._quantity;
+  }
+
+  set quantity(value: number) {
+    this._quantity = value;
+    this.totalPrice = this.calculateTotalPrice(value);
+  }
+
+  calculateTotalPrice(quantity: number): number {
+    return this.stock.currentPrice * quantity;
+  }
+
+  canBuy(): boolean {
+    return this.totalPrice <= this.userWallet && this.quantity > 0;
+  }
+
+  onSubmit() {
+    if (this.canBuy()) {
+      this.portfolioService.buyStock(this.stock.ticker, this.quantity).subscribe({
+        next: (result) => {
+          // Update the user wallet after a successful transaction
+          this.userWallet -= this.totalPrice;
+          this.activeModal.close(result);
+        },
+        error: (error) => {
+          console.error('Error buying stock', error);
+        }
+      });
+    } else {
+      alert("You can't afford this purchase.");
+    }
   }
 }
