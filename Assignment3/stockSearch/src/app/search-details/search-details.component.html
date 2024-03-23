@@ -7,6 +7,7 @@
       <!-- Left side for stock symbol, name, exchange -->
       <div class="left-side">
         <h2>{{ stockProfile.ticker }}</h2>
+        <i class="star-icon" [ngClass]="{'active': isFavorite}" (click)="toggleWatchlist(stockProfile.ticker)">&#9733;</i>
         <p>{{ stockProfile.name }}</p>
         <p>{{ stockProfile.exchange }}</p>
         <button class="buy-btn">Buy</button>
@@ -16,11 +17,11 @@
       
       <!-- Right side for stock quote details -->
       <div class="right-side">
-        <p>Last price: {{ stockQuote.c }}</p>
+        <p>{{ stockQuote.c }}</p>
         <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
-          Change: {{ stockQuote.d }} ({{ stockQuote.dp }}%)
+          {{ stockQuote.d }} ({{ stockQuote.dp }}%)
         </p>
-        <p>Date/Time: {{ stockQuote.t | date:'short' }}</p>
+        <p>{{ stockQuote.t | date:'long' }}</p>
       </div>
     </div>
     

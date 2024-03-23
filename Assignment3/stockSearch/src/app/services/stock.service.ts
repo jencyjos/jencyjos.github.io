@@ -10,7 +10,17 @@ import { Observable } from 'rxjs';
     private quoteUrl = 'http://localhost:3000/api/stock/quote'; 
     private autocompleteUrl = 'http://localhost:3000/api/autocomplete';
     private newsUrl = 'http://localhost:3000/api/stock/news';
+    private apiUrl = 'http://localhost:3000';
+
     constructor(private http: HttpClient) { }
+
+    toggleWatchlist(ticker: string): Observable<any> {
+      return this.http.post(`${this.apiUrl}/api/watchlist/toggle`, { ticker });
+    }
+  
+    getWatchlist(): Observable<any[]> {
+      return this.http.get<any[]>(`${this.apiUrl}/api/watchlist`);
+    }
 
 
     getTopNews(ticker: string): Observable<any[]> {

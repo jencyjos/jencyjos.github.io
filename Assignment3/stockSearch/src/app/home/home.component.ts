@@ -5,12 +5,12 @@ import { StockService } from '../services/stock.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css']
+
 })
 
 export class HomeComponent {
   searchQuery: string = '';
-
   isNavbarCollapsed = true;
 
   constructor(private stockService: StockService, private router: Router) {}

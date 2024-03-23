@@ -26,21 +26,20 @@
           <div class="collapse navbar-collapse"  [class.show] = "!isNavbarCollapsed" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Search</a>
+                <a class="nav-link active" aria-current="page" routerLink="/search/home">Search</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Watchlist</a>
+                <a class="nav-link" routerLink="/watchlist">Watchlist</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Portfolio</a>
+                <a class="nav-link" routerLink="/portfolio">Portfolio</a>
               </li>
             </ul>
           </div>
 
         </div>
       </nav>
-      
-
+    
 
     <!-- STOCK SEARCH  -->
     <div class="container my-4">
@@ -59,6 +58,8 @@
           </div>
         </div>
       </div>
+
+      <!-- <app-search-details></app-search-details> -->
     
 
 

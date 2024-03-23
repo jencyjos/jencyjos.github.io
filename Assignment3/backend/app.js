@@ -3,19 +3,21 @@ require('dotenv').config(); //load env variables from .env file
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-
-const { MongoClient } = require('mongodb');
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-
-const { buyStock, sellStock } = require('./stock-controller');
-
 const app = express();
 const port = process.env.PORT || 3000; 
 
+const { MongoClient } = require('mongodb');
+const uri = process.env.MONGODB_URI;
+const dbName = 'StockSearchDB'; 
 
+// const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+const client = new MongoClient(uri);
 
+let db;
+client.connect().then((client) => {
+  db = client.db(dbName);
+});
+const { buyStock, sellStock } = require('./controllers/stock-controller');
 
 
 // middleware to enable cors and json body parsing
@@ -256,7 +258,49 @@ app.post('/api/sell', async (req, res) => {
   }
 });
 
+// Toggle watchlist item
+app.post('/api/watchlist/toggle', async (req, res) => {
+  const ticker = req.body.ticker;
+  if (!ticker) {
+    return res.status(400).json({ message: 'Ticker is required' });
+  }
+
+  try {
+    const watchlistCollection = db.collection('watchlist');
+    // Check if the ticker is already in the watchlist
+    const stockExists = await watchlistCollection.findOne({ ticker });
+
+    if (stockExists) {
+      // If it exists, remove it
+      await watchlistCollection.deleteOne({ ticker });
+      res.status(200).json({ message: `Ticker ${ticker} removed from watchlist.` });
+    } else {
+      // If not, add it
+      await watchlistCollection.insertOne({ ticker });
+      res.status(200).json({ message: `Ticker ${ticker} added to watchlist.` });
+    }
+  } catch (error) {
+    console.error('Error toggling watchlist item:', error);
+    res.status(500).json({ message: 'Error toggling watchlist item' });
+  }
+});
+
+// Get the watchlist
+app.get('/api/watchlist', async (req, res) => {
+  try {
+    const watchlistCollection = db.collection('watchlist');
+    const watchlist = await watchlistCollection.find({}).toArray();
+    res.status(200).json(watchlist);
+  } catch (error) {
+    console.error('Error fetching watchlist:', error);
+    res.status(500).json({ message: 'Error fetching watchlist' });
+  }
+});
+
+
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+module.exports = app; // Export the app for testing purposes

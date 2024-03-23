@@ -38,6 +38,20 @@
     }
 }
 
+/* search-details.component.css */
+.star-icon {
+    cursor: pointer;
+    font-size: 24px; /* Adjust size as needed */
+    color: #bbb; /* Default color for non-favorite */
+    transition: color 0.3s ease;
+  }
+  
+  .star-icon.active {
+    color: #ff0; /* Yellow color for favorite */
+  }
+  
+
+
 /* ----------------Buy/Sell buttons----------------------- */
 .buy-btn, .sell-btn {
     background-color: #28a745; /* Bootstrap primary color */

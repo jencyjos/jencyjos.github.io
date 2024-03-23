@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { StockService } from '../services/stock.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,19 +19,20 @@ interface NewsArticle {
   templateUrl: './search-details.component.html',
   styleUrls: ['./search-details.component.css']
 })
+
 export class SearchDetailsComponent implements OnInit {
   ticker: string = '';
-  stockProfile: any;
-  stockQuote: any;
+  // stockProfile: any;
+  // stockQuote: any;
+  @Input() stockProfile: any;
+  @Input() stockQuote: any;
   inPortfolio: boolean = false; // Determine if stock is in portfolio
   marketOpen: boolean = false; // Determine if market is open
   topNews : any[] =[];
   Highcharts: typeof Highcharts = Highcharts; // required
   chartOptions?: Highcharts.Options = {}; 
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
-
-
-  
+  isFavorite: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -39,26 +40,26 @@ export class SearchDetailsComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
-  
-  openNewsModal(newsArticle : NewsArticle): void {
-    const dialogRef = this.dialog.open(NewsDetailModalComponent, {
-      width: '30%',
-      height: '40%',
-      data: newsArticle // Pass the newsArticle as data to the modal
-    });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-    });
-  }
-
+ 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
     this.ticker = params['ticker'];
 
-    if (this.ticker === null) {
+    if (!this.ticker)  {
       throw new Error('Ticker parameter is missing');
     }
+
+    this.stockService.getStockProfile(this.ticker).subscribe(data => {
+      this.stockProfile = data;
+      //console.log(this.stockProfile);
+    });
+
+    this.stockService.getStockQuote(this.ticker).subscribe(data => {
+      this.stockQuote = data;
+      this.determineMarketStatus(); // Determine market status with the new quote data
+    }, error => {
+      console.error('Error fetching stock quote', error);
+    });
 
     this.stockService.getTopNews(this.ticker).subscribe(data => {
       this.topNews = data;
@@ -66,17 +67,7 @@ export class SearchDetailsComponent implements OnInit {
       console.error('Error fetching top news', error);
     });
 
-    this.stockService.getStockQuote(this.ticker).subscribe(data => {
-    this.stockQuote = data;
-      console.log(this.stockQuote);
-  });
-
-    this.stockService.getStockProfile(this.ticker).subscribe(data => {
-      this.stockProfile = data;
-      this.determineMarketStatus();
-      console.log(this.stockProfile);
-    });
-
+    
     this.chartOptions = {
       // Highcharts options go here
       series: [
@@ -92,27 +83,24 @@ export class SearchDetailsComponent implements OnInit {
 
     // When your data is ready, create the chart
     //setTimeout(() => Highcharts.chart(this.chartContainer.nativeElement, this.chartOptions), 0);
-
-
   });
+
   }
 
-
-    // Check if stock is in portfolio
-    // You would typically have a service to check your portfolio
-    // This is just a placeholder implementation
-    // this.inPortfolio = this.portfolioService.checkStock(ticker);
-  
     determineMarketStatus() {
-      // Logic to determine if market is open based on stockQuote data
-      // This could involve checking the current time against the 't' property
-      // in the stockQuote object, which would require some date conversion
-      // Assuming stockQuote.t is a timestamp
-      let currentTime = new Date().getTime();
-      let marketCloseTime = new Date(this.stockQuote.t).getTime();
-      this.marketOpen = currentTime < marketCloseTime;
+      if (this.stockQuote && this.stockQuote.t) {
+        const lastUpdate = new Date(this.stockQuote.t * 1000);
+        const now = new Date();
+        const difference = now.getTime() - lastUpdate.getTime();
+    
+        console.log(`Last update: ${lastUpdate}`);
+        console.log(`Current time: ${now}`);
+        console.log(`Difference in minutes: ${difference / 60000}`);
+    
+        this.marketOpen = difference < 5 * 60 * 1000;
+      }
     }
-
+    
     ngAfterViewInit(): void {
       // Ensure ngAfterViewInit is implemented by adding the AfterViewInit interface to your component class.
       if (this.chartContainer.nativeElement) {
@@ -123,5 +111,33 @@ export class SearchDetailsComponent implements OnInit {
       }
     }
 
+     
+  openNewsModal(newsArticle : NewsArticle): void {
+    const dialogRef = this.dialog.open(NewsDetailModalComponent, {
+      width: '30%',
+      height: '40%',
+      data: newsArticle // Pass the newsArticle as data to the modal
+    });
   
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+
+  toggleWatchlist(ticker: string): void {
+    // Toggle the visual state
+    this.isFavorite = !this.isFavorite;
+
+    // Call the StockService method to add/remove from watchlist
+    this.stockService.toggleWatchlist(ticker).subscribe({
+      next: (response) => {
+        // Display a self-closing alert with the response message
+        alert(response.message);
+      },
+      error: (error) => {
+        console.error('Error updating watchlist', error);
+      }
+    });
+  }
 }

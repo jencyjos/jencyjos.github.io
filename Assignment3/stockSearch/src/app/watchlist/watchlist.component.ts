@@ -1,12 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { StockService } from '../services/stock.service'; 
 
 @Component({
   selector: 'app-watchlist',
-  // standalone: true,
-  // imports: [],
   templateUrl: './watchlist.component.html',
-  styleUrl: './watchlist.component.css'
+  styleUrls: ['./watchlist.component.css']
 })
 export class WatchlistComponent {
+  watchlist: any[] = [];
+
+  constructor(private stockService: StockService) {}
+
+  ngOnInit() {
+    this.loadWatchlist();
+  }
+
+  loadWatchlist() {
+    this.stockService.getWatchlist().subscribe(data => {
+      this.watchlist = data;
+    }, error => {
+      console.error('Error loading watchlist', error);
+    });
+  }
 
 }
