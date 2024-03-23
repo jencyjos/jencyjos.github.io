@@ -20,10 +20,11 @@ interface NewsArticle {
   styleUrls: ['./search-details.component.css']
 })
 
-export class SearchDetailsComponent implements OnInit {
+export class SearchDetailsComponent {
   ticker: string = '';
   // stockProfile: any;
   // stockQuote: any;
+  @Input() searchQuery: string = '';
   @Input() stockProfile: any;
   @Input() stockQuote: any;
   inPortfolio: boolean = false; // Determine if stock is in portfolio
@@ -40,52 +41,34 @@ export class SearchDetailsComponent implements OnInit {
     public dialog: MatDialog
   ) {}
 
- 
-  ngOnInit(): void {
-    this.route.params.subscribe(params => {
-    this.ticker = params['ticker'];
 
-    if (!this.ticker)  {
-      throw new Error('Ticker parameter is missing');
+  ngOnChanges(): void {
+    if (this.searchQuery) {
+      this.fetchStockDetails(this.searchQuery);
     }
+  }
 
-    this.stockService.getStockProfile(this.ticker).subscribe(data => {
-      this.stockProfile = data;
-      //console.log(this.stockProfile);
-    });
-
-    this.stockService.getStockQuote(this.ticker).subscribe(data => {
+  fetchStockDetails(ticker: string): void {
+    this.stockService.getStockQuote(ticker).subscribe(data => {
       this.stockQuote = data;
-      this.determineMarketStatus(); // Determine market status with the new quote data
-    }, error => {
-      console.error('Error fetching stock quote', error);
     });
 
-    this.stockService.getTopNews(this.ticker).subscribe(data => {
+    this.stockService.getStockProfile(ticker).subscribe(data => {
+      this.stockProfile = data;
+      this.determineMarketStatus();
+    });
+
+    this.stockService.getTopNews(ticker).subscribe(data => {
       this.topNews = data;
     }, error => {
       console.error('Error fetching top news', error);
     });
 
+  
     
-    this.chartOptions = {
-      // Highcharts options go here
-      series: [
-        {
-          data: [1,2,3,4],
-          type: 'line'
-          // Other series options...
-        }
-        // ... more series if necessary
-      ],
-      // ... other chart options
-    };
-
-    // When your data is ready, create the chart
-    //setTimeout(() => Highcharts.chart(this.chartContainer.nativeElement, this.chartOptions), 0);
-  });
-
+    // Additional logic for fetching chart data, if needed
   }
+
 
     determineMarketStatus() {
       if (this.stockQuote && this.stockQuote.t) {
@@ -100,17 +83,7 @@ export class SearchDetailsComponent implements OnInit {
         this.marketOpen = difference < 5 * 60 * 1000;
       }
     }
-    
-    ngAfterViewInit(): void {
-      // Ensure ngAfterViewInit is implemented by adding the AfterViewInit interface to your component class.
-      if (this.chartContainer.nativeElement) {
-        // Only proceed if chartContainer and chartOptions are both defined.
-        setTimeout(() => {
-          //Highcharts.chart(this.chartContainer.nativeElement, this.chartOptions);
-        }, 0);
-      }
-    }
-
+  
      
   openNewsModal(newsArticle : NewsArticle): void {
     const dialogRef = this.dialog.open(NewsDetailModalComponent, {

@@ -11,12 +11,20 @@ import { Observable } from 'rxjs';
     private autocompleteUrl = 'http://localhost:3000/api/autocomplete';
     private newsUrl = 'http://localhost:3000/api/stock/news';
     private apiUrl = 'http://localhost:3000';
+    private detailsUrl= 'http://localhost:3000/api/stock/details';
+
 
     constructor(private http: HttpClient) { }
+
+    getStockDetails(ticker: string): Observable<any> {
+      console.log(`Fetching details for ticker: ${ticker}`);
+      return this.http.get<any>(`${this.detailsUrl}/${ticker}`);
+    }
 
     toggleWatchlist(ticker: string): Observable<any> {
       return this.http.post(`${this.apiUrl}/api/watchlist/toggle`, { ticker });
     }
+
   
     getWatchlist(): Observable<any[]> {
       return this.http.get<any[]>(`${this.apiUrl}/api/watchlist`);

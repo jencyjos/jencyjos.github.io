@@ -1,36 +1,31 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { StockService } from '../services/stock.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
-
 })
-
 export class HomeComponent {
   searchQuery: string = '';
+  searchResults: any;
   isNavbarCollapsed = true;
 
-  constructor(private stockService: StockService, private router: Router) {}
+  constructor(private stockService: StockService) { }
 
   onSearch(): void {
     if (!this.searchQuery) {
-      // Handle empty search query
-      console.log("no search query")
+      console.log("No search query");
       return;
     }
-    console.log("searching for",this.searchQuery);
-    this.router.navigate(['/search', this.searchQuery]);
-    // Perform the search using the searchQuery
-    // This usually involves calling a service that handles HTTP requests
+    console.log("Searching for", this.searchQuery);
+    this.stockService.getStockDetails(this.searchQuery).subscribe(data => {
+      this.searchResults = data;
+    });
   }
 
   onClear(): void {
-    this.searchQuery = ''; // Clear the search input
-    console.log("cleared");
-    // Clear any search results if necessary
+    this.searchQuery = '';
+    this.searchResults = null;
   }
-
 }

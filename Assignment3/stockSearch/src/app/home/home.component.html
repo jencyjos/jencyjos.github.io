@@ -7,6 +7,10 @@
 </head>
 <body>
 
+  <div class="wrapper">
+
+  
+
     <!-- NAV BAR -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
@@ -59,7 +63,10 @@
         </div>
       </div>
 
-      <!-- <app-search-details></app-search-details> -->
+      <!-- change1 -->
+      <div *ngIf="searchResults">
+        <app-search-details [searchQuery]="searchQuery"></app-search-details>
+      </div>
     
 
 
@@ -71,6 +78,7 @@
       
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-      
+    
+  </div>      
 </body>
 </html>

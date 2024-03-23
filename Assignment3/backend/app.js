@@ -28,6 +28,24 @@ app.get('/', (req, res) => {
   res.send('backend is running!');
 });
 
+// Endpoint for fetching stock details
+app.get('/api/stock/details/:ticker', async (req, res) => {
+  const ticker = req.params.ticker;
+  const finnhubApi =`https://finnhub.io/api/v1/stock/profile2?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
+
+  try {
+    const response = await fetch(finnhubApi);
+    if (!response.ok) {
+      throw new Error(`Error from Finnhub API: ${response.statusText}`);
+    }
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // Autocomplete API for symbol search
 app.get('/api/autocomplete/:query', async (req, res) => {
   const query = req.params.query;
