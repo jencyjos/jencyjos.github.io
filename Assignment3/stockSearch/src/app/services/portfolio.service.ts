@@ -18,9 +18,10 @@ export class PortfolioService {
   }
 
   // Buy stock
-  buyStock(stock: Stock, quantity: number): Observable<any> {
+//   buyStock(stock: Stock, quantity: number): Observable<any> {
+    buyStock(ticker: string, quantity: number): Observable<any> {
     // Replace 'any' with a more specific type for the response if known
-    return this.http.post(`${this.apiUrl}/buy`, { stock, quantity });
+    return this.http.post(`${this.apiUrl}/buy`, { ticker, quantity });
   }
 
   // Sell stock

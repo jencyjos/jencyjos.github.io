@@ -9,8 +9,9 @@ import { Stock } from '../../../../backend/models/stock.model';
   styleUrls: ['./buy-modal.component.css']
 })
 export class BuyModalComponent {
-  @Input() stock: Stock;
-  quantity: number;
+  @Input() stock!: Stock;
+
+  quantity!: number;
 
 
   constructor(
