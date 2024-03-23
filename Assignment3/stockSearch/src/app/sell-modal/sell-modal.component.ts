@@ -2,7 +2,7 @@
 import { Component, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services//portfolio.service';
-import { Stock } from '../models/stock.model';
+import { Stock } from '../../../../backend/models/stock.model';
 
 @Component({
   selector: 'app-sell-modal',

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Stock } from '../models/stock.model'; 
+import { Stock } from '../../../../backend/models/stock.model'; 
 import { PortfolioService } from '../services/portfolio.service'; 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
@@ -44,6 +44,12 @@ export class PortfolioComponent implements OnInit {
     // You will need to implement this method to work with a modal service or component.
     const modalRef = this.modalService.open(BuyModalComponent);
     modalRef.componentInstance.stock = stock;
+    modalRef.result.then((result) => {
+      // Handle the result from the modal
+      // Refresh the portfolio data if a purchase was made
+    }, (reason) => {
+      // Handle the close or dismiss action
+    });
   }
 
   openSellModal(stock: any): void {

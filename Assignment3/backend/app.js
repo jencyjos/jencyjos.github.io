@@ -3,12 +3,20 @@ require('dotenv').config(); //load env variables from .env file
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
-const { connect } = require('./mongo');
+
+const { MongoClient } = require('mongodb');
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+
+const { buyStock, sellStock } = require('./stock-controller');
 
 const app = express();
 const port = process.env.PORT || 3000; 
 
-connect(); //mongodb
+
+
+
 
 // middleware to enable cors and json body parsing
 app.use(cors());
@@ -220,6 +228,30 @@ app.get('/api/earnings/:ticker', async (req, res) => {
     res.json(data);
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint for buying stocks
+app.post('/api/buy', async (req, res) => {
+  try {
+    const { ticker, quantity } = req.body;
+    // buyStock is a function you should implement that handles the buy operation
+    const result = await buyStock(ticker, quantity);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Endpoint for selling stocks
+app.post('/api/sell', async (req, res) => {
+  try {
+    const { ticker, quantity } = req.body;
+    // sellStock is a function you should implement that handles the sell operation
+    const result = await sellStock(ticker, quantity);
+    res.status(200).json(result);
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });

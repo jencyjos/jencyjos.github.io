@@ -1,1 +1,26 @@
-<p>buy-modal works!</p>
+<!-- buy-modal.component.html -->
+<div class="modal-header">
+    <h4 class="modal-title">Buy Stock</h4>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="ticker">Stock Ticker</label>
+        <input type="text" id="ticker" class="form-control" [value]="stock.ticker" readonly>
+      </div>
+      <div class="form-group">
+        <label for="currentPrice">Current Price</label>
+        <input type="text" id="currentPrice" class="form-control" [value]="stock.currentPrice | currency" readonly>
+      </div>
+      <div class="form-group">
+        <label for="quantity">Quantity to Buy</label>
+        <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" required min="1">
+      </div>
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">Buy</button>
+      </div>
+    </form>
+</div>

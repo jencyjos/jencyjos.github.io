@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Stock } from '../models/stock.model'; // Path might differ based on where you place your model
+import { Stock } from '../../../../backend/models/stock.model'; // Path might differ based on where you place your model
 
 @Injectable({
   providedIn: 'root'
