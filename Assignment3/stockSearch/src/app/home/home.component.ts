@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { StockService } from '../services/stock.service';
+import { SearchStateService } from '../services/SearchState.service';
 
 @Component({
   selector: 'app-home',
@@ -9,9 +10,9 @@ import { StockService } from '../services/stock.service';
 export class HomeComponent {
   searchQuery: string = '';
   searchResults: any;
-  isNavbarCollapsed = true;
 
-  constructor(private stockService: StockService) { }
+  constructor(private stockService: StockService,
+    private searchStateService: SearchStateService) { }
 
   onSearch(): void {
     if (!this.searchQuery) {
@@ -21,6 +22,7 @@ export class HomeComponent {
     console.log("Searching for", this.searchQuery);
     this.stockService.getStockDetails(this.searchQuery).subscribe(data => {
       this.searchResults = data;
+      this.searchStateService.setSearchResults(data);
     });
   }
 

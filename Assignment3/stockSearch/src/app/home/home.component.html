@@ -8,41 +8,7 @@
 <body>
 
   <div class="wrapper">
-
-  
-
     <!-- NAV BAR -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-
-          <a class="navbar-brand" href="#">Stock Search</a>
-
-          <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button> -->
-
-          <button class="navbar-toggler" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
-                    [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="navbarNavDropdown">
-                <span class="navbar-toggler-icon"></span>
-          </button>
-
-
-          <div class="collapse navbar-collapse"  [class.show] = "!isNavbarCollapsed" id="navbarNavDropdown">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" routerLink="/search/home">Search</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/watchlist">Watchlist</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" routerLink="/portfolio">Portfolio</a>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-      </nav>
     
 
     <!-- STOCK SEARCH  -->
@@ -71,10 +37,7 @@
 
 
     <!-- the footer -->
-    <footer class="footer">
-        <b>Powered by </b> <a href="https://finnhub.io" target="_blank">Finnhub.io</a>
-      </footer>
-
+   
       
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>

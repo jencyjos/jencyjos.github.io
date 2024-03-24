@@ -1,0 +1,21 @@
+.content {
+    flex: 1 0 auto;
+    padding-bottom: 60px; /* Adjust this value to match the height of your footer */
+  }
+
+  .d-flex {
+    display: flex;
+  }
+  
+  .flex-column {
+    flex-direction: column;
+  }
+  
+  .min-vh-100 {
+    min-height: 100vh;
+  }
+  
+  .flex-grow-1 {
+    flex-grow: 1;
+  }
+  

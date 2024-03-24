@@ -8,6 +8,7 @@ import { NewsDetailModalComponent } from '../news-detail-modal-component/news-de
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
+import { SearchStateService } from '../services/SearchState.service';
 
 HC_exporting(Highcharts);
 
@@ -37,12 +38,14 @@ export class SearchDetailsComponent {
   chartOptions?: Highcharts.Options = {}; 
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
   isFavorite: boolean = false;
+  searchResults: any;
 
   constructor(
     private route: ActivatedRoute,
     private stockService: StockService,
     public dialog: MatDialog,
-    private modalService: NgbModal 
+    private modalService: NgbModal,
+    private searchStateService: SearchStateService
   ) {}
 
 
@@ -50,6 +53,12 @@ export class SearchDetailsComponent {
     if (this.searchQuery) {
       this.fetchStockDetails(this.searchQuery);
     }
+  }
+
+  ngOnInit() {
+    this.searchStateService.searchResults$.subscribe(results => {
+      this.searchResults = results;
+    });
   }
 
   fetchStockDetails(ticker: string): void {

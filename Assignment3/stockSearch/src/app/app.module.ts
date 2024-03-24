@@ -23,6 +23,9 @@ import { PortfolioComponent } from './portfolio/portfolio.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BuyModalComponent } from './buy-modal/buy-modal.component';
 import { SellModalComponent } from './sell-modal/sell-modal.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
+import { MainLayoutComponent } from './main-layout/main-layout.component';
 
 
 @NgModule({
@@ -34,8 +37,10 @@ import { SellModalComponent } from './sell-modal/sell-modal.component';
     WatchlistComponent,
     PortfolioComponent,
     BuyModalComponent,
-    SellModalComponent 
-   
+    SellModalComponent,
+    NavbarComponent,
+    FooterComponent,
+    MainLayoutComponent
   ],
   imports: [
     BrowserModule,
