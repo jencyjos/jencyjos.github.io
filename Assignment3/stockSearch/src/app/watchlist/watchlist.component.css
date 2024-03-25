@@ -1,0 +1,77 @@
+/* Overall layout adjustments */
+:host {
+    display: block;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Style for the watchlist container */
+  .watchlist-container {
+    width: 50%; /* Adjust width as needed */
+    margin-top: 20px; /* Space from the top */
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
+  
+  /* Style for the watchlist header */
+  h2 {
+    margin-bottom: 20px; /* Space below the header */
+    text-align: left;
+  }
+  
+  /* List styles */
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  li {
+    background-color: #f8f9fa; /* Light grey background */
+    margin-bottom: 10px; /* Space between list items */
+    padding: 10px;
+    border-radius: 4px; /* Rounded corners for list items */
+  }
+  
+  /* Alert style */
+  .watchlist-empty-alert {
+    background-color: #fff3cd; /* Light yellow background */
+    border: 1px solid #ffeeba; /* Light yellow border */
+    color: #856404; /* Dark yellow text */
+    padding: 10px;/* Spacing inside the alert */
+    margin: 10px 0; /* Space above and below the alert */
+    border-radius: 4px; /* Rounded borders */
+    width: 100%; /* Full width of the parent container */
+    box-sizing: border-box;
+  }
+
+  .loading-indicator {
+    text-align: center;
+    padding: 20px;
+  }
+  /* Add the following styles for positive, negative, and neutral changes */
+.positive {
+    color: green;
+  }
+  
+  .negative {
+    color: red;
+  }
+  
+  .neutral {
+    color: black;
+  }
+  
+  .close-button {
+    float: right;
+    cursor: pointer;
+  }
+  
+  .ticker {
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  

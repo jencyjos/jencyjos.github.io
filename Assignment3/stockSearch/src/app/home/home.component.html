@@ -17,13 +17,18 @@
         <div class="row justify-content-center">
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Enter stock ticker symbol" aria-label="Stock ticker" [(ngModel)]="searchQuery">
+              <input type="text" class="form-control" placeholder="Enter stock ticker symbol" aria-label="Stock ticker" [(ngModel)]="searchQuery" (keyup)="onSearchChange()">
               <button class="btn btn-outline-primary" type="button" id="button-search" (click)="onSearch()">
                 <i class="bi bi-search"></i>
               </button>
               <button class="btn btn-outline-primary" type="button" id="button-clear" (click)="onClear()">
                 <i class="bi bi-x-lg"></i>
               </button>
+            </div>
+            <div class="autocomplete-container">
+              <div *ngFor="let suggestion of autocompleteResults" class="autocomplete-suggestion" (click)="selectSuggestion(suggestion)">
+                {{ suggestion.symbol }} | {{ suggestion.description }}
+              </div>
             </div>
           </div>
         </div>

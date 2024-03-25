@@ -28,7 +28,8 @@ export class BuyModalComponent implements OnInit {
     // Assume getUserWallet is implemented in your PortfolioService
     this.portfolioService.getUserWallet().subscribe({
       next: (walletResponse) => {
-        this.userWallet = walletResponse.balance; // Access the balance property
+        this.userWallet = walletResponse.balance;
+        console.log(this.userWallet); // Access the balance property
       },
       error: (error) => {
         console.error('Failed to fetch user wallet', error);

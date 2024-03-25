@@ -1,13 +1,29 @@
-<div *ngIf="watchlist.length > 0; else noWatchlist">
-    <h2>Your Watchlist</h2>
-    <ul>
-      <li *ngFor="let item of watchlist">
-        {{ item.ticker }} - {{ item.name }}
-        <!-- Add other details you want to display -->
-      </li>
-    </ul>
+<div class="watchlist-container">
+  <h2>My Watchlist</h2>
+  <div *ngIf="!loading">
+    <div *ngIf="watchlist.length > 0; else noWatchlist">
+      <ul>
+        <li *ngFor="let item of watchlist; let i = index" 
+            [ngClass]="{'positive': item.change > 0, 'negative': item.change < 0, 'neutral': item.change === 0}" 
+            (click)="navigateToDetails(item.ticker)">
+          <span class="ticker">{{ item.ticker }}</span> - {{ item.name }}
+          <span class="close-button" (click)="removeFromWatchlist(item.ticker, i)">&times;</span>
+          <div>
+            Current Price: {{ item.c }}
+            Change: {{ item.d }}
+            Change Percentage: {{ item.dp }}%
+          </div>
+        </li>
+      </ul>
+    </div>
+    <ng-template #noWatchlist>
+      <div class="watchlist-empty-alert">
+        <p>Currently you don't have any stock in your watchlist.</p>
+      </div>
+    </ng-template>
   </div>
-  <ng-template #noWatchlist>
-    <p>You have no items in your watchlist.</p>
-  </ng-template>
-  
+  <div *ngIf="loading" class="loading-indicator">
+    <!-- You can add spinner/loader component here -->
+    Loading...
+  </div>
+</div>

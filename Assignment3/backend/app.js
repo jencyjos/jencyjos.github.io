@@ -26,6 +26,8 @@ app.get('/', (req, res) => {
   res.send('backend is running!');
 });
 
+
+
 // Endpoint for fetching stock details
 app.get('/api/stock/details/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
@@ -129,7 +131,7 @@ app.get('/api/stock/news/:ticker', async (req, res) => {
 });
 
 
-// Historical data API call
+// HOURLY charts API call
 app.get('/api/stock/historical/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
@@ -166,7 +168,74 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
   }
 });
 
-// Company recommendation trends API call
+// SMA data API call
+app.get('/api/stock/sma/:ticker', async (req, res) => {
+  const ticker = req.params.ticker;
+  const multiplier = 1;
+  const timespan = 'hour';
+
+  // Calculate 6 months and 1 day ago date
+  const currentDate = new Date();
+  const fromDate = new Date();
+  fromDate.setFullYear(currentDate.getFullYear() - 2);
+  console.log(fromDate)
+  
+
+  const toDateString = currentDate.toISOString().split('T')[0];
+  const fromDateString = fromDate.toISOString().split('T')[0];
+
+  const finnhubApi = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${fromDateString}/${toDateString}?adjusted=true&sort=asc&apiKey=${process.env.POLYGON_API_KEY}`;
+
+  try {
+    const response = await fetch(finnhubApi);
+    if (!response.ok) {
+      throw new Error(`Error from Polygon API: ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    // Format data for smaChart
+    const formattedData = {
+      stockPriceData: data.results.map(point => [point.t, point.o, point.h, point.l, point.c]),
+      volumeData: data.results.map(point => [point.t, point.v])
+    };
+
+    res.json(formattedData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// earnings charts API call
+app.get('/api/stock/earnings/:ticker', async (req, res) => {
+  const ticker = req.params.ticker;
+  const finnhubApi = `https://finnhub.io/api/v1/stock/earnings?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
+
+  try {
+    const response = await fetch(finnhubApi);
+    if (!response.ok) {
+      throw new Error(`Error from Finnhub API: ${response.statusText}`);
+    }
+    let earningsData = await response.json();
+    
+    // Replace null values with 0
+    earningsData = earningsData.map((item) => ({
+      actual: item.actual !== null ? item.actual : 0,
+      estimate: item.estimate !== null ? item.estimate : 0,
+      period: item.period,
+      symbol: item.symbol,
+      surprise: ((item.actual !== null && item.estimate !== null) ? item.actual - item.estimate : 0).toFixed(4)
+    }));
+    console.log(earningsData);
+    res.json(earningsData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error fetching earnings data' });
+  }
+});
+
+
+//recommendation trends
 app.get('/api/stock/recommendation/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const finnhubApi = `https://finnhub.io/api/v1/stock/recommendation?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
@@ -174,34 +243,53 @@ app.get('/api/stock/recommendation/:ticker', async (req, res) => {
   try {
     const response = await fetch(finnhubApi);
     if (!response.ok) {
-      throw new Error(`Error from Finnhub API: ${response.statusText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const recommendations = await response.json();
-    res.json(recommendations);
+    const data = await response.json();
+    res.json(data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching recommendation trends data:', error);
+    res.status(500).json({ message: 'Error fetching recommendation trends data' });
   }
 });
+
 
 // Company Insider Sentiment API call
 app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
-  // Using the default 'from' date as mentioned in the assignment description
+  // Set the 'from' date to '2022-01-01' as the default parameter
   const fromDate = '2022-01-01';
   const finnhubApi = `https://finnhub.io/api/v1/stock/insider-sentiment?symbol=${ticker}&from=${fromDate}&token=${process.env.FINNHUB_API_KEY}`;
 
   try {
     const response = await fetch(finnhubApi);
     if (!response.ok) {
-      throw new Error(`Error from Finnhub API: ${response.statusText}`);
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json();
-    res.json(data);
+    const sentimentData = await response.json();
+
+    // Transform the sentiment data if necessary
+    // For example, if you need to calculate the aggregates as mentioned in the assignment description.
+    // This is just an example of how you might calculate a total, positive, and negative mspr
+    const msprData = sentimentData.data.reduce(
+      (acc, cur) => {
+        acc.totalMspr += cur.mspr;
+        if (cur.mspr > 0) acc.positiveMspr += cur.mspr;
+        if (cur.mspr < 0) acc.negativeMspr += cur.mspr;
+        return acc;
+      },
+      { totalMspr: 0, positiveMspr: 0, negativeMspr: 0 }
+    );
+
+    res.json({ 
+      sentiment: sentimentData, 
+      msprAggregates: msprData 
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    console.error('Error fetching insider sentiment data:', error);
+    res.status(500).json({ message: 'Error fetching insider sentiment data' });
   }
+  
 });
 
 
@@ -253,7 +341,9 @@ app.get('/api/earnings/:ticker', async (req, res) => {
 // Endpoint to fetch user wallet balance
 app.get('/wallet', async (req, res) => {
   try {
-    const db = await connectToDatabase(); // Assuming you have a method to connect to your DB
+    if (!db) {
+      throw new Error('Database connection not established');
+    }
     const portfolio = await db.collection('portfolio').findOne({}); // Assuming single user
 
     if (!portfolio || portfolio.balance === undefined) {

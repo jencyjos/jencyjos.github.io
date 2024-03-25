@@ -10,7 +10,7 @@
         <i class="star-icon" [ngClass]="{'active': isFavorite}" (click)="toggleWatchlist(stockProfile.ticker)">&#9733;</i>
         <p>{{ stockProfile.name }}</p>
         <p>{{ stockProfile.exchange }}</p>
-        <button class="buy-btn">Buy</button>
+        <button class="buy-btn" (click)="openBuyModal()">Buy</button>
         <!-- Sell button shows only if inPortfolio is true -->
         <button *ngIf="inPortfolio" class="sell-btn">Sell</button>
       </div>
@@ -52,6 +52,12 @@
                 </div>
             </div>
 
+            <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="historicalChartOptions"
+
+            style="width: 100%; height: 400px; display: block;">
+          </highcharts-chart>
         </mat-tab>
 
     
@@ -70,11 +76,56 @@
         
 
         <mat-tab label="Charts">
-          <div id="container" #chartContainer style="height: 400px; min-width: 310px"></div>
+          <!-- <div id="container" #chartContainer style="height: 400px; min-width: 310px"></div> -->
+            <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="smaChartOptions"
+
+            style="width: 100%; height: 400px; display: block;">
+          </highcharts-chart>
+          
         </mat-tab>
 
         <mat-tab label="Insights">
+
+         
           <!-- Insights tab content goes here -->
+          <div >
+            <h3>Insider Sentiment Data</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Month</th>
+                  <th>Change</th>
+                  <th>MSPR</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sentiment of insiderSentimentData.sentiment.data">
+                  <td>{{ sentiment.year }}</td>
+                  <td>{{ sentiment.month }}</td>
+                  <td>{{ sentiment.change }}</td>
+                  <td>{{ sentiment.mspr }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="recommendationChartOptions"
+
+            style="width: 100%; height: 400px; display: block;">
+          </highcharts-chart>
+
+          <highcharts-chart 
+            [Highcharts]="Highcharts"
+            [options]="earningsChartOptions"
+
+            style="width: 100%; height: 400px; display: block;">
+          </highcharts-chart>
+
         </mat-tab>
 
     </mat-tab-group>

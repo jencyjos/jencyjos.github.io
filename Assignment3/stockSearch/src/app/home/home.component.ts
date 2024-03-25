@@ -10,6 +10,7 @@ import { SearchStateService } from '../services/SearchState.service';
 export class HomeComponent {
   searchQuery: string = '';
   searchResults: any;
+  autocompleteResults : any[] =[];
 
   constructor(private stockService: StockService,
     private searchStateService: SearchStateService) { }
@@ -17,6 +18,7 @@ export class HomeComponent {
   onSearch(): void {
     if (!this.searchQuery) {
       console.log("No search query");
+      this.autocompleteResults = [];
       return;
     }
     console.log("Searching for", this.searchQuery);
@@ -26,8 +28,26 @@ export class HomeComponent {
     });
   }
 
-  onClear(): void {
+  onSearchChange(): void {
+    if (this.searchQuery) {
+      this.stockService.getAutocompleteResults(this.searchQuery).subscribe(data => {
+        this.autocompleteResults = data;
+      });
+    } else {
+      this.autocompleteResults = [];
+      this.onClear();
+    }
+  }
+  
+  selectSuggestion(suggestion: any): void {
+    this.searchQuery = suggestion.symbol;
+    this.autocompleteResults = [];
+    this.onSearch();
+  }
+
+ onClear(): void {
     this.searchQuery = '';
     this.searchResults = null;
+    this.autocompleteResults = [];
   }
 }

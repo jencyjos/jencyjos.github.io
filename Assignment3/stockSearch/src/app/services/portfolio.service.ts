@@ -11,7 +11,7 @@ import { map } from 'rxjs/operators';
 })
 export class PortfolioService {
 
-  private apiUrl = 'http://localhost:3000'; // Replace with the URL of your backend
+  private apiUrl = 'http://localhost:3000'; 
   constructor(private http: HttpClient) { }
 
   // Get the current portfolio
