@@ -27,17 +27,27 @@ export class HomeComponent {
       this.searchStateService.setSearchResults(data);
     });
   }
-
   onSearchChange(): void {
     if (this.searchQuery) {
       this.stockService.getAutocompleteResults(this.searchQuery).subscribe(data => {
         this.autocompleteResults = data;
       });
     } else {
-      this.autocompleteResults = [];
-      this.onClear();
+      this.clearAutocompleteResults();
     }
   }
+
+
+  // onSearchChange(): void {
+  //   if (this.searchQuery) {
+  //     this.stockService.getAutocompleteResults(this.searchQuery).subscribe(data => {
+  //       this.autocompleteResults = data;
+  //     });
+  //   } else {
+  //     this.autocompleteResults = [];
+  //     this.onClear();
+  //   }
+  // }
   
   selectSuggestion(suggestion: any): void {
     this.searchQuery = suggestion.symbol;
@@ -48,6 +58,11 @@ export class HomeComponent {
  onClear(): void {
     this.searchQuery = '';
     this.searchResults = null;
+    this.autocompleteResults = [];
+    this.clearAutocompleteResults();
+
+  }
+  clearAutocompleteResults(): void {
     this.autocompleteResults = [];
   }
 }

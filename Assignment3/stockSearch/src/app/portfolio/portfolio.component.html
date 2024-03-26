@@ -1,37 +1,35 @@
-<!-- portfolio.component.html -->
 <div class="portfolio-container">
-    <h1>My Portfolio</h1>
-    <div *ngIf="stocks && stocks.length; else noStocksTemplate">
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Stock Ticker</th>
-            <th>Company Name</th>
-            <th>Shares</th>
-            <th>Average Cost</th>
-            <th>Current Price</th>
-            <th>Total Value</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let stock of stocks">
-            <td>{{ stock.ticker }}</td>
-            <td>{{ stock.name }}</td>
-            <td>{{ stock.shares }}</td>
-            <td>{{ stock.averageCost | currency }}</td>
-            <td>{{ stock.currentPrice | currency }}</td>
-            <td>{{ (stock.shares * stock.currentPrice) | currency }}</td>
-            <td>
-              <button class="btn btn-primary" (click)="openBuyModal(stock)">Buy</button>
-              <button class="btn btn-danger" (click)="openSellModal(stock)">Sell</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <ng-template #noStocksTemplate>
-      <p>You currently have no stocks in your portfolio.</p>
-    </ng-template>
+  <h1>My Portfolio</h1>
+  <div *ngIf="stocks && stocks.length; else noStocksTemplate">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Stock Ticker</th>
+          <th>Company Name</th>
+          <th>Shares</th>
+          <th>Average Cost</th>
+          <th>Current Price</th>
+          <th>Total Value</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let stock of stocks">
+          <td>{{ stock.ticker }}</td>
+          <td>{{ stock.name }}</td>
+          <td>{{ stock.shares }}</td>
+          <td>{{ stock.averageCost | currency }}</td>
+          <td [ngClass]="calculateClass(stock)">{{ stock.currentPrice | currency }}</td>
+          <td>{{ (stock.shares * stock.currentPrice) | currency }}</td>
+          <td>
+            <button class="btn btn-primary" (click)="openBuyModal(stock)">Buy</button>
+            <button class="btn btn-danger" (click)="openSellModal(stock)">Sell</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
+  <ng-template #noStocksTemplate>
+    <p>You currently have no stocks in your portfolio.</p>
+  </ng-template>
+</div>

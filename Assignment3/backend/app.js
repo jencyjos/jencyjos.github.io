@@ -339,35 +339,68 @@ app.get('/api/earnings/:ticker', async (req, res) => {
 });
 
 // Endpoint to fetch user wallet balance
-app.get('/wallet', async (req, res) => {
-  try {
-    if (!db) {
-      throw new Error('Database connection not established');
-    }
-    const portfolio = await db.collection('portfolio').findOne({}); // Assuming single user
+// app.get('/wallet', async (req, res) => {
+//   try {
+//     if (!db) {
+//       throw new Error('Database connection not established');
+//     }
+//     const portfolio = await db.collection('portfolio').findOne({}); // Assuming single user
 
-    if (!portfolio || portfolio.balance === undefined) {
-      return res.status(404).json({ message: 'Portfolio not found or balance undefined' });
-    }
+//     if (!portfolio || portfolio.balance === undefined) {
+//       return res.status(404).json({ message: 'Portfolio not found or balance undefined' });
+//     }
 
-    res.json({ balance: portfolio.balance });
-  } catch (error) {
-    console.error('Error fetching wallet balance:', error);
-    res.status(500).json({ message: 'Error fetching wallet balance' });
-  }
-});
+//     res.json({ balance: portfolio.balance });
+//   } catch (error) {
+//     console.error('Error fetching wallet balance:', error);
+//     res.status(500).json({ message: 'Error fetching wallet balance' });
+//   }
+// });
 
 // Endpoint for buying stocks
-app.post('/api/buy', async (req, res) => {
+// app.post('/api/buy', async (req, res) => {
+//   try {
+//     const { ticker, quantity, price } = req.body;
+//     // buyStock is a function you should implement that handles the buy operation
+//     const result = await buyStock(ticker, quantity, price);
+//     res.status(200).json(result);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+app.get('/api/wallet', async (req, res) => {
   try {
-    const { ticker, quantity, price } = req.body;
-    // buyStock is a function you should implement that handles the buy operation
-    const result = await buyStock(ticker, quantity, price);
-    res.status(200).json(result);
+    const wallet = await db.collection('userWallet').findOne({});
+    res.json(wallet);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Error fetching wallet balance', error });
   }
 });
+
+
+app.post('/api/buy', async (req, res) => {
+  const { ticker, quantity, price } = req.body; // Ensure validation is in place
+  const totalCost = price * quantity;
+
+  try {
+    const wallet = await db.collection('wallet').findOne({});
+    if (wallet.balance < totalCost) {
+      return res.status(400).json({ message: 'Insufficient funds' });
+    }
+
+    // Update wallet
+    await db.collection('wallet').updateOne({}, { $inc: { balance: -totalCost } });
+
+    // Update portfolio (This is conceptual. Adjust based on your schema)
+    // Add logic to update the portfolio here
+
+    res.json({ message: 'Transaction successful' });
+  } catch (error) {
+    res.status(500).json({ message: 'Transaction failed', error });
+  }
+});
+
 
 // Endpoint for selling stocks
 app.post('/api/sell', async (req, res) => {

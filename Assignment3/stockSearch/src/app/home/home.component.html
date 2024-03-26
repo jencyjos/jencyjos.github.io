@@ -17,7 +17,7 @@
         <div class="row justify-content-center">
           <div class="col-md-6">
             <div class="input-group">
-              <input type="text" class="form-control" placeholder="Enter stock ticker symbol" aria-label="Stock ticker" [(ngModel)]="searchQuery" (keyup)="onSearchChange()">
+              <input type="text" class="form-control" placeholder="Enter stock ticker symbol" aria-label="Stock ticker" [(ngModel)]="searchQuery" (input)="onSearchChange()">
               <button class="btn btn-outline-primary" type="button" id="button-search" (click)="onSearch()">
                 <i class="bi bi-search"></i>
               </button>

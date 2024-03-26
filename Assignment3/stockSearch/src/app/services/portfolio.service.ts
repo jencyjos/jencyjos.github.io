@@ -5,7 +5,11 @@ import { Observable } from 'rxjs';
 import { Stock } from '../../../../backend/models/stock.model'; // Path might differ based on where you place your model
 import { map } from 'rxjs/operators';
 
-
+interface TransactionResponse {
+  success: boolean;
+  message?: string;
+  // Add any other relevant fields that your API might return
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -40,7 +44,7 @@ export class PortfolioService {
   }
 
   // Method to fetch the user's wallet balance
-  getUserWallet(): Observable<{balance: number}> {
-    return this.http.get<{balance: number}>(`${this.apiUrl}/wallet`);
+  getWalletBalance(): Observable<{ balance: number }> {
+    return this.http.get<{ balance: number }>(`${this.apiUrl}/api/wallet`);
   }
 }

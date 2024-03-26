@@ -20,18 +20,15 @@ export class BuyModalComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Fetch the user's wallet balance on component initialization
     this.fetchUserWallet();
   }
 
   fetchUserWallet() {
-    // Assume getUserWallet is implemented in your PortfolioService
-    this.portfolioService.getUserWallet().subscribe({
-      next: (walletResponse) => {
+    this.portfolioService.getWalletBalance().subscribe({
+      next: (walletResponse: { balance: number }) => {
         this.userWallet = walletResponse.balance;
-        console.log(this.userWallet); // Access the balance property
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Failed to fetch user wallet', error);
       }
     });
@@ -57,12 +54,12 @@ export class BuyModalComponent implements OnInit {
   onSubmit() {
     if (this.canBuy()) {
       this.portfolioService.buyStock(this.stock.ticker, this.quantity).subscribe({
-        next: (result) => {
+        next: (result: any) => { // Consider using a specific type instead of any if possible
           // Update the user wallet after a successful transaction
           this.userWallet -= this.totalPrice;
           this.activeModal.close(result);
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error buying stock', error);
         }
       });
