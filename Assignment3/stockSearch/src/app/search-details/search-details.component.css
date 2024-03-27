@@ -125,10 +125,91 @@
     margin-top: 1rem;
 }
 
-.summary-content p {
+.summary-content {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
     color: #555;
     margin: 0.5rem 0;
+    /* margin: auto; */
 }
+
+/* Section containing High Price, Low Price, etc. */
+.summary-section {
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+}
+
+/* Styling for each piece of information in the summary section */
+.summary-section p {
+    color: #333;
+    font-size: 0.95rem; 
+    margin: 0.5rem 0;
+}
+
+.summary-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.summary-details, .chart-container {
+    /* If you want both the summary and the chart to have equal widths */
+    flex: 1 1 0px;
+}
+.summary-details {
+    flex: 1; 
+    min-width: 250px; 
+}
+
+.chart-container {
+    flex: 1; 
+    max-width: 600px; 
+}
+
+/* About the Company section */
+
+.company-info {
+    /* To center the company info between the stock details and the chart */
+    margin: 0 auto;
+    max-width: 600px;
+    width: 100%;
+    margin-top: 2rem;
+    align-items: center;
+}
+
+.company-info h3 {
+    color: #000;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid #000; /* Adds a line under the title */
+    padding-bottom: 0.25rem;
+}
+
+.company-info p {
+    color: #333;
+    font-size: 0.95rem; /* Adjust as needed */
+    margin: 0.5rem 0;
+    display: flexbox;
+    align-items: center;
+}
+
+/* Style for webpage link */
+.company-info a {
+    color: #1a0dab; /* Google blue link color */
+    text-decoration: none;
+}
+
+/* Additional styling can be added for hover effects, etc. */
+
+/* Chart container styling, if necessary */
+.highcharts-chart {
+    border-top: 1px solid #ccc;
+    margin-top: 2rem;
+    height: auto;
+}
+/* Styling for each piece of information in the summary section */
 
 /* ---------------TOP NEWS TAB ---------------- */
 

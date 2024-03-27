@@ -6,8 +6,7 @@
     <div class="top-section">
       <!-- Left side for stock symbol, name, exchange -->
       <div class="left-side">
-        <h2>{{ stockProfile.ticker }}</h2>
-        <i class="star-icon" [ngClass]="{'active': isFavorite}" (click)="toggleWatchlist(stockProfile.ticker)">&#9733;</i>
+        <h2>{{ stockProfile.ticker }}  <i class="star-icon" [ngClass]="{'active': isFavorite}" (click)="toggleWatchlist(stockProfile.ticker)">&#9733;</i> </h2>
         <p>{{ stockProfile.name }}</p>
         <p>{{ stockProfile.exchange }}</p>
         <button class="buy-btn" (click)="openBuyModal()">Buy</button>
@@ -15,50 +14,55 @@
         <button *ngIf="inPortfolio" class="sell-btn">Sell</button>
       </div>
       
+        <!-- Center section with logo and market status indication -->
+    <div class="center-section">
+      <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo">
+      <p>Market is {{ marketOpen ? 'Open' : 'Closed' }}</p>
+    </div>
+
       <!-- Right side for stock quote details -->
       <div class="right-side">
         <p>{{ stockQuote.c }}</p>
         <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
           {{ stockQuote.d }} ({{ stockQuote.dp }}%)
         </p>
-        <p>{{ stockQuote.t | date:'long' }}</p>
+        <p>{{ stockQuote.t | date:'yyyy-MM-dd HH-mm-ss' }}</p>
       </div>
     </div>
     
-    <!-- Center section with logo and market status indication -->
-    <div class="center-section">
-      <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo">
-      <p>Market is {{ marketOpen ? 'Open' : 'Closed' }}</p>
-    </div>
+  
 
     <mat-tab-group>
 
-        <mat-tab label="Summary">
-            <div class="summary-content">
-                <!-- Stock Quote Information -->
-                <div class ="summary-section">
-                    <p>High Price: {{ stockQuote.h }}</p>
-                    <p>Low Price: {{ stockQuote.l }}</p>
-                    <p>Open Price: {{ stockQuote.o }}</p>
-                    <p>Prev. Price: {{ stockQuote.pc }}</p>
-                </div>
-                <!-- Company Basic Information -->
-                <div class="company-info">
-                    <h3>About the Company</h3>
-                    <p>IPO Date: {{ stockProfile.ipo | date }}</p>
-                    <p>Industry: {{ stockProfile.finnhubIndustry }}</p>
-                    <p>Webpage: {{ stockProfile.weburl }}</p>
-                    <!-- <p>Company peers: <br> {{ companyPeers.response }}</p> -->
-                </div>
+      <mat-tab label="Summary">
+        <div class="summary-container">
+  
+          <div class="summary-details">
+            <!-- Stock Quote Information -->
+            <div class="summary-section">
+              <p> <b>High Price: </b>{{ stockQuote.h }}</p>
+              <p> <b>Low Price:</b> {{ stockQuote.l }}</p>
+              <p> <b>Open Price: </b>{{ stockQuote.o }}</p>
+              <p> <b>Prev. Price:</b> {{ stockQuote.pc }}</p>
             </div>
-
-            <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="historicalChartOptions"
-
-            style="width: 100%; height: 400px; display: block;">
-          </highcharts-chart>
-        </mat-tab>
+            <!-- Company Basic Information -->
+            <div class="company-info">
+              <h3> <b> <u>About the Company</u></b></h3>
+              <p><b>IPO Date: </b>{{ stockProfile.ipo  }}</p>
+              <p><b>Industry: </b>{{ stockProfile.finnhubIndustry }}</p>
+              <!-- Webpage URL as a clickable link -->
+              <p><b>Webpage: </b> <a [href]="stockProfile.weburl" target="_blank">{{ stockProfile.weburl }}</a></p>
+              <!-- <p>Company peers: <br> {{ companyPeers.response }}</p> -->
+            </div>
+          </div>
+          <div class="chart-container">
+            <highcharts-chart [Highcharts]="Highcharts" [options]="historicalChartOptions"
+              style="width: 100%; height: 400px; display: block;">
+            </highcharts-chart>
+          </div>
+  
+        </div>
+      </mat-tab>
 
     
         <mat-tab label="Top News">
