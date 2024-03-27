@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { Stock } from '../../../../backend/models/stock.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'buy-modal',
@@ -33,22 +34,29 @@ export class BuyModalComponent implements OnInit {
       }
     });
   }
+  quantity: number = 1;
 
-  get quantity(): number {
-    return this._quantity;
-  }
+  // get quantity(): number {
+  //   return this._quantity;
+  // }
 
-  set quantity(value: number) {
-    this._quantity = value;
-    this.totalPrice = this.calculateTotalPrice(value);
+  // set quantity(value: number) {
+  //   this._quantity = value;
+  //   this.totalPrice = this.calculateTotalPrice(value);
+  // }
+  onQuantityChange(newQuantity: number): void {
+    this.quantity = newQuantity;
+    this.totalPrice = this.calculateTotalPrice(newQuantity);
   }
 
   calculateTotalPrice(quantity: number): number {
+    console.log(typeof this.stock.currentPrice);
     return this.stock.currentPrice * quantity;
   }
 
   canBuy(): boolean {
-    return this.totalPrice <= this.userWallet && this.quantity > 0;
+    console.log('Checking canBuy:', this.totalPrice, this.userWallet);
+    return this.totalPrice <= this.userWallet && this.quantity >=1 ;
   }
 
   onSubmit() {
