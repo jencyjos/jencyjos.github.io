@@ -13,6 +13,9 @@ export class SellModalComponent {
   @Input() stock!: Stock;
   quantity: number = 1;
   errorMessage: string = ''; // Added for displaying error messages in the modal
+  showAlert : boolean = false
+  alertMessage: string = ""
+  isSuccess: boolean = false
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -25,10 +28,15 @@ export class SellModalComponent {
       return; // Prevents the sell operation if quantity is invalid
     }
 
-    this.portfolioService.sellStock(this.stock.ticker, this.quantity).subscribe({
+    this.portfolioService.sellStock(this.stock.ticker, this.quantity, this.stock.currentPrice).subscribe({
       next: (result: any) => { // Consider using a specific type for `result`
         // Handle the successful sell
         this.activeModal.close(result);
+        this.alertMessage = 'Sold successfully!';
+        this.isSuccess = true
+        this.showAlert = true; // Display the alert
+        setTimeout(() => { this.showAlert = false; this.alertMessage = ''; }, 25000); // Hide the alert after 3 seconds
+       
       },
       error: (error: any) => { // Consider using a specific type for `error`
         // Handle the error case
@@ -37,6 +45,7 @@ export class SellModalComponent {
       }
     });
   }
+
   canSell(): boolean {
     return this.quantity >= 1 && this.quantity <= this.stock.shares;
   }

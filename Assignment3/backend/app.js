@@ -380,24 +380,40 @@ app.get('/api/wallet', async (req, res) => {
 
 
 app.post('/api/buy', async (req, res) => {
-  const { ticker, quantity, price } = req.body; // Ensure validation is in place
+  const { ticker, name, quantity, price } = req.body; // Ensure validation is in place
   const totalCost = price * quantity;
 
   try {
-    const wallet = await db.collection('wallet').findOne({});
+    const wallet = await db.collection('userWallet').findOne({});
     if (wallet.balance < totalCost) {
       return res.status(400).json({ message: 'Insufficient funds' });
     }
 
     // Update wallet
-    await db.collection('wallet').updateOne({}, { $inc: { balance: -totalCost } });
+    await db.collection('userWallet').updateOne({}, { $inc: { balance: -totalCost } });
 
     // Update portfolio (This is conceptual. Adjust based on your schema)
     // Add logic to update the portfolio here
-
-    res.json({ message: 'Transaction successful' });
+    const result = await buyStock(ticker, name, quantity, price)
+    if (result.success ==  true)
+      res.json({ message: 'Transaction successful' });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: 'Transaction failed', error });
+  }
+});
+
+app.get('/api/portfolio', async (req, res) => {
+  try {
+    const portfolio = await db.collection('portfolio').findOne({});
+    if (portfolio && portfolio.stocks && portfolio.stocks.length > 0) {
+      res.json({stocks:portfolio.stocks}); // Return array of stocks
+    } else {
+      res.json({stocks:[]});
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({ message: 'Failed to fetch portfolio', error });
   }
 });
 
@@ -405,11 +421,17 @@ app.post('/api/buy', async (req, res) => {
 // Endpoint for selling stocks
 app.post('/api/sell', async (req, res) => {
   try {
-    const { ticker, quantity, price } = req.body;
+    const { ticker, quantity, currentPrice } = req.body;
+    const wallet = await db.collection('userWallet').findOne({});
+    revenue = quantity*currentPrice
+    // Update wallet
+    await db.collection('userWallet').updateOne({}, { $inc: { balance: +revenue } });
+    console.log("updated the wallet")
     // sellStock is a function you should implement that handles the sell operation
-    const result = await sellStock(ticker, quantity, price);
+    const result = await sellStock(ticker, quantity, currentPrice);
     res.status(200).json(result);
   } catch (error) {
+    console.log("error ocured in sell", error)
     res.status(500).json({ message: error.message });
   }
 });

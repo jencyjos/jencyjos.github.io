@@ -14,6 +14,10 @@ export class BuyModalComponent implements OnInit {
   private _quantity: number = 1;
   userWallet!: number; // This will now be fetched dynamically
   totalPrice: number = 0;
+  quantityChanged : boolean = false;
+  showAlert : boolean = false
+  alertMessage: string = ""
+  isSuccess = false
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -34,7 +38,7 @@ export class BuyModalComponent implements OnInit {
       }
     });
   }
-  quantity: number = 1;
+  quantity: number = 0;
 
   // get quantity(): number {
   //   return this._quantity;
@@ -47,6 +51,7 @@ export class BuyModalComponent implements OnInit {
   onQuantityChange(newQuantity: number): void {
     this.quantity = newQuantity;
     this.totalPrice = this.calculateTotalPrice(newQuantity);
+    this.quantityChanged = true
   }
 
   calculateTotalPrice(quantity: number): number {
@@ -55,20 +60,28 @@ export class BuyModalComponent implements OnInit {
   }
 
   canBuy(): boolean {
-    console.log('Checking canBuy:', this.totalPrice, this.userWallet);
-    return this.totalPrice <= this.userWallet && this.quantity >=1 ;
+    console.log('Checking canBuy:', this.totalPrice, this.userWallet, this.quantity);
+    return (this.totalPrice <= this.userWallet) && this.quantity >=1 ;
   }
 
   onSubmit() {
     if (this.canBuy()) {
-      this.portfolioService.buyStock(this.stock.ticker, this.quantity).subscribe({
+      console.log('we can buy this!')
+      this.portfolioService.buyStock(this.stock.ticker, this.stock.name, this.quantity, this.stock.currentPrice).subscribe({
         next: (result: any) => { // Consider using a specific type instead of any if possible
           // Update the user wallet after a successful transaction
           this.userWallet -= this.totalPrice;
           this.activeModal.close(result);
+          this.alertMessage = 'Stock bought successfully!';
+          this.isSuccess = true
+          this.showAlert = true; // Display the alert
+          setTimeout(() => { this.showAlert = false; }, 25000); // Hide the alert after 3 seconds
         },
         error: (error: any) => {
           console.error('Error buying stock', error);
+          this.alertMessage = 'Failed to buy stock!';
+          this.showAlert = true; // Display the alert
+          setTimeout(() => { this.showAlert = false; }, 5000); // Hide the alert after 3 seconds
         }
       });
     } else {

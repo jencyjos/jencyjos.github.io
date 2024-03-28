@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
+import { Stock } from '../../../../backend/models/stock.model'; 
 
 @Component({
   selector: 'app-portfolio',
@@ -10,8 +11,8 @@ import { SellModalComponent } from '../sell-modal/sell-modal.component';
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
-  stocks: any[] = []; // Assuming you have a model for stocks
-  walletBalance: number = 25000; // Initial balance, should ideally be fetched from the backend
+  stocks: any[] = []; 
+  walletBalance: number = 25000; // Initial balance
 
   constructor(
     private portfolioService: PortfolioService,
@@ -22,10 +23,39 @@ export class PortfolioComponent implements OnInit {
     this.loadWalletBalance();
   }
 
+  fetchStockDetails(): void {
+    for (let stock of this.stocks) {
+      this.portfolioService.getStockDetails(stock.ticker).subscribe(
+        (data: any) => {
+          stock.name = data.name;
+        },
+        (error: any) => {
+          console.error('Error fetching stock details', error);
+        }
+      );
+    }
+  }
+
+  fetchCurrentPrice(): void {
+    for (let stock of this.stocks) {
+      this.portfolioService.getStockPrice(stock.ticker).subscribe(
+        (data: any) => {
+          stock.currentPrice = data.c;
+        },
+        (error: any) => {
+          console.error('Error fetching stock details', error);
+        }
+      );
+    }
+  }
+
   loadPortfolio(): void {
     this.portfolioService.getPortfolio().subscribe(
-      (data: any[]) => { // Adjust based on your actual Stock model
-        this.stocks = data;
+      (data: any) => { 
+        this.stocks = data.stocks;
+        console.log("its an ", typeof(this.stocks))
+        this.fetchStockDetails();
+        this.fetchCurrentPrice();
       },
       (error: any) => {
         console.error('Error fetching portfolio', error);
