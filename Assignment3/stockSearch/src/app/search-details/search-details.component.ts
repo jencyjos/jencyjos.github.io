@@ -113,11 +113,13 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
     });
-    this.state.searchResults = this.searchResults
+    this.state.searchResults = this.searchResults;
     this.stockService.setState(this.state);
     this.checkIfFavorite(this.stockProfile.ticker);
     this.ngOnChanges();
   }
+
+
 
   ngOnDestroy() {
     // Unsubscribe from any subscriptions to prevent memory leaks
@@ -125,7 +127,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
   fetchStockDetails(ticker: string): void {
     this.checkIfFavorite(ticker); 
-
     this.state.ticker = ticker;
     this.stockService.setState(this.state);
 

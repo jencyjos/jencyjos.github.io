@@ -77,8 +77,8 @@ export class WatchlistComponent {
 
   navigateToDetails(ticker: string) {
     const url = `/search/${ticker}`; 
-    window.open(url, '_blank'); // Open in a new tab
-    //this.router.navigateByUrl(`search/${ticker}`); // Navigate to the details route
+    // window.open(url, '_blank');  Open in a new tab
+    this.router.navigateByUrl(`search/${ticker}`); // Navigate to the details route
   }
 
   removeFromWatchlist(event: MouseEvent, ticker: string, index: number) {
