@@ -47,28 +47,7 @@ app.get('/api/stock/details/:ticker', async (req, res) => {
 });
 
 // Autocomplete API for symbol search
-// app.get('/api/autocomplete/:query', async (req, res) => {
-//   const query = req.params.query;
-//   const finnhubApi = `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.FINNHUB_API_KEY}`;
 
-//   try {
-//     const response = await fetch(finnhubApi);
-//     if (!response.ok) {
-//       throw new Error(`Error from Finnhub API: ${response.statusText}`);
-//     }
-//     const data = await response.json();
-//     const filteredResponse = data.result.map(item => ({
-//       description: item.description,
-//       displaySymbol: item.displaySymbol,
-//       symbol: item.symbol,
-//       type: item.type
-//     }));
-//     res.json(filteredResponse);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 app.get('/api/autocomplete/:query', async (req, res) => {
   const query = req.params.query;
   const finnhubApi = `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.FINNHUB_API_KEY}`;
@@ -136,10 +115,9 @@ app.get('/api/stock/quote/:ticker', async(req,res) => {
 
 
 //company news
+
 app.get('/api/stock/news/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
-  // const fromDate = "2022-01-01"; 
-  // const toDate = "2022-12-31"; 
   const currentDate = new Date();
   const sevenDaysBefore = new Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
 
@@ -149,13 +127,24 @@ app.get('/api/stock/news/:ticker', async (req, res) => {
 
   try {
       const response = await fetch(finnhubApi);
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(`Error from Finnhub API: ${response.statusText}`);
+      }
+      let data = await response.json();
+
+      // Filter out news articles without an image
+      data = data.filter(article => article.image && article.image.trim() !== '');
+
+      // Limit the number of news articles to 20
+      data = data.slice(0, 20);
+
       res.json(data);
   } catch (error) {
       console.error(error);
       res.status(500).json({ message: error.message });
   }
 });
+
 
 
 // HOURLY charts API call
@@ -333,6 +322,7 @@ app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
 
 
 //company peers
+
 app.get('/api/peers/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const finnhubApi = `https://finnhub.io/api/v1/stock/peers?symbol=${ticker}&token=${process.env.FINNHUB_API_KEY}`;
@@ -343,7 +333,11 @@ app.get('/api/peers/:ticker', async (req, res) => {
       throw new Error(`Error from Finnhub API: ${response.statusText}`);
     }
     const data = await response.json();
-    res.json(data);
+
+    // Filter out any symbols containing a dot ('.')
+    const filteredData = data.filter(symbol => !symbol.includes('.'));
+
+    res.json(filteredData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });

@@ -17,14 +17,28 @@ export class SellModalComponent {
   showAlert : boolean = false
   alertMessage: string = ""
   isSuccess: boolean = false
+  userWallet: number = 0;
+  sellable: boolean = false;
 
   constructor(
     public activeModal: NgbActiveModal,
     private portfolioService: PortfolioService,
     private renderer: Renderer2
-  ) {}
+  ) {
+    this.portfolioService.getWalletBalance().subscribe({
+      next: (walletResponse: { balance: number }) => {
+        this.userWallet = walletResponse.balance;
+      },
+      error: (error: any) => {
+        console.error('Failed to fetch user wallet', error);
+      }
+    });
+  }
 
   onSubmit() {
+
+
+
     if (this.quantity > this.stock.shares) {
       this.errorMessage = "You can't sell more shares than you own.";
       return; // Prevents the sell operation if quantity is invalid
@@ -69,4 +83,19 @@ export class SellModalComponent {
   canSell(): boolean {
     return this.quantity >= 1 && this.quantity <= this.stock.shares;
   }
+
+
+  onQuantityChange(newQuantity: number): void {
+    this.quantity = newQuantity;
+    if(this.quantity > this.stock.shares || this.quantity < 1){
+      this.sellable = true
+    }
+    else{
+      this.sellable = false;
+    }
+  }
+
+
 }
+
+

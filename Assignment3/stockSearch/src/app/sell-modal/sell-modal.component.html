@@ -1,9 +1,9 @@
-sell-modal.component.html
+<!-- 
 <div *ngIf="showAlert && alertMessage" class="alert" [ngClass]="{'green-alert': isSuccess, 'red-alert': !isSuccess}">
   {{ alertMessage }}
 </div>
 <div class="modal-header">
-  <h4 class="modal-title">Sell Stock</h4>
+  <h5 class="modal-title">{{ stock.ticker }}</h5>
   <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
     <span aria-hidden="true">&times;</span>
   </button>
@@ -17,10 +17,10 @@ sell-modal.component.html
     </div>
     <div class="form-group">
       <label for="currentPrice">Current Price</label>
-      <input type="text" id="currentPrice" class="form-control" [value]="stock.currentPrice | currency" readonly>
+      <input type="text" id="currentPrice" class="form-control" [value]="stock.currentPrice" readonly>
     </div>
     <div class="form-group">
-      <label for="quantity">Quantity to Sell</label>
+      <label for="quantity">Quantity</label>
       <input type="number" id="quantity" name="quantity" class="form-control" [(ngModel)]="quantity" required min="1" [max]="stock.shares">
     </div>
 
@@ -29,28 +29,34 @@ sell-modal.component.html
       <button type="submit" class="btn btn-danger" [disabled]="!canSell()">Sell</button>
     </div>
   </form>
-</div>
+</div> -->
 
 
-<!-- <div class="modal-header">
+
+<div class="modal-header">
   <h5 class="modal-title">{{ stock.ticker }}</h5>
-  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+  <div class="d-flex flex-row-reverse">
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><i class="bi bi-x"></i></button>
+</div>
 </div>
 <form (ngSubmit)="onSubmit()">
 
 <div class="modal-body">
-  Current Price: {{ stock.currentPrice }}
+  Current Price: {{ stock.currentPrice | currency:'USD':'symbol' }}
   <br>
   Money in Wallet: {{ userWallet | currency:'USD':'symbol' }}
   <br>
   Quantity: <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
   <br>
-  <small *ngIf="quantityChanged && totalPrice > userWallet" class="text-danger">
-    You don't have enough stocks to buy this quantity.
+  <small *ngIf="sellable" class="text-danger">
+    You cannot sell the stock you don't own.
   </small>
 </div>
 <div class="modal-footer">
-  <p class="text-center" style="display:inline-block">Total: {{ totalPrice | currency:'USD':'symbol' }}</p>
-  <button type="submit" class="btn btn-danger" [disabled]="!canSell()">Sell</button>
+  <p class="text-center" style="display:inline-block">Total: {{ (quantity * stock.currentPrice) | currency:'USD':'symbol' }}</p>
+  <button type="submit" class="btn btn-success" [disabled]="!canSell()">Buy</button>
 </div>
-</form> -->
+</form>
+
+
+

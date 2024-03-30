@@ -39,8 +39,18 @@
           </div>
         </div>
       </div>
+
+      <div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="tickerNotFound">
+        No data found. Please enter a valid Ticker.
+      </div>
+
+
+      <div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="emptyTicker">
+        Enter a valid Ticker.
+      </div>
+
       <!-- change1 -->
-      <div *ngIf="searchResults">
+      <div *ngIf="searchResults && !tickerNotFound">
         <app-search-details [searchQuery]="searchQuery"></app-search-details>
       </div>
     

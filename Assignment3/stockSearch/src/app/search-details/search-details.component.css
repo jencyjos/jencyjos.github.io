@@ -79,7 +79,13 @@
 
 }
 
+.text-red {
+  color: red;
+}
 
+.text-green {
+  color: green;
+}
 /* --------------------------------------------  TABS ------------------------------------------- */
 /* Center the tab labels within the tab group */
 .mat-tab-group {

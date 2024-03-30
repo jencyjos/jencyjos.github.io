@@ -2,6 +2,9 @@ import { Component, Input, OnInit, ViewChild, ElementRef, AfterViewInit, OnDestr
 import { ActivatedRoute } from '@angular/router';
 import { StockService } from '../services/stock.service';
 import { MatDialog } from '@angular/material/dialog';
+import { formatDate } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PortfolioService } from '../services/portfolio.service';
 
 // import HC_exporting from 'highcharts/modules/exporting'; 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
@@ -18,9 +21,12 @@ HC_stock(Highcharts);
 indicators(Highcharts);
 vbpa(Highcharts);
 
-
 // HC_exporting(Highcharts);
 // insider-sentiment.model.ts
+interface Stock {
+  ticker: string;
+  // ... any other properties
+}
 
 interface RecommendationData {
   buy: number;
@@ -65,12 +71,19 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   chartOptions?: Highcharts.Options = {}; 
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
   isFavorite: boolean = false;
+  onFav: boolean = false;
+  onUnfav: boolean = false;
   searchResults: any;
   results: any;
   watchlist: string[] = []; 
   companyPeers : any[] =[];
   insiderSentimentData: any;
-
+  lastUpdatedTime: string = ""; 
+  tickerNotFound : boolean = false;
+  todayDate: any;
+  walletBalance: number = 0;
+  stocks: any[] = []; 
+  stock: any;
   state:any;
   
   historicalChartOptions!: Highcharts.Options;
@@ -83,8 +96,19 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     private stockService: StockService,
     public dialog: MatDialog,
     private modalService: NgbModal,
-    private searchStateService: SearchStateService
+    private searchStateService: SearchStateService,
+    private snackBar: MatSnackBar,
+    private portfolioService: PortfolioService,
+    
+    
   ) {
+    this.tickerNotFound = false;
+    this.setCurrentTime();}
+
+  setCurrentTime() {
+    const now = new Date();
+    this.todayDate = now;
+    this.lastUpdatedTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
   }
 
 
@@ -114,6 +138,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
+
     });
     this.state.searchResults = this.searchResults;
     this.stockService.setState(this.state);
@@ -127,6 +152,35 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     // Unsubscribe from any subscriptions to prevent memory leaks
   }
 
+  // fetchPortfolioetails(): void {
+  //     this.portfolioService.getStockDetails(this.searchQuery).subscribe(
+  //       (data: any) => {
+  //         this.stock = data;
+  //         let check = this.stock.filter(x => x.ticker == this.searchQuery)
+  //         if(check[0] == this.searchQuery){
+  //           this.inPortfolio = true;
+  //         }
+  //       },
+  //       (error: any) => {
+  //         console.error('Error fetching stock details', error);
+  //       }
+  //     ); 
+  // }
+
+  fetchPortfolioDetails(): void {
+    this.portfolioService.getStockDetails(this.searchQuery).subscribe(
+      (data: Stock[]) => { // Assuming that getStockDetails returns an array of Stock
+        this.stock = data;
+        let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
+        if(check.length > 0 && check[0].ticker === this.searchQuery){
+          this.inPortfolio = true;
+        }
+      },
+      (error: any) => {
+        console.error('Error fetching stock details', error);
+      }
+    );
+  }
   fetchStockDetails(ticker: string): void {
     this.checkIfFavorite(ticker); 
     this.state.ticker = ticker;
@@ -143,6 +197,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.stockProfile = data;
       this.state.stockProfile = this.stockProfile;
       this.stockService.setState(this.state);
+      if(JSON.stringify(this.stockProfile) === '{}'){
+        this.tickerNotFound = true;
+      }
+
     });
 
     this.stockService.getTopNews(ticker).subscribe(data => {
@@ -157,6 +215,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.companyPeers = data;
       this.state.companyPeers = this.companyPeers;
       this.stockService.setState(this.state);
+
     }, error => {
       console.error('Error fetching company peers', error);
     });
@@ -227,6 +286,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  
 
   drawPriceChart(stockData: any): void {
     this.historicalChartOptions= {
@@ -248,7 +308,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     },
       title:
       {
-        text: ` Hourly Price Variation`
+        text: `${this.stockProfile.ticker} Hourly Price Variation`
       },
 
       xAxis: {
@@ -274,7 +334,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       series: [
           {
             type: 'line',
-            name: `AAAA`,
+            name: this.stockProfile.ticker,
             data: stockData["stockPriceData"],
             yAxis: 0,
             threshold: null,
@@ -625,7 +685,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         },
 
         title: {
-            text: 'AAPL Historical'
+            text: `${this.searchQuery} Historical`
         },
 
         subtitle: {
@@ -684,8 +744,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
             series: {
                 dataGrouping: {
                     units: [[
-                        'week',                         // unit name
-                        [2]                             // allowed multiples
+                        'week',                         
+                        [2]                             
                     ], [
                         'month',
                         [1, 2, 3, 4, 6]
@@ -729,6 +789,19 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
+    // determineMarketStatus() {
+    //   if (this.stockQuote && this.stockQuote.t) {
+    //     const lastUpdate = new Date(this.stockQuote.t * 1000);
+    //     const now = new Date();
+    //     const difference = now.getTime() - lastUpdate.getTime();
+    
+    //     console.log(`Last update: ${lastUpdate}`);
+    //     console.log(`Current time: ${now}`);
+    //     console.log(`Difference in minutes: ${difference / 60000}`);
+    
+    //     this.marketOpen = difference < 5 * 60 * 1000;
+    //   }
+    // }
     determineMarketStatus() {
       if (this.stockQuote && this.stockQuote.t) {
         const lastUpdate = new Date(this.stockQuote.t * 1000);
@@ -740,6 +813,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         console.log(`Difference in minutes: ${difference / 60000}`);
     
         this.marketOpen = difference < 5 * 60 * 1000;
+        if (this.marketOpen == false) {
+          this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+        }
       }
     }
   
@@ -757,22 +833,53 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-  toggleWatchlist(ticker: string): void {
-    // Toggle the visual state
-    this.isFavorite = !this.isFavorite;
+  // toggleWatchlist(ticker: string): void {
+  //   // Toggle the visual state
+  //   this.isFavorite = !this.isFavorite;
 
-    // Call the StockService method to add/remove from watchlist
+  //   // Call the StockService method to add/remove from watchlist
+  //   this.stockService.toggleWatchlist(ticker).subscribe({
+  //     next: (response) => {
+  //       // Display a self-closing alert with the response message
+  //       this.isFavorite = !this.isFavorite; 
+  //       alert(response.message);
+  //     },
+  //     error: (error) => {
+  //       console.error('Error updating watchlist', error);
+  //     }
+  //   });
+  // }
+
+  toggleWatchlist(ticker: string): void {
+    // Assuming this.isFavorite already toggled by the method caller or handled here
     this.stockService.toggleWatchlist(ticker).subscribe({
       next: (response) => {
-        // Display a self-closing alert with the response message
+        // Use MatSnackBar for the message
+        if(this.isFavorite){
+        this.onUnfav = true;
+        setTimeout(() => {
+          this.onUnfav =false;
+        }, 5000);
+      }
+      else if(!this.isFavorite){
+        this.onFav = true;
+        setTimeout(() => {
+          this.onFav =false;
+        }, 5000);
+      }
+
+        // Optionally toggle isFavorite based on actual operation success
         this.isFavorite = !this.isFavorite; 
-        alert(response.message);
       },
       error: (error) => {
         console.error('Error updating watchlist', error);
+        this.snackBar.open('Failed to update watchlist. Please try again.', 'Close', {
+          duration: 3000,
+        });
       }
     });
   }
+  
 
   openBuyModal() {
     // Logic to open the Buy Modal
@@ -791,6 +898,60 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       // Handle the dismiss
     });
 }
+
+openSellModal(stock: any): void {
+  const modalRef = this.modalService.open(SellModalComponent);
+  modalRef.componentInstance.stock = stock;
+
+  modalRef.result.then((result) => {
+    if (result && result.success == true) {
+      this.loadPortfolio();
+      this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+    }
+  }, (reason) => {});
+}
+
+loadPortfolio(): void {
+  this.portfolioService.getPortfolio().subscribe(
+    (data: any) => { // Adjust based on your actual Stock model
+      this.stocks =[...data.stocks];;
+      this.fetchStockDetails(this.searchQuery);
+      this.fetchCurrentPrice();
+    },
+    (error: any) => {
+      console.error('Error fetching portfolio', error);
+    }
+  );
+}
+
+
+loadWalletBalance(): void {
+  // Implement this method in your service
+  this.portfolioService.getWalletBalance().subscribe(
+    (data: { balance: number }) => {
+      this.walletBalance = data.balance;
+    },
+    (error: any) => {
+      console.error('Error fetching wallet balance', error);
+    }
+  );
+}
+
+
+fetchCurrentPrice(): void {
+  for (let stock of this.stocks) {
+    this.portfolioService.getStockPrice(stock.ticker).subscribe(
+      (data: any) => {
+        stock.currentPrice = data.c;
+      },
+      (error: any) => {
+        console.error('Error fetching stock details', error);
+      }
+    );
+  }
+}
+
+
 
 
   

@@ -18,6 +18,8 @@ export class HomeComponent implements OnInit{
   autocompleteResults : any[] =[];
   showAuto: boolean = false;
   control = new FormControl();
+  tickerNotFound: boolean = false;
+  emptyTicker: boolean = false;
 
   constructor(private stockService: StockService,
     private searchStateService: SearchStateService,
@@ -33,6 +35,8 @@ export class HomeComponent implements OnInit{
       });
     }
   ngOnInit() {
+    this.emptyTicker = false;
+    this.tickerNotFound = false;
     this.searchResults = {}
     console.log("Fuckedd uppp");
     this.control.valueChanges.subscribe(
@@ -46,10 +50,20 @@ export class HomeComponent implements OnInit{
   }
 
   onSelect(){
+    if(!this.searchQuery){
+      this.emptyTicker = true;
+    }
     this.router.navigate(['/', 'search', this.control.value]);
+
   }
+
   onSearch(): void {
+    if(!this.searchQuery){
+      this.emptyTicker = true;
+    }
+    this.tickerNotFound = false;
     this.searchQuery = this.control.value;
+    this.searchQuery = this.searchQuery.toUpperCase();
     console.log("onsearch: ", this.searchQuery)
     if (!this.searchQuery) {
       console.log("No search query");
@@ -60,11 +74,15 @@ export class HomeComponent implements OnInit{
     console.log("Searching for", this.searchQuery);
     this.stockService.getStockDetails(this.searchQuery).subscribe(data => {
       this.searchResults = data;
+      if(JSON.stringify(this.searchResults) === '{}'){
+        this.tickerNotFound = true;
+      }
       this.searchStateService.setSearchResults(data);
+      
     });
   }
+
   onSearchChange(value: string): void {
-    console.log("keydown");
     this.showAuto = true;
     this.acLoading =true;
     this.autocompleteResults=[];
@@ -86,6 +104,7 @@ export class HomeComponent implements OnInit{
 
  onClear(): void {
     this.searchQuery = '';
+    this.emptyTicker = false;
     this.searchResults = null;
     this.autocompleteResults = [];
     this.stockService.setState({});
