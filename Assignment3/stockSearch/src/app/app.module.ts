@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { RouterModule } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { SearchDetailsComponent } from './search-details/search-details.component';
@@ -58,7 +59,8 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
     MatButtonModule,
     MatIconModule,
     HighchartsChartModule,
-    MatProgressSpinner 
+    MatProgressSpinner,
+    RouterModule
   ],
   providers: [
     provideAnimationsAsync('noop')

@@ -18,6 +18,7 @@ HC_stock(Highcharts);
 indicators(Highcharts);
 vbpa(Highcharts);
 
+
 // HC_exporting(Highcharts);
 // insider-sentiment.model.ts
 

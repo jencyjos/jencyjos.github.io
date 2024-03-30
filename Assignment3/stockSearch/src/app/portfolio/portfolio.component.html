@@ -1,4 +1,4 @@
-<div class="portfolio-container">
+<!-- <div class="portfolio-container">
   <h1>My Portfolio</h1>
   <div *ngIf="stocks && stocks.length > 0; else noStocksTemplate">
     <p>Total Portfolio Value: {{ (walletBalance) | currency:'USD':'symbol' }}</p>
@@ -39,4 +39,70 @@
   <ng-template #noStocksTemplate>
     <p>You currently have no stocks in your portfolio.</p>
   </ng-template>
-</div>
+</div> -->
+
+
+
+
+
+<div class="justify-content-center">
+  <div class="watchlist-container col-8 mx-auto">
+    <h2>My Portfolio</h2>
+    <h3>My Wallet: {{ (walletBalance) | currency:'USD':'symbol' }}</h3>
+    <div class="alert alert-warning text-center" *ngIf="stocks.length == 0;" role="alert">
+      Currently, you don't have any stocks in your watchlist.
+    </div>
+
+    <div class="card my-3" *ngFor="let stock of stocks">
+      <div class="card-header">
+        <b>{{ stock.ticker }}</b> {{ stock.name }}
+      </div>
+      <div class="card-body">
+        <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+          <div class="col-sm-8">
+            Quantity:
+            <br>
+            Avg Cost/Share:
+            <br>
+            Total Cost:
+          </div>
+        
+          <div class="col-sm-4">
+            {{ (stock.shares).toFixed(2) }}
+            <br>
+            {{ (stock.averageCost).toFixed(2) }}
+            <br>
+            {{ (stock.averageCost * stock.shares).toFixed(2) }}
+          </div>
+        </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="row">
+
+          <div class="col-8">
+            Change:
+            <br>
+            Current Price:
+            <br>
+            Market Value:
+          </div>
+          <div class="col-4">
+            {{ (calculateChangeInPrice(stock)).toFixed(2) }}
+            <br>
+            {{ stock.currentPrice }}
+            <br>
+            {{ (stock.currentPrice * stock.shares).toFixed(2) }}
+          </div>
+          </div>
+          
+        </div>
+      </div>
+      </div>
+      <div class="card-footer text-muted">
+        <a class="btn btn-primary" (click)="openBuyModal(stock)">Buy</a>
+        <a class="btn btn-danger mx-2" (click)="openSellModal(stock)">Sell</a>
+      </div>
+    </div>

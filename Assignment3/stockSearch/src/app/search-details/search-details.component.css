@@ -183,7 +183,6 @@
     color: #000;
     font-size: 1.1rem;
     margin-bottom: 0.5rem;
-    border-bottom: 1px solid #000; /* Adds a line under the title */
     padding-bottom: 0.25rem;
 }
 

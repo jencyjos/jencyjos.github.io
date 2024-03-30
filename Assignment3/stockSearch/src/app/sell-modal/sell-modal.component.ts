@@ -12,7 +12,7 @@ import { Stock } from '../../../../backend/models/stock.model';
 })
 export class SellModalComponent {
   @Input() stock!: Stock;
-  quantity: number = 1;
+  quantity: number = 0;
   errorMessage: string = ''; // Added for displaying error messages in the modal
   showAlert : boolean = false
   alertMessage: string = ""
@@ -45,7 +45,6 @@ export class SellModalComponent {
 
         setTimeout(() => {
           this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity});
-          
           
         }, 200);
         // Automatically close the alert after 15 seconds

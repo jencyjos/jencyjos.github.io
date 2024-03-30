@@ -1,5 +1,10 @@
-<div class="watchlist-container">
+<div class="justify-content-center">
+<div class="watchlist-container col-8 mx-auto">
   <h2>My Watchlist</h2>
+  <div class="alert alert-warning text-center" *ngIf="watchlist.length == 0;" role="alert">
+    Currently, you don't have any stocks in your watchlist.
+  </div>
+
   <div *ngIf="!loading">
 
     <!-- <div *ngIf="watchlist.length > 0; else noWatchlist">
@@ -35,12 +40,32 @@
     </ng-template>
   </div> -->
 
-  <div class="card">
-    wqiudbu<br>
-    wquidhbjas
+  <div class="card" *ngFor="let item of watchlist; let i = index">
+    <div class="col-1"><button (click)="removeFromWatchlist($event, item.ticker, i)">x</button></div>
+    <div class="row">
+
+      <div class="col-6 p-4">
+        <p class="fs-3">{{ item.ticker }}</p>
+        <br>
+        <p class="fs-4">{{ item.name }}</p>
+      </div>
+
+      <div class="col-6 p-4" [class]="(item.d>0) ? 'col-6 p-4 text-success' : 'col-6 p-4 text-danger'">
+        <p class="fs-3">{{ item.c }}</p>      
+        <br>
+        <span *ngIf="item.d > 0" class="text-success">&#x25B2;</span>
+        <span *ngIf="item.d < 0" class="text-danger">&#x25BC;</span>
+        <p class="fs-4" style="display: inline-block">{{ item.d | number:'1.2-2' }} ({{ item.dp }}%)</p>
+      </div>
+
+
+    </div>
+
   </div>
+
 
   <div *ngIf="loading" class="loading-indicator">
     Loading...
   </div>
+</div>
 </div>
