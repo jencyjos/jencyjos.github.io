@@ -6,11 +6,15 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
   })
   export class StockService {
-    private stateData = {}
+    private stateData: any = {}
 
     getState() {
       console.log("I am here 1", this.stateData);
       return this.stateData;
+    }
+
+    getTicker(){
+      return this.stateData.ticker
     }
 
     setState(obj: any){

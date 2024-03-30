@@ -83,13 +83,14 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private modalService: NgbModal,
     private searchStateService: SearchStateService
-  ) {}
+  ) {
+  }
 
 
   ngOnChanges(): void {
     if (this.searchQuery) {
       this.state = this.stockService.getState();
-      if (this.state.ticker === null || this.state.ticker === undefined){
+      if (this.state.ticker === null || this.state.ticker === undefined || this.searchQuery !== this.state.ticker){
         console.log("I am here 3", this.state.ticker);
         this.fetchStockDetails(this.searchQuery);
       } else {

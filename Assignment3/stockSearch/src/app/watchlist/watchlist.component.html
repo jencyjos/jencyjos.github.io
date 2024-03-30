@@ -1,7 +1,8 @@
 <div class="watchlist-container">
   <h2>My Watchlist</h2>
   <div *ngIf="!loading">
-    <div *ngIf="watchlist.length > 0; else noWatchlist">
+
+    <!-- <div *ngIf="watchlist.length > 0; else noWatchlist">
       <ul class="watchlist">
         <li *ngFor="let item of watchlist; let i = index" class="watchlist-item">
           <div class="stock-info" (click)="navigateToDetails(item.ticker)">
@@ -17,8 +18,8 @@
                 class="price-details">
               <div class="current-price">{{ item.c }}</div>
               <div class="change">
-                <span *ngIf="item.d > 0" class="price-arrow">&#x25B2;</span> <!-- Upwards arrow -->
-                <span *ngIf="item.d < 0" class="price-arrow">&#x25BC;</span> <!-- Downwards arrow -->
+                <span *ngIf="item.d > 0" class="price-arrow">&#x25B2;</span>
+                <span *ngIf="item.d < 0" class="price-arrow">&#x25BC;</span>
                 {{ item.d | number:'1.2-2' }} ({{ item.dp }}%)
               </div>
             </div>
@@ -32,7 +33,13 @@
         <p>Currently, you don't have any stocks in your watchlist.</p>
       </div>
     </ng-template>
+  </div> -->
+
+  <div class="card">
+    wqiudbu<br>
+    wquidhbjas
   </div>
+
   <div *ngIf="loading" class="loading-indicator">
     Loading...
   </div>

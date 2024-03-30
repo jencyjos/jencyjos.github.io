@@ -13,7 +13,8 @@ const routes: Routes = [
     children: [
     { path: '', redirectTo: '/search/home', pathMatch: 'full' },
     { path: 'search/home', component: HomeComponent },
-    { path: 'search/:ticker', component: SearchDetailsComponent },
+    // { path: 'search/:ticker', component: SearchDetailsComponent },
+    { path: 'search/:ticker', component: HomeComponent },
     { path: 'watchlist', component: WatchlistComponent },
     { path: 'portfolio', component: PortfolioComponent },
     ]

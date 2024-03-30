@@ -26,6 +26,7 @@ import { SellModalComponent } from './sell-modal/sell-modal.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
 
 
 @NgModule({
@@ -56,7 +57,8 @@ import { MainLayoutComponent } from './main-layout/main-layout.component';
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    MatProgressSpinner 
   ],
   providers: [
     provideAnimationsAsync('noop')

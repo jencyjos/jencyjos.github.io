@@ -52,7 +52,7 @@
               <p><b>Industry: </b>{{ stockProfile.finnhubIndustry }}</p>
               <!-- Webpage URL as a clickable link -->
               <p><b>Webpage: </b> <a [href]="stockProfile.weburl" target="_blank">{{ stockProfile.weburl }}</a></p>
-              <!-- <p>Company peers: <br> {{ companyPeers.response }}</p> -->
+              <p *ngFor="let peer of companyPeers" style="display: inline-block"><a>{{ peer }}</a>,</p>
             </div>
           </div>
           <div class="chart-container">
