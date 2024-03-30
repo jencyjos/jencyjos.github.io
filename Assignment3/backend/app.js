@@ -47,6 +47,28 @@ app.get('/api/stock/details/:ticker', async (req, res) => {
 });
 
 // Autocomplete API for symbol search
+// app.get('/api/autocomplete/:query', async (req, res) => {
+//   const query = req.params.query;
+//   const finnhubApi = `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.FINNHUB_API_KEY}`;
+
+//   try {
+//     const response = await fetch(finnhubApi);
+//     if (!response.ok) {
+//       throw new Error(`Error from Finnhub API: ${response.statusText}`);
+//     }
+//     const data = await response.json();
+//     const filteredResponse = data.result.map(item => ({
+//       description: item.description,
+//       displaySymbol: item.displaySymbol,
+//       symbol: item.symbol,
+//       type: item.type
+//     }));
+//     res.json(filteredResponse);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: error.message });
+//   }
+// });
 app.get('/api/autocomplete/:query', async (req, res) => {
   const query = req.params.query;
   const finnhubApi = `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.FINNHUB_API_KEY}`;
@@ -57,8 +79,12 @@ app.get('/api/autocomplete/:query', async (req, res) => {
       throw new Error(`Error from Finnhub API: ${response.statusText}`);
     }
     const data = await response.json();
-    // Optional: Filter the response to only include the needed keys if necessary
-    const filteredResponse = data.result.map(item => ({
+    // Filter the response based on the criteria
+    const filteredData = data.result.filter(item =>
+      item.type === 'Common Stock' && !item.symbol.includes('.')
+    );
+    // Optional: Further filter the response to only include the needed keys
+    const filteredResponse = filteredData.map(item => ({
       description: item.description,
       displaySymbol: item.displaySymbol,
       symbol: item.symbol,
@@ -70,6 +96,7 @@ app.get('/api/autocomplete/:query', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 
 //Company profile
