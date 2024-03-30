@@ -71,7 +71,7 @@ export class BuyModalComponent implements OnInit {
         next: (result: any) => { // Consider using a specific type instead of any if possible
           // Update the user wallet after a successful transaction
           this.userWallet -= this.totalPrice;
-          this.activeModal.close(result);
+          this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity, totalCost: this.totalPrice});
           this.alertMessage = 'Stock bought successfully!';
           this.isSuccess = true
           this.showAlert = true; // Display the alert

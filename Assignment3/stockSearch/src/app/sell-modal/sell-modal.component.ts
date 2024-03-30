@@ -1,5 +1,6 @@
 // sell-modal.component.ts
 import { Component, Input } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service'; // Removed the extra slash
 import { Stock } from '../../../../backend/models/stock.model';
@@ -19,7 +20,8 @@ export class SellModalComponent {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private portfolioService: PortfolioService
+    private portfolioService: PortfolioService,
+    private renderer: Renderer2
   ) {}
 
   onSubmit() {
@@ -31,11 +33,30 @@ export class SellModalComponent {
     this.portfolioService.sellStock(this.stock.ticker, this.quantity, this.stock.currentPrice).subscribe({
       next: (result: any) => { // Consider using a specific type for `result`
         // Handle the successful sell
-        this.activeModal.close(result);
+       
         this.alertMessage = 'Sold successfully!';
         this.isSuccess = true
-        this.showAlert = true; // Display the alert
-        setTimeout(() => { this.showAlert = false; this.alertMessage = ''; }, 25000); // Hide the alert after 3 seconds
+        // Create and insert the alert message at the top of the webpage
+        const alert = this.renderer.createElement('div');
+        alert.textContent = this.alertMessage;
+        alert.className = 'alert';
+        alert.classList.add(this.isSuccess ? 'green-alert' : 'red-alert');
+        this.renderer.insertBefore(document.body, alert, document.body.firstChild);
+
+        setTimeout(() => {
+          this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity});
+          
+          
+        }, 200);
+        // Automatically close the alert after 15 seconds
+        setTimeout(() => {
+          
+          this.alertMessage = ''; // Clear the alert message
+          this.isSuccess = false;
+          this.renderer.removeChild(document.body, alert);   
+        }, 3000);
+
+        
        
       },
       error: (error: any) => { // Consider using a specific type for `error`

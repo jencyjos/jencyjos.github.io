@@ -91,45 +91,91 @@
         </mat-tab>
 
         <mat-tab label="Insights">
-
-         
           <!-- Insights tab content goes here -->
-          <div >
-            <h3>Insider Sentiment Data</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Year</th>
-                  <th>Month</th>
-                  <th>Change</th>
-                  <th>MSPR</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let sentiment of insiderSentimentData.sentiment.data">
-                  <td>{{ sentiment.year }}</td>
-                  <td>{{ sentiment.month }}</td>
-                  <td>{{ sentiment.change }}</td>
-                  <td>{{ sentiment.mspr }}</td>
-                </tr>
-              </tbody>
-            </table>
+         <div class="insider-sentiments">
+          <h3>Insider Sentiments</h3>
+          <div class="sentiment-header">
+          <span class="company-name">Apple Inc.</span>
+          
+          <span class="mspr-header">MSPR</span>
+          
+          <span class="change-header">Change</span>
+          
           </div>
-
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="recommendationChartOptions"
-
-            style="width: 100%; height: 400px; display: block;">
+          
+          <div class="sentiment-row total">
+          
+          <span class="row-label">Total</span>
+          
+          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.totalMspr | number:'1.2-2' }}</span>
+          
+          <span class="change-value">{{ insiderSentimentData.changeAggregates.totalChange | number:'1.0-0' }}</span>
+          
+          </div>
+          
+          <div class="sentiment-row positive">
+          
+          <span class="row-label">Positive</span>
+          
+          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.positiveMspr | number:'1.2-2' }}</span>
+          
+          <span class="change-value">{{ insiderSentimentData.changeAggregates.positiveChange | number:'1.0-0' }}</span>
+          
+          </div>
+          
+          <div class="sentiment-row negative">
+          
+          <span class="row-label">Negative</span>
+          
+          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.negativeMspr | number:'1.2-2' }}</span>
+          
+          <span class="change-value">{{ insiderSentimentData.changeAggregates.negativeChange | number:'1.0-0' }}</span>
+          
+          </div>
+          
+          </div>
+          
+          <!-- Container for the charts -->
+          
+          <div class="charts-container">
+          
+          <!-- Recommendation Trends Chart -->
+          
+          <div class="chart" id="recommendation-chart">
+          
+          <highcharts-chart
+          
+          [Highcharts]="Highcharts"
+          
+          [options]="recommendationChartOptions"
+          
+          style="width: 100%; height: 400px; display: block;">
+          
           </highcharts-chart>
-
-          <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="earningsChartOptions"
-
-            style="width: 100%; height: 400px; display: block;">
+          
+          </div>
+          
+          
+          
+          <!-- Historical EPS Surprises Chart -->
+          
+          <div class="chart" id="eps-chart">
+          
+          <highcharts-chart
+          
+          [Highcharts]="Highcharts"
+          
+          [options]="earningsChartOptions"
+          
+          style="width: 100%; height: 400px; display: block;">
+          
           </highcharts-chart>
-
-        </mat-tab>
-
+          
+          </div>
+          
+          </div>
+          
+          
+          
+          </mat-tab>
     </mat-tab-group>

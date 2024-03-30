@@ -21,7 +21,15 @@ vbpa(Highcharts);
 // HC_exporting(Highcharts);
 // insider-sentiment.model.ts
 
-
+interface RecommendationData {
+  buy: number;
+  hold: number;
+  period: string;
+  sell: number;
+  strongBuy: number;
+  strongSell: number;
+  symbol: string
+}
 
 
 interface NewsArticle {
@@ -275,150 +283,291 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       };
   };
 
-  drawRecommendationChart(insightsData: any): void {
-    this.recommendationChartOptions = {
+  // drawRecommendationChart(insightsData: any): void {
+  //   this.recommendationChartOptions = {
 
-      accessibility: {
-          enabled: false
-      },
-      chart: {
-          type: 'column',
-          backgroundColor: 'rgba(0, 0, 0, 0.05)'
-      },
+  //     accessibility: {
+  //         enabled: false
+  //     },
+  //     chart: {
+  //         type: 'column',
+  //         backgroundColor: 'rgba(0, 0, 0, 0.05)'
+  //     },
   
-      yAxis: {
-          title: {
-              text: 'Analysis'
-          },
-          stackLabels: {
-              enabled: false
-          },
-          opposite: false,
-          lineWidth: 0,
-          resize: {
-              enabled: false
-          }
-      },
-      title: {
-          text: 'Recommendation Trends',
-          align: 'center'
-      },
-      // tooltip: {
-      //     headerFormat: '<b>{point.x}</b><br/>',
-      //     pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}',
-      //     split: true
-      // },
-  
-  
-  
-      plotOptions: {
-          column: {
-              stacking: 'normal',
-              dataLabels: {
-                  enabled: true
-              }
-          }
-      },
+  //     yAxis: {
+  //         title: {
+  //             text: 'Analysis'
+  //         },
+  //         stackLabels: {
+  //             enabled: false
+  //         },
+  //         opposite: false,
+  //         lineWidth: 0,
+  //         resize: {
+  //             enabled: false
+  //         }
+  //     },
+  //     title: {
+  //         text: 'Recommendation Trends',
+  //         align: 'center'
+  //     },
+    
+  //     plotOptions: {
+  //         column: {
+  //             stacking: 'normal',
+  //             dataLabels: {
+  //                 enabled: true
+  //             }
+  //         }
+  //     },
   
   
-      xAxis: {
-          categories: insightsData['recommendation'].xAxis
-      },
+  //     xAxis: {
+  //         categories: insightsData['recommendation'].xAxis
+  //     },
 
   
-      series: [{
-          name: 'Strong Buy',
-          data: insightsData['recommendation'].yAxis.strongBuy,
-          type:'column',
-          color: '#008000'
-      }, {
-          name: 'Buy',
-          data: insightsData['recommendation'].yAxis.buy,
-          type:'column',
-          color: '#04af70'
-      }, {
-          name: 'Hold',
-          data: insightsData['recommendation'].yAxis.hold,
-          type:'column',
-          color: '#a68004'
+  //     series: [{
+  //         name: 'Strong Buy',
+  //         data: insightsData['recommendation'].yAxis.strongBuy,
+  //         type:'column',
+  //         color: '#008000'
+  //     }, {
+  //         name: 'Buy',
+  //         data: insightsData['recommendation'].yAxis.buy,
+  //         type:'column',
+  //         color: '#04af70'
+  //     }, {
+  //         name: 'Hold',
+  //         data: insightsData['recommendation'].yAxis.hold,
+  //         type:'column',
+  //         color: '#a68004'
+  //     },
+  //     {
+  //       name: 'Sell',
+  //       data: insightsData['recommendation'].yAxis.sell,
+  //       type:'column',
+  //       color: '#f28500'
+  //   },
+  //   {
+  //     name: 'Strong Sell',
+  //     data: insightsData['recommendation'].yAxis.strongSell,
+  //     type:'column',
+  //     color: '#800080'
+  // }] 
+  
+  // };
+  
+  // };
+
+
+  drawRecommendationChart(recommendationData: RecommendationData[]) {
+    const categories = recommendationData.map(data => data.period);
+  
+    // Series data for each type of recommendation
+    const series : Highcharts.SeriesOptionsType[] = [
+      {
+        name: 'Strong Sell',
+        type: 'column',
+        data: recommendationData.map(data => data.strongSell),
+        color: '#FF6347', // Tomato red for Strong Sell
+        stack: 'recommendations'
       },
       {
         name: 'Sell',
-        data: insightsData['recommendation'].yAxis.sell,
-        type:'column',
-        color: '#f28500'
-    },
-    {
-      name: 'Strong Sell',
-      data: insightsData['recommendation'].yAxis.strongSell,
-      type:'column',
-      color: '#800080'
-  }] 
+        type: 'column',
+        data: recommendationData.map(data => data.sell),
+        color: '#FFA07A', // Light Salmon for Sell
+        stack: 'recommendations'
+      },
+      {
+        name: 'Hold',
+        type: 'column',
+        data: recommendationData.map(data => data.hold),
+        color: '#FFD700', // Gold for Hold
+        stack: 'recommendations'
+      },
+      {
+        name: 'Buy',
+        type: 'column',
+        data: recommendationData.map(data => data.buy),
+        color: '#9ACD32', // Yellow Green for Buy
+        stack: 'recommendations'
+      },
+      {
+        name: 'Strong Buy',
+        type: 'column',
+        data: recommendationData.map(data => data.strongBuy),
+        color: '#006400', // Dark Green for Strong Buy
+        stack: 'recommendations'
+      },
+    ];
   
-  };
-  
-  };
- 
-  drawEarningsChart(earningsData: any): void {
-    const actualData = earningsData.map((item: EarningsData) => item.actual !== null ? item.actual : 0);
-    const estimateData = earningsData.map((item: EarningsData) => item.estimate !== null ? item.estimate : 0);
-    const categories = earningsData.map((item: EarningsData) => `${item.period}\nSurprise: ${item.surprise}`);
-    this.earningsChartOptions = {
-      
-        chart: {
-            type: 'spline',
-            backgroundColor: 'rgba(0, 0, 0, 0.05)'
-        },
-        accessibility: {
-            enabled: false
-        },
+    // Configure the chart options
+    this.recommendationChartOptions = {
+      chart: {
+        type: 'column'
+      },
+      title: {
+        text: 'Recommendation Trends'
+      },
+      xAxis: {
+        categories: categories
+      },
+      yAxis: {
+        min: 0,
         title: {
-            text: 'Historical EPS Suprises',
-            align: 'center'
+          text: 'Number of Analyst Recommendations'
         },
+        stackLabels: {
+          enabled: true,
+          style: {
+            fontWeight: 'bold'
+          }
+        }
+      },
+      tooltip: {
+        shared: true
+      },
+      plotOptions: {
+        column: {
+          stacking: 'normal',
+          dataLabels: {
+            enabled: false
+          }
+        }
+      },
+      series: series,
+      legend: {
+        reversed: true
+      }
+    };
+  
+    // Now you can use this.recommendationChartOptions in your Highcharts chart component.
+  }
 
-        xAxis: {
-          crosshair: true,
-          categories: earningsData["earnings"].xAxis,
-        },
-        yAxis: {
-            title: {
-                text: 'Quarterly EPS'
-            },
-            opposite: false,
-            lineWidth: 0,
-            resize: {
-                enabled: false
-            }
-        },
-        tooltip: {
-            shared: true
-        },
-        plotOptions: {
-            spline: {
-                marker: {
-                    radius: 3
-                }
-            }
-        },
-        series: [{
-            type: 'spline',
-            name: 'Actual',
-            marker: {
-                symbol: 'circle'
-            },
-            data: earningsData["earnings"].yAxis.actual
 
-        }, {
-          type: 'spline',
-          name: 'Estimate',
-            marker: {
-                symbol: 'diamond'
-            },
-            data: earningsData["earnings"].yAxis.estimate
-        }]
-    }
-  };
+ 
+  // drawEarningsChart(earningsData: any): void {
+  //   const actualData = earningsData.map((item: EarningsData) => item.actual !== null ? item.actual : 0);
+  //   const estimateData = earningsData.map((item: EarningsData) => item.estimate !== null ? item.estimate : 0);
+  //   const categories = earningsData.map((item: EarningsData) => `${item.period}\nSurprise: ${item.surprise}`);
+  //   this.earningsChartOptions = {
+      
+  //       chart: {
+  //           type: 'spline',
+  //           backgroundColor: 'rgba(0, 0, 0, 0.05)'
+  //       },
+  //       accessibility: {
+  //           enabled: false
+  //       },
+  //       title: {
+  //           text: 'Historical EPS Suprises',
+  //           align: 'center'
+  //       },
+
+  //       xAxis: {
+  //         crosshair: true,
+  //         categories: earningsData["earnings"].xAxis,
+  //       },
+  //       yAxis: {
+  //           title: {
+  //               text: 'Quarterly EPS'
+  //           },
+  //           opposite: false,
+  //           lineWidth: 0,
+  //           resize: {
+  //               enabled: false
+  //           }
+  //       },
+  //       tooltip: {
+  //           shared: true
+  //       },
+  //       plotOptions: {
+  //           spline: {
+  //               marker: {
+  //                   radius: 3
+  //               }
+  //           }
+  //       },
+  //       series: [{
+  //           type: 'spline',
+  //           name: 'Actual',
+  //           marker: {
+  //               symbol: 'circle'
+  //           },
+  //           data: earningsData["earnings"].yAxis.actual
+
+  //       }, {
+  //         type: 'spline',
+  //         name: 'Estimate',
+  //           marker: {
+  //               symbol: 'diamond'
+  //           },
+  //           data: earningsData["earnings"].yAxis.estimate
+  //       }]
+  //   }
+  // };
+  drawEarningsChart(earningsData: EarningsData[]): void {
+    const actualData = earningsData.map(item => ({
+      y: item.actual,
+      marker: {
+        symbol: 'circle'
+      }
+    }));
+  
+    const estimateData = earningsData.map(item => ({
+      y: item.estimate,
+      marker: {
+        symbol: 'circle'
+      }
+    }));
+  
+    const categories = earningsData.map(item => `${item.period}\nSurprise: ${item.surprise}`);
+  
+    this.earningsChartOptions = {
+      chart: {
+        type: 'spline',
+        backgroundColor: 'rgba(0, 0, 0, 0.05)'
+      },
+      title: {
+        text: 'Historical EPS Surprises',
+        align: 'center'
+      },
+      xAxis: {
+        crosshair: true,
+        categories: categories
+      },
+      yAxis: {
+        title: {
+          text: 'Quarterly EPS'
+        }
+      },
+      tooltip: {
+        shared: true
+      },
+      plotOptions: {
+        spline: {
+          marker: {
+            radius: 4
+          }
+        }
+      },
+      series: [{
+        name: 'Actual',
+        type: 'spline',
+        data: actualData,
+        color: 'blue' // choose the color you prefer for actual values
+      }, {
+        name: 'Estimate',
+        type: 'spline',
+        data: estimateData,
+        color: 'lightblue' // choose the color you prefer for estimate values
+      }]
+    };
+  
+    // Trigger chart update if necessary, e.g., using Angular's change detection
+  }
 
   drawSMAChart(smaData : any): void {
     this.smaChartOptions = {

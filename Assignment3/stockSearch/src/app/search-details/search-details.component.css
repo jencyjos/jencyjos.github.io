@@ -282,6 +282,85 @@
     color: red;
 }
 
+
+
+/* insights tab */
+/* Container styling */
+
+   
+.insider-sentiments {
+    font-family: Arial, sans-serif;
+    max-width: 400px; /* Adjust as needed */
+    margin: auto;
+    border: 2px solid black;
+  }
+  
+  .insider-sentiments h3 {
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+  }
+  
+  .company-name {
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    padding: 10px 0;
+    background-color: #f2f2f2;
+    border-bottom: 2px solid black;
+  }
+  
+  .sentiment-header {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+    text-align: center;
+    padding: 5px 0;
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .sentiment-header div:first-child,
+  .sentiment-row div:first-child {
+    text-align: left;
+  }
+  
+  .sentiment-row {
+    display: grid;
+    grid-template-columns: repeat(3, 2fr); /* 3 equal columns */
+    text-align: center;
+    padding: 5px 0;
+  }
+  
+  .sentiment-row div {
+    padding: 0 10px; /* Add padding to each cell */
+  }
+  /* Special styling for rows to add borders */
+  .sentiment-row:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+  
+
+.charts-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Adjust the space between the charts */
+  }
+  
+  /* Individual chart styling */
+  .chart {
+    flex: 1; /* Each chart will take up equal space in the container */
+    min-width: 0; /* Allows the flex items to shrink below their content size if necessary */
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .charts-container {
+      flex-direction: column;
+    }
+  }
+
+
   
 
 

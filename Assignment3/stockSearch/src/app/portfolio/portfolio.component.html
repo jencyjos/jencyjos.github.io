@@ -1,6 +1,6 @@
 <div class="portfolio-container">
   <h1>My Portfolio</h1>
-  <div *ngIf="stocks && stocks.length; else noStocksTemplate">
+  <div *ngIf="stocks && stocks.length > 0; else noStocksTemplate">
     <p>Total Portfolio Value: {{ (walletBalance) | currency:'USD':'symbol' }}</p>
     <table class="table">
       <thead>
@@ -22,8 +22,9 @@
           <td>{{ stock.shares }}</td>
           <td>{{ stock.averageCost | currency }}</td>
           <td [ngClass]="calculateClass(stock)">
-            <span *ngIf="calculateClass(stock) === 'profit'" class="profit">&#8593;</span>
-            <span *ngIf="calculateClass(stock) === 'loss'" class="loss">&#8595;</span>
+            <span *ngIf="calculateClass(stock) === 'profit'" class="profit">&#8593;{{ calculateChangeInPrice(stock) | number:'1.2-2' }}</span>
+            <span *ngIf="calculateClass(stock) === 'loss'" class="loss">&#8593;{{ calculateChangeInPrice(stock) | number:'1.2-2' }}</span>
+            <span *ngIf="calculateClass(stock) === 'unchanged'" class="unchanged">{{ calculateChangeInPrice(stock) | number:'1.2-2' }}</span>
           </td>
           <td>{{ stock.currentPrice | currency:'USD':'symbol' }}</td>
           <td>{{ (stock.currentPrice * stock.shares) | currency:'USD':'symbol' }}</td>

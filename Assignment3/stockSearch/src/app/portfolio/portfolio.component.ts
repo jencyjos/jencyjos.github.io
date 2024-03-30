@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
-import { Stock } from '../../../../backend/models/stock.model'; 
+import { Stock } from '../../../../backend/models/stock.model'; // Path might differ based on where you place your model
 
 @Component({
   selector: 'app-portfolio',
@@ -11,16 +11,19 @@ import { Stock } from '../../../../backend/models/stock.model';
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
-  stocks: any[] = []; 
-  walletBalance: number = 25000; // Initial balance
+  stocks: any[] = []; // Assuming you have a model for stocks
+  walletBalance: number = 25000; // Initial balance, should ideally be fetched from the backend
 
   constructor(
     private portfolioService: PortfolioService,
-    private modalService: NgbModal) {}
+    private modalService: NgbModal,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.loadPortfolio();
     this.loadWalletBalance();
+    
   }
 
   fetchStockDetails(): void {
@@ -49,11 +52,11 @@ export class PortfolioComponent implements OnInit {
     }
   }
 
+
   loadPortfolio(): void {
     this.portfolioService.getPortfolio().subscribe(
-      (data: any) => { 
-        this.stocks = data.stocks;
-        console.log("its an ", typeof(this.stocks))
+      (data: any) => { // Adjust based on your actual Stock model
+        this.stocks =[...data.stocks];;
         this.fetchStockDetails();
         this.fetchCurrentPrice();
       },
@@ -68,6 +71,7 @@ export class PortfolioComponent implements OnInit {
     this.portfolioService.getWalletBalance().subscribe(
       (data: { balance: number }) => {
         this.walletBalance = data.balance;
+        this.changeDetectorRef.detectChanges();
       },
       (error: any) => {
         console.error('Error fetching wallet balance', error);
@@ -81,9 +85,9 @@ export class PortfolioComponent implements OnInit {
     modalRef.componentInstance.walletBalance = this.walletBalance; // Pass the current balance to the modal
 
     modalRef.result.then((result) => {
-      if (result === 'success') {
+      if (result && result.success == true) {
         this.loadPortfolio();
-        this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+        this.loadWalletBalance();
       }
     }, (reason) => {});
   }
@@ -93,7 +97,7 @@ export class PortfolioComponent implements OnInit {
     modalRef.componentInstance.stock = stock;
 
     modalRef.result.then((result) => {
-      if (result === 'success') {
+      if (result && result.success == true) {
         this.loadPortfolio();
         this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
       }
@@ -104,5 +108,9 @@ export class PortfolioComponent implements OnInit {
     if (stock.currentPrice > stock.averageCost) return 'profit';
     else if (stock.currentPrice < stock.averageCost) return 'loss';
     return 'unchanged';
+  }
+
+  calculateChangeInPrice(stock: any): number {
+    return Math.abs(stock.currentPrice - stock.averageCost);
   }
 }

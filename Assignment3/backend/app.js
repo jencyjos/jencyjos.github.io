@@ -254,6 +254,9 @@ app.get('/api/stock/recommendation/:ticker', async (req, res) => {
 });
 
 
+
+
+
 // Company Insider Sentiment API call
 app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
@@ -280,9 +283,18 @@ app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
       },
       { totalMspr: 0, positiveMspr: 0, negativeMspr: 0 }
     );
+    const changeData = sentimentData.data.reduce(
+      (acc, cur) => {
+        acc.totalChange += cur.change;
+        if (cur.change > 0) acc.positiveChange += cur.change;
+        if (cur.change < 0) acc.negativeChange += cur.change;
+        return acc;
+      },
+      { totalChange: 0, positiveChange: 0, negativeChange: 0 }
+    );
 
     res.json({ 
-      sentiment: sentimentData, 
+      changeAggregates: changeData, 
       msprAggregates: msprData 
     });
   } catch (error) {
