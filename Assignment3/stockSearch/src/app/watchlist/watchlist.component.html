@@ -2,28 +2,38 @@
   <h2>My Watchlist</h2>
   <div *ngIf="!loading">
     <div *ngIf="watchlist.length > 0; else noWatchlist">
-      <ul>
-        <li *ngFor="let item of watchlist; let i = index" 
-            [ngClass]="{'positive': item.change > 0, 'negative': item.change < 0, 'neutral': item.change === 0}" 
-            (click)="navigateToDetails(item.ticker)">
-          <span class="ticker">{{ item.ticker }}</span> - {{ item.name }}
-          <span class="close-button" (click)="removeFromWatchlist(item.ticker, i)">&times;</span>
-          <div>
-            Current Price: {{ item.c }}
-            Change: {{ item.d }}
-            Change Percentage: {{ item.dp }}%
+      <ul class="watchlist">
+        <li *ngFor="let item of watchlist; let i = index" class="watchlist-item">
+          <div class="stock-info" (click)="navigateToDetails(item.ticker)">
+            <div class="ticker-and-name">
+              <div class="ticker">{{ item.ticker }}</div>
+              <div class="company-name">{{ item.name }}</div>
+            </div>
+            <div [ngClass]="{
+                  'positive': item.d > 0,
+                  'negative': item.d < 0,
+                  'neutral': item.d === 0
+                }" 
+                class="price-details">
+              <div class="current-price">{{ item.c }}</div>
+              <div class="change">
+                <span *ngIf="item.d > 0" class="price-arrow">&#x25B2;</span> <!-- Upwards arrow -->
+                <span *ngIf="item.d < 0" class="price-arrow">&#x25BC;</span> <!-- Downwards arrow -->
+                {{ item.d | number:'1.2-2' }} ({{ item.dp }}%)
+              </div>
+            </div>
           </div>
+          <span class="close-button" (click)="removeFromWatchlist($event, item.ticker, i)">&times;</span>
         </li>
       </ul>
     </div>
     <ng-template #noWatchlist>
       <div class="watchlist-empty-alert">
-        <p>Currently you don't have any stock in your watchlist.</p>
+        <p>Currently, you don't have any stocks in your watchlist.</p>
       </div>
     </ng-template>
   </div>
   <div *ngIf="loading" class="loading-indicator">
-    <!-- You can add spinner/loader component here -->
     Loading...
   </div>
 </div>

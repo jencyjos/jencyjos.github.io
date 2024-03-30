@@ -6,6 +6,18 @@ import { Observable } from 'rxjs';
     providedIn: 'root'
   })
   export class StockService {
+    private stateData = {}
+
+    getState() {
+      console.log("I am here 1", this.stateData);
+      return this.stateData;
+    }
+
+    setState(obj: any){
+      console.log("I am here", obj);
+      this.stateData = obj;
+    }
+
     private apiUrl = 'http://localhost:3000';
     private profileUrl = 'http://localhost:3000/api/stock/profile'; 
     private quoteUrl = 'http://localhost:3000/api/stock/quote'; 

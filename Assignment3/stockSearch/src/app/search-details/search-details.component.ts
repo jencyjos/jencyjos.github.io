@@ -61,6 +61,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   watchlist: string[] = []; 
   companyPeers : any[] =[];
   insiderSentimentData: any;
+
+  state:any;
   
   historicalChartOptions!: Highcharts.Options;
   smaChartOptions!: Highcharts.Options;
@@ -78,7 +80,22 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
   ngOnChanges(): void {
     if (this.searchQuery) {
-      this.fetchStockDetails(this.searchQuery);
+      this.state = this.stockService.getState();
+      if (this.state.ticker === null || this.state.ticker === undefined){
+        console.log("I am here 3", this.state.ticker);
+        this.fetchStockDetails(this.searchQuery);
+      } else {
+        console.log("I am here 2", this.state.ticker);
+        this.stockQuote = this.state.stockQuote;
+        this.stockProfile = this.state.stockProfile;
+        this.topNews = this.state.topNews;
+        this.companyPeers = this.state.companyPeers;
+        this.insiderSentimentData = this.state.insiderSentimentData;
+        this.drawPriceChart(this.state.priceChartData);
+        this.drawSMAChart(this.state.smaChartData);
+        this.drawEarningsChart(this.state.earningsChartData);
+        this.drawRecommendationChart(this.state.recommendationChartData);
+      }
     }
   }
 
@@ -88,7 +105,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
     });
+    this.state.searchResults = this.searchResults
+    this.stockService.setState(this.state);
     this.checkIfFavorite(this.stockProfile.ticker);
+    this.ngOnChanges();
   }
 
   ngOnDestroy() {
@@ -98,29 +118,42 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   fetchStockDetails(ticker: string): void {
     this.checkIfFavorite(ticker); 
 
+    this.state.ticker = ticker;
+    this.stockService.setState(this.state);
+
     this.stockService.getStockQuote(ticker).subscribe(data => {
       this.stockQuote = data;
+      this.state.stockQuote = this.stockQuote;
+      this.stockService.setState(this.state);
       this.determineMarketStatus();
     });
 
     this.stockService.getStockProfile(ticker).subscribe(data => {
       this.stockProfile = data;
+      this.state.stockProfile = this.stockProfile;
+      this.stockService.setState(this.state);
     });
 
     this.stockService.getTopNews(ticker).subscribe(data => {
       this.topNews = data;
+      this.state.topNews = this.topNews;
+      this.stockService.setState(this.state);
     }, error => {
       console.error('Error fetching top news', error);
     });
 
     this.stockService.getCompanyPeers(ticker).subscribe(data => {
       this.companyPeers = data;
+      this.state.companyPeers = this.companyPeers;
+      this.stockService.setState(this.state);
     }, error => {
       console.error('Error fetching company peers', error);
     });
 
     this.stockService.getCompanySentiment(ticker.toUpperCase()).subscribe(data => {
       this.insiderSentimentData = data;
+      this.state.insiderSentimentData = this.insiderSentimentData;
+      this.stockService.setState(this.state);
       console.log(this.insiderSentimentData);
       console.log("this",ticker);
     }, error => {
@@ -133,7 +166,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
   //historical chart - summary tab
     this.stockService.getHighCharts(ticker).subscribe(data => {
-      this.drawPriceChart(data);
+      this.state.priceChartData = data;
+      this.stockService.setState(this.state);
+      this.drawPriceChart(this.state.priceChartData);
     }, error => {
       console.error('Error fetching top news', error);
     });
@@ -141,13 +176,17 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
     //sma chart 
     this.stockService.getSmaCharts(ticker).subscribe(data => {
-      this.drawSMAChart(data);
+      this.state.smaChartData = data;
+      this.stockService.setState(this.state);
+      this.drawSMAChart(this.state.smaChartData);
     }, error => {
       console.error('Error fetching top news', error);
     });
 
     this.stockService.getEarningsData(ticker).subscribe((data: EarningsData[]) => {
-      this.drawEarningsChart(data);
+      this.state.earningsChartData = data;
+      this.stockService.setState(this.state);
+      this.drawEarningsChart(this.state.earningsChartData);
     }, error => {
       console.error('Error fetching earnings chart', error);
     });
@@ -155,7 +194,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
     //recommendation charts
     this.stockService.getRecommendationCharts(ticker).subscribe(data => {
-      this.drawRecommendationChart(data);
+      this.state.recommendationChartData = data;
+      this.stockService.setState(this.state);
+      this.drawRecommendationChart(this.state.recommendationChartData);
     }, error => {
       console.error('Error fetching top news', error);
     });

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { StockService } from '../services/stock.service';
 import { SearchStateService } from '../services/SearchState.service';
 
@@ -7,13 +7,21 @@ import { SearchStateService } from '../services/SearchState.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit{
   searchQuery: string = '';
+  state: any;
   searchResults: any;
   autocompleteResults : any[] =[];
 
   constructor(private stockService: StockService,
     private searchStateService: SearchStateService) { }
+
+  ngOnInit() {
+    console.log("Fuckedd uppp");
+    this.state = this.stockService.getState();
+    this.searchQuery = this.state.ticker;
+    this.onSearch()
+  }
 
   onSearch(): void {
     if (!this.searchQuery) {
@@ -59,6 +67,7 @@ export class HomeComponent {
     this.searchQuery = '';
     this.searchResults = null;
     this.autocompleteResults = [];
+    this.stockService.setState({});
     this.clearAutocompleteResults();
 
   }
