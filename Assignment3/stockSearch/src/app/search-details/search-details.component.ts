@@ -668,8 +668,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
      
   openNewsModal(newsArticle : NewsArticle): void {
     const dialogRef = this.dialog.open(NewsDetailModalComponent, {
-      width: '30%',
-      height: '40%',
+      width: '340px',
+      height: '300px',
       data: newsArticle // Pass the newsArticle as data to the modal
     });
   
@@ -727,35 +727,35 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  openSellModal(): void {
-    const modalRef = this.modalService.open(SellModalComponent);
-    this.portfolioService.getStockByTicker(this.stockProfile.ticker).subscribe({
-    next: (stock: Stock| null) => {
-    if (stock) {
-    console.log("In sell", stock)
-    modalRef.componentInstance.stock = {ticker: stock.ticker, name: stock.name, averageCost: stock.averageCost, currentPrice: this.stockQuote.c, shares: stock.shares}
-    modalRef.result.then((result) => {
-    if (result && result.success == true) {
-    console.log("sold ", this.stockProfile.ticker) 
-    this.loadPortfolio();
-    this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
-    }
-    }, (reason) => {
-    console.log("reason due to we coulnt sell", reason)
-    });
-    } else {
-    console.error('Stock not found: ', this.stockProfile.ticker);
-    // Optionally close the modal if the stock isn't found
-    modalRef.close();
-    }
-    
-    },
-    error: (error) => {
-    console.error('Error checking if stock is in portfolio', error);
-    }
-    });
-    }
-   
+openSellModal(): void {
+ const modalRef = this.modalService.open(SellModalComponent);
+ this.portfolioService.getStockByTicker(this.stockProfile.ticker).subscribe({
+ next: (stock: Stock| null) => {
+ if (stock) {
+ console.log("In sell", stock)
+ modalRef.componentInstance.stock = {ticker: stock.ticker, name: stock.name, averageCost: stock.averageCost, currentPrice: this.stockQuote.c, shares: stock.shares}
+ modalRef.result.then((result) => {
+ if (result && result.success == true) {
+ console.log("sold ", this.stockProfile.ticker) 
+ this.loadPortfolio();
+ this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+ }
+ }, (reason) => {
+ console.log("reason due to we coulnt sell", reason)
+ });
+ } else {
+ console.error('Stock not found: ', this.stockProfile.ticker);
+ // Optionally close the modal if the stock isn't found
+ modalRef.close();
+ }
+ 
+ },
+ error: (error) => {
+ console.error('Error checking if stock is in portfolio', error);
+ }
+ });
+ }
+
 
 loadPortfolio(): void {
   this.portfolioService.getPortfolio().subscribe(
