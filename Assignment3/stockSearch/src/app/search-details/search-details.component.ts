@@ -137,20 +137,14 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.searchResults = results;
 
     });
-    console.log("Inside ng init")
-    // this.fetchPortfolioDetails();
     this.state.searchResults = this.searchResults;
     this.stockService.setState(this.state);
     this.checkIfFavorite(this.stockProfile.ticker);
     this.checkInPortfolio(this.stockProfile.ticker);
-    console.log("Calling the function")
-    // this.fetchPortfolioDetails();
+    // this.startAutoUpdate(this.stockProfile.ticker);
     this.ngOnChanges();
-
-    this.startAutoUpdate();
+    
   }
-
-
 
   ngOnDestroy() {
     // Unsubscribe from any subscriptions to prevent memory leaks
@@ -159,27 +153,11 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-//  sell button for search details 
-  // fetchPortfolioDetails(): void {
-  //   console.log("Inside fetchPortfolio ")
-  //   this.portfolioService.getPortfolio().subscribe(
-  //     (data: any) => {
-  //       this.stock = data;
-  //       console.log("searchquery here 1",this.searchQuery);
-  //       let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
-  //       console.log("this is stock", check[0].ticker,check[1].ticker);
-  //       if(check.length > 0 && check[0].ticker === this.searchQuery){
-  //         this.inPortfolio = true;
-  //       }
-  //       console.log("This portfolio",this.inPortfolio)
-  //     },
-  //     (error: any) => {
-  //       console.error('Error fetching stock details', error);
-  //     }
-  //   );
-  // }
 
   fetchStockDetails(ticker: string): void {
+    console.log(
+      "tetsing market open"
+    )
     this.checkIfFavorite(ticker); 
     this.checkInPortfolio(ticker);
     this.state.ticker = ticker;
@@ -666,18 +644,19 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         console.log(`Current time: ${now}`);
         console.log(`Difference in minutes: ${difference / 60000}`);
     
-        this.marketOpen = difference < 5 * 60 * 1000;
+        this.marketOpen = difference > 5 * 60 * 1000;
         if (this.marketOpen == false) {
           this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
         }
       }
     }
-    startAutoUpdate() {
+    startAutoUpdate(ticker : string) {
       // Start auto-update only if the market is open
       this.determineMarketStatus(); // Make sure the market status is updated before starting
       if (this.marketOpen) {
         this.autoUpdateInterval = setInterval(() => {
-          this.fetchStockDetails(this.ticker); // Assuming this.ticker is the current ticker symbol
+          this.fetchStockDetails(ticker); // Assuming this.ticker is the current ticker symbol
+          console.log("auto update for ", this.ticker);
           this.determineMarketStatus(); // Check if the market is still open
           if (!this.marketOpen && this.autoUpdateInterval) {
             clearInterval(this.autoUpdateInterval); // Stop updating if the market closes
