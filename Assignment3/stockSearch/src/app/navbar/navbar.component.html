@@ -4,10 +4,6 @@
 
       <a class="navbar-brand" href="#">Stock Search</a>
 
-      <!-- <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button> -->
-
       <button class="navbar-toggler" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
                 [attr.aria-expanded]="!isNavbarCollapsed" aria-controls="navbarNavDropdown">
             <span class="navbar-toggler-icon"></span>
@@ -25,6 +21,15 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/portfolio">Portfolio</a>
           </li>
+          <!-- <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/', 'search', 'home']" routerLinkActive="active">Search</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
+          </li> -->
         </ul>
       </div>
 

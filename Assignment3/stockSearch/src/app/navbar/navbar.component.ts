@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { StockService } from '../services/stock.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-navbar',
