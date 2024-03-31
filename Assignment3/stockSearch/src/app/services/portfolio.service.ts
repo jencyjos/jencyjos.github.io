@@ -25,10 +25,22 @@ export class PortfolioService {
     return this.http.get<Stock[]>(`${this.apiUrl}/api/portfolio`);
   }
 
+  // checkStockInPortfolio(ticker: string): Observable<boolean> {
+  //   return this.getPortfolio().pipe(
+  //     map(stocks => stocks.some(stock => stock.ticker === ticker))
+  //     // map((stocks: Stock[]) => stocks.some((stock: Stock) => stock.ticker === ticker))
+  //   );
+  // }
+
+  // Get the current portfolio
+  getPortfolioInOrig(): Observable<{ stocks: Stock[]}> {
+    return this.http.get<{ stocks: Stock[]}>(`${this.apiUrl}/api/portfolio`);
+  }
   checkStockInPortfolio(ticker: string): Observable<boolean> {
-    return this.getPortfolio().pipe(
-      map(stocks => stocks.some(stock => stock.ticker === ticker))
-      // map((stocks: Stock[]) => stocks.some((stock: Stock) => stock.ticker === ticker))
+    return this.getPortfolioInOrig().pipe(
+      //map(stocks => stocks.some(stock => stock.ticker === ticker))
+       //map((stocks: Stock[]) => stocks.some((stock: Stock) => stock.ticker === ticker))
+       map(response => response.stocks.some(stock => stock.ticker === ticker))
     );
   }
 

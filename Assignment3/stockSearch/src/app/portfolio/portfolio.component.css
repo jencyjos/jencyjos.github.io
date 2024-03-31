@@ -10,3 +10,14 @@ color: red;
 color: black;
 }
 
+/* styles.scss or your component's CSS file */
+
+.snackbar-success {
+  background-color: #43a047; /* Green */
+  color: #fff;
+}
+
+.snackbar-error {
+  background-color: #e53935; /* Red */
+  color: #fff;
+}

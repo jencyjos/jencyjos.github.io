@@ -58,9 +58,8 @@ interface EarningsData {
 })
 
 export class SearchDetailsComponent implements OnInit, OnDestroy {
+  autoUpdateInterval: any; 
   ticker: string = '';
-  // stockProfile: any;
-  // stockQuote: any;
   @Input() searchQuery: string = '';
   @Input() stockProfile: any;
   @Input() stockQuote: any;
@@ -133,84 +132,56 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  //------------------------------------this is for the state - fix it
   ngOnInit() {
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
 
     });
     console.log("Inside ng init")
-    this.fetchPortfolioDetails();
+    // this.fetchPortfolioDetails();
     this.state.searchResults = this.searchResults;
     this.stockService.setState(this.state);
     this.checkIfFavorite(this.stockProfile.ticker);
+    this.checkInPortfolio(this.stockProfile.ticker);
     console.log("Calling the function")
-    this.fetchPortfolioDetails();
+    // this.fetchPortfolioDetails();
     this.ngOnChanges();
+
+    this.startAutoUpdate();
   }
 
 
 
   ngOnDestroy() {
     // Unsubscribe from any subscriptions to prevent memory leaks
+    if (this.autoUpdateInterval) {
+      clearInterval(this.autoUpdateInterval);
+    }
   }
 
-  // fetchPortfolioetails(): void {
-  //     this.portfolioService.getStockDetails(this.searchQuery).subscribe(
-  //       (data: any) => {
-  //         this.stock = data;
-  //         let check = this.stock.filter(x => x.ticker == this.searchQuery)
-  //         if(check[0] == this.searchQuery){
-  //           this.inPortfolio = true;
-  //         }
-  //       },
-  //       (error: any) => {
-  //         console.error('Error fetching stock details', error);
+//  sell button for search details 
+  // fetchPortfolioDetails(): void {
+  //   console.log("Inside fetchPortfolio ")
+  //   this.portfolioService.getPortfolio().subscribe(
+  //     (data: any) => {
+  //       this.stock = data;
+  //       console.log("searchquery here 1",this.searchQuery);
+  //       let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
+  //       console.log("this is stock", check[0].ticker,check[1].ticker);
+  //       if(check.length > 0 && check[0].ticker === this.searchQuery){
+  //         this.inPortfolio = true;
   //       }
-  //     ); 
+  //       console.log("This portfolio",this.inPortfolio)
+  //     },
+  //     (error: any) => {
+  //       console.error('Error fetching stock details', error);
+  //     }
+  //   );
   // }
-
-  fetchPortfolioDetails(): void {
-    console.log("Inside fetchPortfolio ")
-    // this.portfolioService.getStockDetails(this.searchQuery).subscribe(
-    //   (data: Stock[]) => { // Assuming that getStockDetails returns an array of Stock
-    //     this.stock = data;
-    //     let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
-    //     if(check.length > 0 && check[0].ticker === this.searchQuery){
-    //       this.inPortfolio = true;
-    //     }
-    //     console.log("This portfolio",this.inPortfolio)
-    //   },
-    //   (error: any) => {
-    //     console.error('Error fetching stock details', error);
-    //   }
-    // );
-
-    this.portfolioService.getPortfolio().subscribe(
-      (data: any) => {
-        // stock.name = data.name;\
-        console.log("Inside he new subscribe")
-        console.log("This is the new data",data)
-        this.stock = data;
-        console.log("searchquery here 1",this.searchQuery);
-        let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
-      
-        console.log("this is stock", check.type);
-        console.log("this is stock", check[0].ticker,check[1].ticker);
-        if(check.length > 0 && check[0].ticker === this.searchQuery){
-          this.inPortfolio = true;
-        }
-        console.log("This portfolio",this.inPortfolio)
-      },
-      (error: any) => {
-        console.error('Error fetching stock details', error);
-      }
-    );
-  }
 
   fetchStockDetails(ticker: string): void {
     this.checkIfFavorite(ticker); 
+    this.checkInPortfolio(ticker);
     this.state.ticker = ticker;
     this.stockService.setState(this.state);
 
@@ -314,6 +285,20 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  checkInPortfolio(ticker: string) {
+    console.log("checkInPortfolio ticker 11", ticker)
+    this.portfolioService.checkStockInPortfolio(ticker).subscribe({
+      next: (isInPortfolio: boolean) => {
+        this.inPortfolio = isInPortfolio; // directly set inPortfolio based on the response
+        console.log("hsdfjsdhfksjdhfsdhfk")
+        console.log(this.inPortfolio)
+      },
+      error: (error) => {
+        console.error('Error checking if stock is in portfolio', error);
+      }
+    });
+  }
+
   
 
   drawPriceChart(stockData: any): void {
@@ -373,84 +358,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         ],
       };
   };
-
-  // drawRecommendationChart(insightsData: any): void {
-  //   this.recommendationChartOptions = {
-
-  //     accessibility: {
-  //         enabled: false
-  //     },
-  //     chart: {
-  //         type: 'column',
-  //         backgroundColor: 'rgba(0, 0, 0, 0.05)'
-  //     },
-  
-  //     yAxis: {
-  //         title: {
-  //             text: 'Analysis'
-  //         },
-  //         stackLabels: {
-  //             enabled: false
-  //         },
-  //         opposite: false,
-  //         lineWidth: 0,
-  //         resize: {
-  //             enabled: false
-  //         }
-  //     },
-  //     title: {
-  //         text: 'Recommendation Trends',
-  //         align: 'center'
-  //     },
-    
-  //     plotOptions: {
-  //         column: {
-  //             stacking: 'normal',
-  //             dataLabels: {
-  //                 enabled: true
-  //             }
-  //         }
-  //     },
-  
-  
-  //     xAxis: {
-  //         categories: insightsData['recommendation'].xAxis
-  //     },
-
-  
-  //     series: [{
-  //         name: 'Strong Buy',
-  //         data: insightsData['recommendation'].yAxis.strongBuy,
-  //         type:'column',
-  //         color: '#008000'
-  //     }, {
-  //         name: 'Buy',
-  //         data: insightsData['recommendation'].yAxis.buy,
-  //         type:'column',
-  //         color: '#04af70'
-  //     }, {
-  //         name: 'Hold',
-  //         data: insightsData['recommendation'].yAxis.hold,
-  //         type:'column',
-  //         color: '#a68004'
-  //     },
-  //     {
-  //       name: 'Sell',
-  //       data: insightsData['recommendation'].yAxis.sell,
-  //       type:'column',
-  //       color: '#f28500'
-  //   },
-  //   {
-  //     name: 'Strong Sell',
-  //     data: insightsData['recommendation'].yAxis.strongSell,
-  //     type:'column',
-  //     color: '#800080'
-  // }] 
-  
-  // };
-  
-  // };
-
 
   drawRecommendationChart(recommendationData: RecommendationData[]) {
     const categories = recommendationData.map(data => data.period);
@@ -534,71 +441,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       }
     };
   
-    // Now you can use this.recommendationChartOptions in your Highcharts chart component.
   }
 
-
- 
-  // drawEarningsChart(earningsData: any): void {
-  //   const actualData = earningsData.map((item: EarningsData) => item.actual !== null ? item.actual : 0);
-  //   const estimateData = earningsData.map((item: EarningsData) => item.estimate !== null ? item.estimate : 0);
-  //   const categories = earningsData.map((item: EarningsData) => `${item.period}\nSurprise: ${item.surprise}`);
-  //   this.earningsChartOptions = {
-      
-  //       chart: {
-  //           type: 'spline',
-  //           backgroundColor: 'rgba(0, 0, 0, 0.05)'
-  //       },
-  //       accessibility: {
-  //           enabled: false
-  //       },
-  //       title: {
-  //           text: 'Historical EPS Suprises',
-  //           align: 'center'
-  //       },
-
-  //       xAxis: {
-  //         crosshair: true,
-  //         categories: earningsData["earnings"].xAxis,
-  //       },
-  //       yAxis: {
-  //           title: {
-  //               text: 'Quarterly EPS'
-  //           },
-  //           opposite: false,
-  //           lineWidth: 0,
-  //           resize: {
-  //               enabled: false
-  //           }
-  //       },
-  //       tooltip: {
-  //           shared: true
-  //       },
-  //       plotOptions: {
-  //           spline: {
-  //               marker: {
-  //                   radius: 3
-  //               }
-  //           }
-  //       },
-  //       series: [{
-  //           type: 'spline',
-  //           name: 'Actual',
-  //           marker: {
-  //               symbol: 'circle'
-  //           },
-  //           data: earningsData["earnings"].yAxis.actual
-
-  //       }, {
-  //         type: 'spline',
-  //         name: 'Estimate',
-  //           marker: {
-  //               symbol: 'diamond'
-  //           },
-  //           data: earningsData["earnings"].yAxis.estimate
-  //       }]
-  //   }
-  // };
   drawEarningsChart(earningsData: EarningsData[]): void {
     const actualData = earningsData.map(item => ({
       y: item.actual,
@@ -657,7 +501,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       }]
     };
   
-    // Trigger chart update if necessary, e.g., using Angular's change detection
   }
 
   drawSMAChart(smaData : any): void {
@@ -722,11 +565,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
         navigator: {
             enabled: true
-            // series: {
-            //     accessibility: {
-            //         exposeAsGroupOnly: true
-            //     }
-            // }
+           
         },
 
         xAxis: {
@@ -817,19 +656,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-    // determineMarketStatus() {
-    //   if (this.stockQuote && this.stockQuote.t) {
-    //     const lastUpdate = new Date(this.stockQuote.t * 1000);
-    //     const now = new Date();
-    //     const difference = now.getTime() - lastUpdate.getTime();
-    
-    //     console.log(`Last update: ${lastUpdate}`);
-    //     console.log(`Current time: ${now}`);
-    //     console.log(`Difference in minutes: ${difference / 60000}`);
-    
-    //     this.marketOpen = difference < 5 * 60 * 1000;
-    //   }
-    // }
     determineMarketStatus() {
       if (this.stockQuote && this.stockQuote.t) {
         const lastUpdate = new Date(this.stockQuote.t * 1000);
@@ -846,7 +672,19 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         }
       }
     }
-  
+    startAutoUpdate() {
+      // Start auto-update only if the market is open
+      this.determineMarketStatus(); // Make sure the market status is updated before starting
+      if (this.marketOpen) {
+        this.autoUpdateInterval = setInterval(() => {
+          this.fetchStockDetails(this.ticker); // Assuming this.ticker is the current ticker symbol
+          this.determineMarketStatus(); // Check if the market is still open
+          if (!this.marketOpen && this.autoUpdateInterval) {
+            clearInterval(this.autoUpdateInterval); // Stop updating if the market closes
+          }
+        }, 15000); // Update every 15 seconds
+      }
+    }
      
   openNewsModal(newsArticle : NewsArticle): void {
     const dialogRef = this.dialog.open(NewsDetailModalComponent, {
@@ -861,22 +699,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-  // toggleWatchlist(ticker: string): void {
-  //   // Toggle the visual state
-  //   this.isFavorite = !this.isFavorite;
-
-  //   // Call the StockService method to add/remove from watchlist
-  //   this.stockService.toggleWatchlist(ticker).subscribe({
-  //     next: (response) => {
-  //       // Display a self-closing alert with the response message
-  //       this.isFavorite = !this.isFavorite; 
-  //       alert(response.message);
-  //     },
-  //     error: (error) => {
-  //       console.error('Error updating watchlist', error);
-  //     }
-  //   });
-  // }
 
   toggleWatchlist(ticker: string): void {
     // Assuming this.isFavorite already toggled by the method caller or handled here
@@ -978,9 +800,6 @@ fetchCurrentPrice(): void {
     );
   }
 }
-
-
-
 
   
 }

@@ -73,7 +73,7 @@
               <!-- Webpage URL as a clickable link -->
               <b>Webpage: </b> <a [href]="stockProfile.weburl" target="_blank">{{ stockProfile.weburl }}</a><br>
               <b>Company Peers:</b><br>
-              <p *ngFor="let peer of companyPeers" style="display: inline-block"><a [routerLink]="'/search/'+peer"><u>{{ peer }}</u></a>,</p>
+              <p *ngFor="let peer of companyPeers" style="display: inline-block"><a [routerLink]="'/search/'+peer"><u>{{ peer }}</u></a>, </p>
             </div>
           </div>
           <div class="col-6 col-xs-12">

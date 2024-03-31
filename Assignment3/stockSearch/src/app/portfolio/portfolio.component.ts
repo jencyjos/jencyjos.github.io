@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
 import { Stock } from '../../../../backend/models/stock.model'; 
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StockService } from '../services/stock.service'; 
 
 @Component({
   selector: 'app-portfolio',
@@ -16,7 +18,8 @@ export class PortfolioComponent implements OnInit {
 
   constructor(
     private portfolioService: PortfolioService,
-    private modalService: NgbModal) {}
+    private modalService: NgbModal,
+    private changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadPortfolio();
@@ -81,9 +84,10 @@ export class PortfolioComponent implements OnInit {
     modalRef.componentInstance.walletBalance = this.walletBalance; // Pass the current balance to the modal
 
     modalRef.result.then((result) => {
-      if (result === 'success') {
+      if (result && result.success == true) {
         this.loadPortfolio();
         this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+        this.changeDetectorRef.detectChanges();
       }
     }, (reason) => {});
   }
@@ -93,9 +97,10 @@ export class PortfolioComponent implements OnInit {
     modalRef.componentInstance.stock = stock;
 
     modalRef.result.then((result) => {
-      if (result === 'success') {
+      if (result && result.success == true) {
         this.loadPortfolio();
         this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+        this.changeDetectorRef.detectChanges();
       }
     }, (reason) => {});
   }
@@ -110,4 +115,9 @@ export class PortfolioComponent implements OnInit {
   calculateChangeInPrice(stock: any): number {
     return Math.abs(stock.currentPrice - stock.averageCost);
   }
+
+  
+
+
+
 }

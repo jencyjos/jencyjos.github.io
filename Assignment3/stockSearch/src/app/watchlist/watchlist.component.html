@@ -7,63 +7,29 @@
 
   <div *ngIf="!loading">
 
-    <!-- <div *ngIf="watchlist.length > 0; else noWatchlist">
-      <ul class="watchlist">
-        <li *ngFor="let item of watchlist; let i = index" class="watchlist-item">
-          <div class="stock-info" (click)="navigateToDetails(item.ticker)">
-            <div class="ticker-and-name">
-              <div class="ticker">{{ item.ticker }}</div>
-              <div class="company-name">{{ item.name }}</div>
-            </div>
-            <div [ngClass]="{
-                  'positive': item.d > 0,
-                  'negative': item.d < 0,
-                  'neutral': item.d === 0
-                }" 
-                class="price-details">
-              <div class="current-price">{{ item.c }}</div>
-              <div class="change">
-                <span *ngIf="item.d > 0" class="price-arrow">&#x25B2;</span>
-                <span *ngIf="item.d < 0" class="price-arrow">&#x25BC;</span>
-                {{ item.d | number:'1.2-2' }} ({{ item.dp }}%)
-              </div>
-            </div>
-          </div>
-          <span class="close-button" (click)="removeFromWatchlist($event, item.ticker, i)">&times;</span>
-        </li>
-      </ul>
-    </div>
-    <ng-template #noWatchlist>
-      <div class="watchlist-empty-alert">
-        <p>Currently, you don't have any stocks in your watchlist.</p>
-      </div>
-    </ng-template>
-  </div> -->
-
-  <div class="card my-3" *ngFor="let item of watchlist; let i = index" [routerLink]="'/search/'+item.ticker">
+    <div class="card my-3" *ngFor="let item of watchlist; let i = index" [routerLink]="'/search/'+item.ticker">
     <div class="col-1"><i class="bi bi-x" (click)="removeFromWatchlist($event, item.ticker, i)"></i></div>
     <div class="row">
+    <div class="col-6 p-3">
+    <p class="fs-5">{{ item.ticker }}</p>
+    <p class="fs-6">{{ item.name }}</p>
+  </div>
 
-      <div class="col-6 p-3">
-        <p class="fs-5">{{ item.ticker }}</p>
-        <p class="fs-6">{{ item.name }}</p>
-      </div>
-
-      <div [class]="(item.d>0) ? 'col-6 p-3 text-success' : 'col-6 p-3 text-danger'">
-        <p class="fs-5">{{ item.c }}</p>      
-        <span *ngIf="item.d > 0" class="text-success">&#x25B2;</span>
-        <span *ngIf="item.d < 0" class="text-danger">&#x25BC;</span>
-        <p class="fs-6" style="display: inline-block">{{ item.d | number:'1.2-2' }} ({{ item.dp }}%)</p>
-      </div>
-
-
+    <div [class]="(item.d>0) ? 'col-6 p-3 text-success' : 'col-6 p-3 text-danger'">
+      <p class="fs-5">{{ item.c }}</p>      
+      <span *ngIf="item.d > 0" class="text-success">&#x25B2;</span>
+      <span *ngIf="item.d < 0" class="text-danger">&#x25BC;</span>
+      <p class="fs-6" style="display: inline-block">{{ item.d | number:'1.2-2' }} ({{ item.dp }}%)</p>
     </div>
-  </div>
 
 
-  <div *ngIf="loading" class="loading-indicator">
-    Loading...
   </div>
+</div>
+
+
+<div *ngIf="loading" class="loading-indicator">
+  Loading...
+</div>
   
 </div>
 </div>

@@ -49,57 +49,46 @@ import { Observable } from 'rxjs';
 
 
     getStockDetails(ticker: string): Observable<any> {
-      // console.log(`Fetching details for ticker: ${ticker}`);
       return this.http.get<any>(`${this.detailsUrl}/${ticker}`);
     }
 
     toggleWatchlist(ticker: string): Observable<any> {
       return this.http.post(`${this.apiUrl}/api/watchlist/toggle`, { ticker });
     }
-
   
     getWatchlist(): Observable<any[]> {
       return this.http.get<any[]>(`${this.apiUrl}/api/watchlist`);
     }
 
-
     getHighCharts(ticker: string): Observable<any[]> {
-      // console.log(`Fetching charts for ticker: ${ticker}`);
       return this.http.get<any[]>(`${this.chartsUrl}/${ticker}`);
     }
 
     getSmaCharts(ticker: string): Observable<any[]> {
-      // console.log(`Fetching SMA for ticker: ${ticker}`);
       return this.http.get<any[]>(`${this.smaChartsUrl}/${ticker}`);
     }
 
     getEarningsData(ticker: string): Observable<any[]> {
-      // console.log(`Fetching charts for ticker: ${ticker}`);
       return this.http.get<any[]>(`${this.earningsChartsUrl}/${ticker}`);
     }
 
     getRecommendationCharts(ticker: string): Observable<any[]> {
-      // console.log(`Fetching recommendation for ticker: ${ticker}`);
       return this.http.get<any[]>(`${this.recommendationChartsUrl}/${ticker}`);
     }
 
     getTopNews(ticker: string): Observable<any[]> {
-      // console.log(`Fetching nEWS for ticker: ${ticker}`);
       return this.http.get<any[]>(`${this.newsUrl}/${ticker}`);
     }
 
     getAutocompleteResults(query: string): Observable<any[]> {
-      // console.log(`Fetching autocomplete for query: ${query}`);
       return this.http.get<any[]>(`${this.autocompleteUrl}/${query}`);
     }
   
     getStockProfile(ticker: string): Observable<any> {
-      // console.log(`Fetching profile for ticker: ${ticker}`);
       return this.http.get(`${this.profileUrl}/${ticker}`);
     }
   
     getStockQuote(ticker: string): Observable<any> {
-      // console.log(`Fetching quote for ticker: ${ticker}`);
       return this.http.get(`${this.quoteUrl}/${ticker}`);
     }
 

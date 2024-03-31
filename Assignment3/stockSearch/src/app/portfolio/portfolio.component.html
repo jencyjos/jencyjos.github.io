@@ -99,13 +99,14 @@
             <br>
             Market Value:
           </div>
-          <div class="col-4">
+          <div class="col-4" [ngClass]="calculateClass(stock)">
+            <span *ngIf="calculateClass(stock) === 'profit'">&#x25B2; <!-- Upwards arrow for profit --></span>
+            <span *ngIf="calculateClass(stock) === 'loss'">&#x25BC; <!-- Downwards arrow for loss --></span>
             {{ (calculateChangeInPrice(stock)).toFixed(2) }}
             <br>
             {{ stock.currentPrice }}
             <br>
             {{ (stock.currentPrice * stock.shares).toFixed(2) }}
-          </div>
           </div>
           
         </div>

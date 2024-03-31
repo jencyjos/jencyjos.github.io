@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { RouterModule } from '@angular/router';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { HomeComponent } from './home/home.component';
 import { SearchDetailsComponent } from './search-details/search-details.component';
 import { NewsDetailModalComponent } from './news-detail-modal-component/news-detail-modal-component.component';
@@ -60,7 +60,8 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
     MatIconModule,
     HighchartsChartModule,
     MatProgressSpinner,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   providers: [
     provideAnimationsAsync('noop')
