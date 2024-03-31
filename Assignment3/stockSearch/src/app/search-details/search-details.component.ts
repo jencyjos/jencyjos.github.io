@@ -347,35 +347,35 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         name: 'Strong Sell',
         type: 'column',
         data: recommendationData.map(data => data.strongSell),
-        color: '#FF6347', // Tomato red for Strong Sell
+        color: '#800080',
         stack: 'recommendations'
       },
       {
         name: 'Sell',
         type: 'column',
         data: recommendationData.map(data => data.sell),
-        color: '#FFA07A', // Light Salmon for Sell
+        color: 'red',
         stack: 'recommendations'
       },
       {
         name: 'Hold',
         type: 'column',
         data: recommendationData.map(data => data.hold),
-        color: '#FFD700', // Gold for Hold
+        color: '#a68004',
         stack: 'recommendations'
       },
       {
         name: 'Buy',
         type: 'column',
         data: recommendationData.map(data => data.buy),
-        color: '#9ACD32', // Yellow Green for Buy
+        color: '#04af70', 
         stack: 'recommendations'
       },
       {
         name: 'Strong Buy',
         type: 'column',
         data: recommendationData.map(data => data.strongBuy),
-        color: '#006400', // Dark Green for Strong Buy
+        color: '#008000',
         stack: 'recommendations'
       },
     ];
