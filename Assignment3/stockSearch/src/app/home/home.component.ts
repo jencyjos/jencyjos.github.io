@@ -4,11 +4,14 @@ import { StockService } from '../services/stock.service';
 import { SearchStateService } from '../services/SearchState.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
+
 export class HomeComponent implements OnInit{
   searchQuery: string = '';
   currentTicker:string ='';
@@ -38,7 +41,6 @@ export class HomeComponent implements OnInit{
     this.emptyTicker = false;
     this.tickerNotFound = false;
     this.searchResults = {}
-    console.log("Fuckedd uppp");
     this.control.valueChanges.subscribe(
       value => {
         if(value){
@@ -66,7 +68,6 @@ export class HomeComponent implements OnInit{
     this.searchQuery = this.searchQuery.toUpperCase();
     console.log("onsearch: ", this.searchQuery)
     if (!this.searchQuery) {
-      console.log("No search query");
       this.autocompleteResults = [];
       return;
     }
@@ -95,12 +96,6 @@ export class HomeComponent implements OnInit{
       this.clearAutocompleteResults();
     }
   }
-
-  // selectSuggestion(suggestion: any): void {
-  //   this.searchQuery = suggestion.symbol;
-  //   this.autocompleteResults = [];
-  //   this.onSearch();
-  // }
 
  onClear(): void {
     this.searchQuery = '';

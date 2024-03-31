@@ -1,6 +1,5 @@
 
 html, body {
-    /* height: 100%; */
     margin: 0;
     padding: 0;
 }
@@ -8,7 +7,7 @@ html, body {
 .wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;/* Make wrapper at least full height of viewport */
+    min-height: 100vh;
 }
 /* ------------------------------------- autocomplete styles---------------------------- */
 .autocomplete-suggestions-container {
