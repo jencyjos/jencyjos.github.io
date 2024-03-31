@@ -48,7 +48,7 @@ export class SellModalComponent {
       next: (result: any) => { // Consider using a specific type for `result`
         // Handle the successful sell
        
-        this.alertMessage = 'Sold successfully!';
+        // this.alertMessage = 'Sold successfully!';
         this.isSuccess = true
         // Create and insert the alert message at the top of the webpage
         const alert = this.renderer.createElement('div');

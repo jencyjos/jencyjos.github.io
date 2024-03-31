@@ -46,11 +46,21 @@
 
 
 <div class="justify-content-center">
-  <div class="watchlist-container col-8 mx-auto">
-    <h2>My Portfolio</h2>
+  <!-- <div class="alert1 alert-success alert-dismissible fade show mx-auto text-center col-8" role="alert">
+     {{ stock.ticker }}bought successfully
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+
+  <div class="alert2 alert-success alert-dismissible fade show mx-auto text-center col-8" role="alert">
+    {{ stock.ticker }} sold successfully
+   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ </div> -->
+
+  <div class="portfolio-container col-8 mx-auto">
+    <h1><b>My Portfolio</b></h1>
     <h3>My Wallet: {{ (walletBalance) | currency:'USD':'symbol' }}</h3>
     <div class="alert alert-warning text-center" *ngIf="stocks.length == 0;" role="alert">
-      Currently, you don't have any stocks in your watchlist.
+      Currently, you don't have any stock.
     </div>
 
     <div class="card my-3" *ngFor="let stock of stocks">

@@ -54,7 +54,7 @@
 </div>
 <div class="modal-footer">
   <p class="text-center" style="display:inline-block">Total: {{ (quantity * stock.currentPrice) | currency:'USD':'symbol' }}</p>
-  <button type="submit" class="btn btn-success" [disabled]="!canSell()">Buy</button>
+  <button type="submit" class="btn btn-success" [disabled]="!canSell()">Sell</button>
 </div>
 </form>
 

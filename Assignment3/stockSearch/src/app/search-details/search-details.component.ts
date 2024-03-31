@@ -140,9 +140,13 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.searchResults = results;
 
     });
+    console.log("Inside ng init")
+    this.fetchPortfolioDetails();
     this.state.searchResults = this.searchResults;
     this.stockService.setState(this.state);
     this.checkIfFavorite(this.stockProfile.ticker);
+    console.log("Calling the function")
+    this.fetchPortfolioDetails();
     this.ngOnChanges();
   }
 
@@ -168,19 +172,43 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   // }
 
   fetchPortfolioDetails(): void {
-    this.portfolioService.getStockDetails(this.searchQuery).subscribe(
-      (data: Stock[]) => { // Assuming that getStockDetails returns an array of Stock
+    console.log("Inside fetchPortfolio ")
+    // this.portfolioService.getStockDetails(this.searchQuery).subscribe(
+    //   (data: Stock[]) => { // Assuming that getStockDetails returns an array of Stock
+    //     this.stock = data;
+    //     let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
+    //     if(check.length > 0 && check[0].ticker === this.searchQuery){
+    //       this.inPortfolio = true;
+    //     }
+    //     console.log("This portfolio",this.inPortfolio)
+    //   },
+    //   (error: any) => {
+    //     console.error('Error fetching stock details', error);
+    //   }
+    // );
+
+    this.portfolioService.getPortfolio().subscribe(
+      (data: any) => {
+        // stock.name = data.name;\
+        console.log("Inside he new subscribe")
+        console.log("This is the new data",data)
         this.stock = data;
+        console.log("searchquery here 1",this.searchQuery);
         let check = this.stock.filter((x: Stock) => x.ticker === this.searchQuery);
+      
+        console.log("this is stock", check.type);
+        console.log("this is stock", check[0].ticker,check[1].ticker);
         if(check.length > 0 && check[0].ticker === this.searchQuery){
           this.inPortfolio = true;
         }
+        console.log("This portfolio",this.inPortfolio)
       },
       (error: any) => {
         console.error('Error fetching stock details', error);
       }
     );
   }
+
   fetchStockDetails(ticker: string): void {
     this.checkIfFavorite(ticker); 
     this.state.ticker = ticker;

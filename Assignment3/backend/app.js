@@ -272,7 +272,7 @@ app.get('/api/stock/recommendation/:ticker', async (req, res) => {
 
 
 
-
+//current
 // Company Insider Sentiment API call
 app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
@@ -322,6 +322,7 @@ app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
 
 
 //company peers
+
 
 app.get('/api/peers/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
