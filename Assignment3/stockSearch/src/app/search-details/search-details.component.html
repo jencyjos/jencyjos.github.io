@@ -39,7 +39,7 @@
       <div class="col-4">
         <p>{{ stockQuote.c }}</p>
         <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
-          {{ stockQuote.d }} ({{ stockQuote.dp }}%)
+          {{ stockQuote.d }} ({{ stockQuote.dp | number: '1.2-2' }}%)
         </p>
         <p>{{ todayDate | date:'yyyy-MM-dd HH:mm:ss' }}</p>
         
@@ -52,8 +52,6 @@
       </p>
     </div>
     
-  
-
     <mat-tab-group>
       <mat-tab label="Summary">
         <div class="row">

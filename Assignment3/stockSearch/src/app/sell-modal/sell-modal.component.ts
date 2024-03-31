@@ -36,11 +36,8 @@ export class SellModalComponent {
   }
 
   onSubmit() {
-
-
-
     if (this.quantity > this.stock.shares) {
-      this.errorMessage = "You can't sell more shares than you own.";
+      this.errorMessage = "You cannot sell the stocks that you don't have!";
       return; // Prevents the sell operation if quantity is invalid
     }
 
@@ -51,11 +48,11 @@ export class SellModalComponent {
         // this.alertMessage = 'Sold successfully!';
         this.isSuccess = true
         // Create and insert the alert message at the top of the webpage
-        const alert = this.renderer.createElement('div');
-        alert.textContent = this.alertMessage;
-        alert.className = 'alert';
-        alert.classList.add(this.isSuccess ? 'green-alert' : 'red-alert');
-        this.renderer.insertBefore(document.body, alert, document.body.firstChild);
+        // const alert = this.renderer.createElement('div');
+        // alert.textContent = this.alertMessage;
+        // alert.className = 'alert';
+        // alert.classList.add(this.isSuccess ? 'green-alert' : 'red-alert');
+        // this.renderer.insertBefore(document.body, alert, document.body.firstChild);
 
         setTimeout(() => {
           this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity});

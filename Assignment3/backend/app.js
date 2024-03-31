@@ -151,7 +151,7 @@ app.get('/api/stock/news/:ticker', async (req, res) => {
 app.get('/api/stock/historical/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
-  const timespan = 'day';
+  const timespan = 'hour';
 
   // Calculate 6 months and 1 day ago date
   const currentDate = new Date();
@@ -184,7 +184,7 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
   }
 });
 
-// SMA data API call
+// SMA data API call --charts
 app.get('/api/stock/sma/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;

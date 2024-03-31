@@ -72,14 +72,14 @@ export class BuyModalComponent implements OnInit {
           // Update the user wallet after a successful transaction
           this.userWallet -= this.totalPrice;
           this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity, totalCost: this.totalPrice});
-          this.alertMessage = 'Stock bought successfully!';
+          // this.alertMessage = 'Stock bought successfully!';
           this.isSuccess = true
           this.showAlert = true; // Display the alert
           setTimeout(() => { this.showAlert = false; }, 25000); // Hide the alert after 3 seconds
         },
         error: (error: any) => {
           console.error('Error buying stock', error);
-          this.alertMessage = 'Failed to buy stock!';
+          // this.alertMessage = 'Failed to buy stock!';
           this.showAlert = true; // Display the alert
           setTimeout(() => { this.showAlert = false; }, 5000); // Hide the alert after 3 seconds
         }
