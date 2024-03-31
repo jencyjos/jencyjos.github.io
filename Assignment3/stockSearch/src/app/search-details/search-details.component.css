@@ -66,6 +66,9 @@
 .sell-btn {
     background-color: #28a745; /* Bootstrap success color */
 }
+.btn-buy {
+  margin-right: 20px;
+}
 
 /* -------------------------Center section with logo and market status------------------- */
 .center-section {

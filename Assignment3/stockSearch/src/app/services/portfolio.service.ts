@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Stock } from '../../../../backend/models/stock.model'; // Path might differ based on where you place your model
+import { Stock } from '../../../../backend/models/stock.model'; 
 import { map } from 'rxjs/operators';
 
 interface TransactionResponse {
@@ -36,11 +36,18 @@ export class PortfolioService {
   getPortfolioInOrig(): Observable<{ stocks: Stock[]}> {
     return this.http.get<{ stocks: Stock[]}>(`${this.apiUrl}/api/portfolio`);
   }
+
   checkStockInPortfolio(ticker: string): Observable<boolean> {
     return this.getPortfolioInOrig().pipe(
       //map(stocks => stocks.some(stock => stock.ticker === ticker))
        //map((stocks: Stock[]) => stocks.some((stock: Stock) => stock.ticker === ticker))
        map(response => response.stocks.some(stock => stock.ticker === ticker))
+    );
+  }
+  
+  getStockByTicker(ticker: string): Observable<Stock | null> {
+    return this.getPortfolioInOrig().pipe(
+      map(response => response.stocks.find(stock => stock.ticker === ticker) || null)
     );
   }
 

@@ -49,7 +49,7 @@
   Quantity: <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
   <br>
   <small *ngIf="sellable" class="text-danger">
-    You cannot sell the stock you don't own.
+    You cannot sell the stock you don't have!
   </small>
 </div>
 <div class="modal-footer">

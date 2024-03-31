@@ -188,7 +188,7 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
 app.get('/api/stock/sma/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
-  const timespan = 'hour';
+  const timespan = 'month';
 
   // Calculate 6 months and 1 day ago date
   const currentDate = new Date();

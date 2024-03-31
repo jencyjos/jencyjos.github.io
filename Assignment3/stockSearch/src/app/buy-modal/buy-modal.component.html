@@ -49,7 +49,7 @@
   Quantity: <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
   <br>
   <small *ngIf="quantityChanged && totalPrice > userWallet" class="text-danger">
-    You don't have enough stocks to buy this quantity.
+    Not enough money in wallet.
   </small>
 </div>
 <div class="modal-footer">

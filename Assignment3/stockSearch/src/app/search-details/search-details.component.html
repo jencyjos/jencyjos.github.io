@@ -24,9 +24,9 @@
         <h2>{{ stockProfile.ticker }}  <i [class]=" (isFavorite) ? 'bi bi-star-fill text-warning' : 'bi bi-star text-dark'" (click)="toggleWatchlist(stockProfile.ticker)"></i> </h2>
         <p>{{ stockProfile.name }}</p>
         <p>{{ stockProfile.exchange }}</p>
-        <button class="btn btn-success" (click)="openBuyModal()">Buy</button>
+        <button class="btn btn-success btn-buy" (click)="openBuyModal()">Buy</button>
         <!-- Sell button shows only if inPortfolio is true -->
-        <button *ngIf="inPortfolio" class="btn btn-danger" (click)="openSellModal(this.stock)">Sell</button>
+        <button *ngIf="inPortfolio" class="btn btn-danger" (click)="openSellModal()">Sell</button>
       </div>
       
     
