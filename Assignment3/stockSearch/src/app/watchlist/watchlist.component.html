@@ -1,35 +1,30 @@
 <div class="justify-content-center">
-<div class="watchlist-container col-8 mx-auto">
-  <h1><b>My Watchlist</b></h1>
-  <div class="alert alert-warning text-center" *ngIf="watchlist.length == 0;" role="alert">
-    Currently, you don't have any stocks in your watchlist.
-  </div>
-
-  <div *ngIf="!loading">
-
-    <div class="card my-3" *ngFor="let item of watchlist; let i = index" [routerLink]="'/search/'+item.ticker">
-    <div class="col-1"><i class="bi bi-x" (click)="removeFromWatchlist($event, item.ticker, i)"></i></div>
-    <div class="row">
-    <div class="col-6 p-3">
-    <p class="fs-5">{{ item.ticker }}</p>
-    <p class="fs-6">{{ item.name }}</p>
-  </div>
-
-    <div [class]="(item.d>0) ? 'col-6 p-3 text-success' : 'col-6 p-3 text-danger'">
-      <p class="fs-5">{{ item.c }}</p>      
-      <span *ngIf="item.d > 0" class="text-success">&#x25B2;</span>
-      <span *ngIf="item.d < 0" class="text-danger">&#x25BC;</span>
-      <p class="fs-6" style="display: inline-block">{{ item.d | number:'1.2-2' }} ({{ item.dp }}%)</p>
+  <div class="watchlist-container col-8 mx-auto">
+    <h1><b>My Watchlist</b></h1>
+    <div class="alert alert-warning text-center" *ngIf="watchlist.length == 0;" role="alert">
+      Currently, you don't have any stocks in your watchlist.
     </div>
-
-
-  </div>
-</div>
-
-
-<div *ngIf="loading" class="loading-indicator">
-  Loading...
-</div>
+    <div *ngIf="!loading">
+      <div class="card my-3" *ngFor="let item of watchlist; let i = index" [routerLink]="'/search/'+item.ticker">
+      <div class="col-1"><i class="bi bi-x" (click)="removeFromWatchlist($event, item.ticker, i)"></i></div>
+      <div class="row">
+      <div class="col-6 p-3">
+      <p class="fs-5">{{ item.ticker }}</p>
+      <p class="fs-6">{{ item.name }}</p>
+    </div>
+      <div [class]="(item.d>0) ? 'col-6 p-3 text-success' : 'col-6 p-3 text-danger'">
+        <p class="fs-5">{{ item.c }}</p>      
+        <span *ngIf="item.d > 0" class="text-success">&#x25B2;</span>
+        <span *ngIf="item.d < 0" class="text-danger">&#x25BC;</span>
+        <p class="fs-6" style="display: inline-block">{{ item.d | number:'1.2-2' }} ({{ item.dp }}%)</p>
+      </div>
   
-</div>
-</div>
+    </div>
+  </div>
+  
+  <div *ngIf="loading" class="loading-indicator">
+    Loading...
+  </div>
+    
+  </div>
+  </div>
