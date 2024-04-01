@@ -29,7 +29,6 @@ html, body {
     background-color: #f2f2f2;
   }
   
-  /* Positioning and styling the dropdown */
   .autocomplete-suggestions-container .autocomplete-suggestion {
     position: absolute;
     width: 100%;

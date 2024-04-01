@@ -19,7 +19,7 @@ enum LoadingState {
 })
 export class PortfolioComponent implements OnInit {
   stocks: any[] = [];
-  walletBalance: number = 25000; // Initial balance
+  walletBalance: number = 25000; 
   LoadingState = LoadingState;
   loading: LoadingState = LoadingState.InProgress;
   boughtSuccessfully: boolean = false;
@@ -78,7 +78,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   loadPortfolio(): any {
-    // Adjust this method to return the Observable from the service call
+  
     return this.portfolioService.getPortfolio().pipe(
       tap((data: any) => {
         this.stocks = data.stocks;
@@ -87,20 +87,20 @@ export class PortfolioComponent implements OnInit {
       }),
       catchError((error: any) => {
         console.error('Error fetching portfolio', error);
-        return of(null); // Ensure this observable doesn't error out completely
+        return of(null); 
       })
     );
   }
 
   loadWalletBalance(): any {
-    // Adjust this method to return the Observable from the service call
+    
     return this.portfolioService.getWalletBalance().pipe(
       tap((data: { balance: number }) => {
         this.walletBalance = data.balance;
       }),
       catchError((error: any) => {
         console.error('Error fetching wallet balance', error);
-        return of(null); // Ensure this observable doesn't error out completely
+        return of(null); 
       })
     );
   }
@@ -108,11 +108,11 @@ export class PortfolioComponent implements OnInit {
   openBuyModal(stock: any): void {
     const modalRef = this.modalService.open(BuyModalComponent);
     modalRef.componentInstance.stock = stock;
-    modalRef.componentInstance.walletBalance = this.walletBalance; // Pass the current balance to the modal
+    modalRef.componentInstance.walletBalance = this.walletBalance; 
 
     modalRef.result.then((result) => {
       if (result && result.success == true) {
-        this.loadAgain(); // Reload balance and portfolio to reflect changes
+        this.loadAgain(); 
         this.boughtSuccessfully = true
         this.stockProcessed = stock.ticker
         setTimeout(() => {

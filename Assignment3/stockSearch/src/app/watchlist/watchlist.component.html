@@ -7,7 +7,7 @@
     </div>
 
     <div *ngIf="loading == LoadingState.Complete">
-      <!-- Content to display once loading is complete -->
+      
       <div class="card my-3" *ngFor="let item of watchlist; let i = index" [routerLink]="'/search/'+item.ticker">
         <div class="col-1">
           <i class="bi bi-x" (click)="removeFromWatchlist($event, item.ticker, i)"></i>
@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <!-- Show loading indicator when loading is in progress -->
+   
     <div *ngIf="loading == LoadingState.InProgress" class="spinner-container">
       <div class="spinner"></div>
     </div>

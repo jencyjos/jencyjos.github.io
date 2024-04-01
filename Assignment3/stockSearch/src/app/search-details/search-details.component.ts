@@ -8,7 +8,6 @@ import { PortfolioService } from '../services/portfolio.service';
 import { interval, Subscription } from 'rxjs';
 import { switchMap, filter, startWith } from 'rxjs/operators';
 
-// import HC_exporting from 'highcharts/modules/exporting'; 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
@@ -179,7 +178,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log("init called")
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
 
@@ -293,7 +291,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkIfFavorite(ticker: string) {
-    console.log("ticker 11", ticker)
+    
     this.stockService.getWatchlist().subscribe({
       next: (watchlist) => {
         this.watchlist = watchlist.map(stock => stock.ticker);
@@ -306,11 +304,11 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkInPortfolio(ticker: string) {
-    console.log("checkInPortfolio ticker 11", ticker)
+  
     this.portfolioService.checkStockInPortfolio(ticker).subscribe({
       next: (isInPortfolio: boolean) => {
         this.inPortfolio = isInPortfolio;
-        // console.log(this.inPortfolio)
+       
       },
       error: (error) => {
         console.error('Error checking if stock is in portfolio', error);
@@ -728,7 +726,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      // console.log('The dialog was closed');
     });
   }
 
@@ -761,57 +759,15 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
 
-  // openBuyModal() {
-  //   const buyModalRef = this.modalService.open(BuyModalComponent);
-  //   buyModalRef.componentInstance.stock = { ticker: this.stockProfile.ticker, name: this.stockProfile.name, currentPrice: this.stockQuote.c }
-  //   console.log(buyModalRef.componentInstance.stock)
-  //   buyModalRef.result.then((result) => {
-  //     if (result && result.success == true) {
-  //       console.log("bought ", this.stockProfile.ticker)
-  //       this.loadPortfolio();
-  //       this.loadWalletBalance();
-  //     }
-  //   }, (reason) => {
-  //     console.log("oh crap", reason)
-  //   });
-  // }
-
-  // openSellModal(): void {
-  //   const modalRef = this.modalService.open(SellModalComponent);
-  //   this.portfolioService.getStockByTicker(this.stockProfile.ticker).subscribe({
-  //     next: (stock: Stock | null) => {
-  //       if (stock) {
-  //         console.log("In sell", stock)
-  //         modalRef.componentInstance.stock = { ticker: stock.ticker, name: stock.name, averageCost: stock.averageCost, currentPrice: this.stockQuote.c, shares: stock.shares }
-  //         modalRef.result.then((result) => {
-  //           if (result && result.success == true) {
-  //             console.log("sold ", this.stockProfile.ticker)
-  //             this.loadPortfolio();
-  //             this.loadWalletBalance(); 
-  //           }
-  //         }, (reason) => {
-  //           console.log("reason due to we coulnt sell", reason)
-  //         });
-  //       } else {
-  //         console.error('Stock not found: ', this.stockProfile.ticker);
-  //         modalRef.close();
-  //       }
-
-  //     },
-  //     error: (error) => {
-  //       console.error('Error checking if stock is in portfolio', error);
-  //     }
-  //   });
-  // }
 
   openBuyModal() {
-    // Logic to open the Buy Modal
+
     const buyModalRef = this.modalService.open(BuyModalComponent);
     buyModalRef.componentInstance.stock = { ticker: this.stockProfile.ticker, name: this.stockProfile.name, currentPrice: this.stockQuote.c }
-    console.log(buyModalRef.componentInstance.stock)
+    // console.log(buyModalRef.componentInstance.stock)
     buyModalRef.result.then((result) => {
       if (result && result.success == true) {
-        console.log("bought ", this.stockProfile.ticker)
+        // console.log("bought ", this.stockProfile.ticker)
         this.loadPortfolio();
         this.loadWalletBalance();
         this.boughtSuccessfully = true;
@@ -820,7 +776,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         }, 5000);
       }
     }, (reason) => {
-      console.log("oh crap", reason)
+      // console.log("oh crap", reason)
     });
   }
 
@@ -829,13 +785,13 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     this.portfolioService.getStockByTicker(this.stockProfile.ticker).subscribe({
       next: (stock: Stock | null) => {
         if (stock) {
-          console.log("In sell", stock)
+          // console.log("In sell", stock)
           modalRef.componentInstance.stock = { ticker: stock.ticker, name: stock.name, averageCost: stock.averageCost, currentPrice: this.stockQuote.c, shares: stock.shares }
           modalRef.result.then((result) => {
             if (result && result.success == true) {
-              console.log("sold ", this.stockProfile.ticker)
+              // console.log("sold ", this.stockProfile.ticker)
               this.loadPortfolio();
-              this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+              this.loadWalletBalance();
               this.soldSuccessfully = true;
               setTimeout(() => {
                 this.soldSuccessfully = false

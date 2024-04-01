@@ -10,7 +10,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 export class NewsDetailModalComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<NewsDetailModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any // Inject data passed to dialog
+    @Inject(MAT_DIALOG_DATA) public data: any 
   ) {}
   ngOnInit() {
     const matDialogConfig = new MatDialogConfig()

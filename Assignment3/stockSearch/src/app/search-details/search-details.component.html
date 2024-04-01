@@ -1,22 +1,26 @@
 <div class="alert alert-success alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="onFav">
   {{this.searchQuery}} added to watchlist!
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="this.onFav=false"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+    (click)="this.onFav=false"></button>
 </div>
 
 <div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="onUnfav">
   {{this.searchQuery}} removed from watchlist!
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="this.onUnfav=false"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+    (click)="this.onUnfav=false"></button>
 </div>
 
 <div class="alert alert-success alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="boughtSuccessfully">
   {{this.searchQuery}} bought successfully!
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="this.boughtSuccessfully=false"></button>
- </div>
- 
- <div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="soldSuccessfully">
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+    (click)="this.boughtSuccessfully=false"></button>
+</div>
+
+<div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="soldSuccessfully">
   {{this.searchQuery}} sold successfully!
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" (click)="this.soldSuccessfully=false"></button>
- </div>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+    (click)="this.soldSuccessfully=false"></button>
+</div>
 
 
 <!-- <div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="tickerNotFound">
@@ -24,7 +28,7 @@
 </div> -->
 
 
-<!-- Conditionally display the entire details section only if stockProfile and stockQuote data is available -->
+
 <div *ngIf="stockProfile && stockQuote" class="col-md-8 col-xs-12 col-sm-12 mx-auto">
 
   <div class="container-fluid">
@@ -32,19 +36,21 @@
     <div class="row text-center">
       <!-- Left side for stock symbol, name, exchange -->
       <div class="col-md-5 col-5">
-        <h2>{{ stockProfile.ticker }}  <i [class]=" (isFavorite) ? 'bi bi-star-fill text-warning' : 'bi bi-star text-dark'" (click)="toggleWatchlist(stockProfile.ticker)"></i> </h2>
+        <h2>{{ stockProfile.ticker }} <i
+            [class]=" (isFavorite) ? 'bi bi-star-fill text-warning' : 'bi bi-star text-dark'"
+            (click)="toggleWatchlist(stockProfile.ticker)"></i> </h2>
         <p>{{ stockProfile.name }}</p>
         <p>{{ stockProfile.exchange }}</p>
         <button class="btn btn-success btn-buy" (click)="openBuyModal()">Buy</button>
         <!-- Sell button shows only if inPortfolio is true -->
         <button *ngIf="inPortfolio" class="btn btn-danger" (click)="openSellModal()">Sell</button>
-    </div>
-      
-    
-    <div class="col-md-2 col-2">
-      <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo" width="100%">
-    </div>
-    
+      </div>
+
+
+      <div class="col-md-2 col-2">
+        <img [src]="stockProfile.logo" alt="{{ stockProfile.name }} logo" width="100%">
+      </div>
+
 
       <!-- Right side for stock quote details -->
       <div class="col-md-5 col-5">
@@ -53,23 +59,23 @@
           {{ stockQuote.d }} ({{ stockQuote.dp | number: '1.2-2' }}%)
         </p>
         <p>{{ lastUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</p>
-        
+
       </div>
     </div>
   </div>
 
-    <div class="row text-center">
-      <p [ngClass]="{'text-red': !marketOpen, 'text-green': marketOpen}">
-        <b><small>Market {{ marketOpen ? 'is Open' : 'Closed on ' + lastUpdatedTime }}</small></b>
-      </p>
-    </div>
-   
-    <mat-tab-group>
-      <mat-tab label="Summary">
-        <div class="row">
-          <div class="col-md-6 col-12 ">
-            <!-- Stock Quote Information -->
-            <div class="col-7">
+  <div class="row text-center">
+    <p [ngClass]="{'text-red': !marketOpen, 'text-green': marketOpen}">
+      <b><small>Market {{ marketOpen ? 'is Open' : 'Closed on ' + lastUpdatedTime }}</small></b>
+    </p>
+  </div>
+
+  <mat-tab-group>
+    <mat-tab label="Summary">
+      <div class="row">
+        <div class="col-md-6 col-12 ">
+          <!-- Stock Quote Information -->
+          <div class="col-7">
             <div class="text-center my-4">
               <b>High Price: </b>{{ stockQuote.h }}<br>
               <b>Low Price:</b> {{ stockQuote.l }}<br>
@@ -77,168 +83,116 @@
               <b>Prev. Price:</b> {{ stockQuote.pc }}
             </div>
           </div>
-            <!-- Company Basic Information -->
-            <div class="text-center">
-              <h3> <b> <u>About the Company</u></b></h3>
-              <b>IPO Date: </b>{{ stockProfile.ipo  }}<br>
-              <b>Industry: </b>{{ stockProfile.finnhubIndustry }}<br>
-              <!-- Webpage URL as a clickable link -->
-              <b>Webpage: </b> <a [href]="stockProfile.weburl" target="_blank">{{ stockProfile.weburl }}</a><br>
-              <b>Company Peers:</b><br>
-              <p *ngFor="let peer of companyPeers" style="display: inline-block"><a [routerLink]="'/search/'+peer"><u>{{ peer }}</u></a>, </p>
-            </div>
+          <!-- Company Basic Information -->
+          <div class="text-center">
+            <h3> <b> <u>About the Company</u></b></h3>
+            <b>IPO Date: </b>{{ stockProfile.ipo }}<br>
+            <b>Industry: </b>{{ stockProfile.finnhubIndustry }}<br>
+           
+            <b>Webpage: </b> <a [href]="stockProfile.weburl" target="_blank">{{ stockProfile.weburl }}</a><br>
+            <b>Company Peers:</b><br>
+            <p *ngFor="let peer of companyPeers" style="display: inline-block"><a [routerLink]="'/search/'+peer"><u>{{
+                  peer }}</u></a>, </p>
           </div>
-          <div class="col-md-6 col-12">
-            <highcharts-chart [Highcharts]="Highcharts" [options]="historicalChartOptions"
-              style="width: 100%; height: 400px; display: block;">
-            </highcharts-chart>
-          </div>
-  
         </div>
-      </mat-tab>
-
-    
-        <mat-tab label="Top News">
-          <div class="news-container">
-            <!-- Iterate over topNews to create cards for each article -->
-            <div *ngFor="let newsArticle of topNews" class="news-card" (click)="openNewsModal(newsArticle)">
-              <img [src]="newsArticle.image" alt="news image">
-              
-              <div>
-                <h3>{{ newsArticle.headline }}</h3>
-              </div>
-            </div>
-          </div>
-        </mat-tab>
-        
-
-        <mat-tab label="Charts">
-          <!-- <div id="container" #chartContainer style="height: 400px; min-width: 310px"></div> -->
-            <highcharts-chart 
-            [Highcharts]="Highcharts"
-            [options]="smaChartOptions"
-
+        <div class="col-md-6 col-12">
+          <highcharts-chart [Highcharts]="Highcharts" [options]="historicalChartOptions"
             style="width: 100%; height: 400px; display: block;">
           </highcharts-chart>
-          
-        </mat-tab>
-
-        <mat-tab label="Insights">
-          <!-- Insights tab content goes here -->
-         <!-- <div class="insider-sentiments">
-          <h3>Insider Sentiments</h3>
-          <div class="sentiment-header">
-
-          <span class="company-name">Apple Inc.</span>
-          <span class="mspr-header">MSPR</span>
-          <span class="change-header">Change</span>
         </div>
-          
-          <div class="sentiment-row total">
-          
-          <span class="row-label">Total</span>
-          
-          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.totalMspr | number:'1.2-2' }}</span>
-          
-          <span class="change-value">{{ insiderSentimentData.changeAggregates.totalChange | number:'1.0-0' }}</span>
-          
-          </div>
-          
-          <div class="sentiment-row positive">
-          
-          <span class="row-label">Positive</span>
-          
-          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.positiveMspr | number:'1.2-2' }}</span>
-          
-          <span class="change-value">{{ insiderSentimentData.changeAggregates.positiveChange | number:'1.0-0' }}</span>
-          
-          </div>
-          
-          <div class="sentiment-row negative">
-          
-          <span class="row-label">Negative</span>
-          
-          <span class="mspr-value">{{ insiderSentimentData.msprAggregates.negativeMspr | number:'1.2-2' }}</span>
-          
-          <span class="change-value">{{ insiderSentimentData.changeAggregates.negativeChange | number:'1.0-0' }}</span>
-          
-          </div>
-          
-          </div> -->
 
-          <h2 class="fw-bold text-center">Insider Sentiments</h2>
+      </div>
+    </mat-tab>
 
 
-          <div class="mx-auto col-8 text-center">
-          <table class="table">
-            <tbody>
-          <tr>
-            <th>AAPL</th>
-            <th>MSPR</th>
-            <th>Change</th>
-          </tr>
-          <tr>
-            <th>Total</th>
-            <td>{{ insiderSentimentData.msprAggregates.totalMspr | number:'1.2-2' }}</td>
-            <td>{{ insiderSentimentData.changeAggregates.totalChange | number:'1.0-0' }}</td>
-          </tr>
-          <tr>
-            <th>Positive</th>
-            <td>{{ insiderSentimentData.msprAggregates.positiveMspr | number:'1.2-2' }}</td>
-            <td>{{ insiderSentimentData.changeAggregates.positiveChange | number:'1.0-0' }}</td>
-          </tr>
-          <tr>
-            <th>Negative</th>
-            <td>{{ insiderSentimentData.msprAggregates.negativeMspr | number:'1.2-2' }}</td>
-            <td>{{ insiderSentimentData.changeAggregates.negativeChange | number:'1.0-0' }}</td>
-          </tr>
-        </tbody>
+    <mat-tab label="Top News">
+      <div class="news-container">
+        <!-- Iterate over topNews to create cards for each article -->
+        <div *ngFor="let newsArticle of topNews" class="news-card" (click)="openNewsModal(newsArticle)">
+          <img [src]="newsArticle.image" alt="news image">
+
+          <div>
+            <h3>{{ newsArticle.headline }}</h3>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+
+    <mat-tab label="Charts">
+      <!-- <div id="container" #chartContainer style="height: 400px; min-width: 310px"></div> -->
+      <highcharts-chart [Highcharts]="Highcharts" [options]="smaChartOptions"
+        style="width: 100%; height: 400px; display: block;">
+      </highcharts-chart>
+
+    </mat-tab>
+
+    <mat-tab label="Insights">
+
+
+      <h2 class="fw-bold text-center">Insider Sentiments</h2>
+
+
+      <div class="mx-auto col-8 text-center">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>AAPL</th>
+              <th>MSPR</th>
+              <th>Change</th>
+            </tr>
+            <tr>
+              <th>Total</th>
+              <td>{{ insiderSentimentData.msprAggregates.totalMspr | number:'1.2-2' }}</td>
+              <td>{{ insiderSentimentData.changeAggregates.totalChange | number:'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <th>Positive</th>
+              <td>{{ insiderSentimentData.msprAggregates.positiveMspr | number:'1.2-2' }}</td>
+              <td>{{ insiderSentimentData.changeAggregates.positiveChange | number:'1.0-0' }}</td>
+            </tr>
+            <tr>
+              <th>Negative</th>
+              <td>{{ insiderSentimentData.msprAggregates.negativeMspr | number:'1.2-2' }}</td>
+              <td>{{ insiderSentimentData.changeAggregates.negativeChange | number:'1.0-0' }}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
-    
-          
-          <!-- Container for the charts -->
-          
-          <div class="charts-container">
-          
-          <!-- Recommendation Trends Chart -->
-          
-          <div class="chart" id="recommendation-chart">
-          
-          <highcharts-chart
-          
-          [Highcharts]="Highcharts"
-          
-          [options]="recommendationChartOptions"
-          
-          style="width: 100%; height: 400px; display: block;">
-          
+
+
+      <!-- Container for the charts -->
+
+      <div class="charts-container">
+
+        <!-- Recommendation Trends Chart -->
+
+        <div class="chart" id="recommendation-chart">
+
+          <highcharts-chart [Highcharts]="Highcharts" [options]="recommendationChartOptions"
+            style="width: 100%; height: 400px; display: block;">
+
           </highcharts-chart>
-          
-          </div>
-          
-          
-          
-          <!-- Historical EPS Surprises Chart -->
-          
-          <div class="chart" id="eps-chart">
-          
-          <highcharts-chart
-          
-          [Highcharts]="Highcharts"
-          
-          [options]="earningsChartOptions"
-          
-          style="width: 100%; height: 400px; display: block;">
-          
+
+        </div>
+
+
+
+        <!-- Historical EPS Surprises Chart -->
+
+        <div class="chart" id="eps-chart">
+
+          <highcharts-chart [Highcharts]="Highcharts" [options]="earningsChartOptions"
+            style="width: 100%; height: 400px; display: block;">
+
           </highcharts-chart>
-          
-          </div>
-          
-          </div>
-          
-          
-          
-          </mat-tab>
-    </mat-tab-group>
+
+        </div>
+
+      </div>
+
+
+
+    </mat-tab>
+  </mat-tab-group>
 </div>
