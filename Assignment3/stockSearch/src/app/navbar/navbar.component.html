@@ -16,10 +16,10 @@
             <a class="nav-link active" aria-current="page"  [routerLink]="['/', 'search', this.service.stateData.ticker? this.service.stateData.ticker: 'home']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: false}">Search</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/watchlist">Watchlist</a>
+            <a class="nav-link" routerLink="/watchlist" routerLinkActive="active">Watchlist</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/portfolio">Portfolio</a>
+            <a class="nav-link" routerLink="/portfolio" routerLinkActive="active">Portfolio</a>
           </li>
          
         </ul>

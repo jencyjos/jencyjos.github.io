@@ -1,131 +1,130 @@
 
 html, body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 /* ------------------------------------- autocomplete styles---------------------------- */
 .autocomplete-suggestions-container {
-    position: relative;
-  }
-  
-  .autocomplete-suggestion {
-    background-color: #ffffff;
-    border-bottom: 1px solid #cccccc;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .autocomplete-suggestion:last-child {
-    border-bottom: none;
-  }
-  
-  .autocomplete-suggestion:hover {
-    background-color: #f2f2f2;
-  }
-  
-  .autocomplete-suggestions-container .autocomplete-suggestion {
-    position: absolute;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    margin-top: 2px;
-  }
-  
-  .autocomplete-suggestions-container .autocomplete-suggestion {
-    max-height: 200px;
-    overflow-y: auto;
-  }
+  position: relative;
+}
 
-  .match-highlight {
-  font-weight: bold;
-  color: #007bff; 
+.autocomplete-suggestion {
+  background-color: #ffffff;
+  border-bottom: 1px solid #cccccc;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.autocomplete-suggestion:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-suggestion:hover {
+  background-color: #f2f2f2;
+}
+
+.autocomplete-suggestions-container .autocomplete-suggestion {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin-top: 2px;
+}
+
+.autocomplete-suggestions-container .autocomplete-suggestion {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.match-highlight {
+font-weight: bold;
+color: #007bff; 
 }
 
 .autocomplete-container {
-    max-height: 300px; 
-    overflow-y: auto; 
-  }
+  max-height: 300px; 
+  overflow-y: auto; 
+}
 
-  .spinner-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50h;
+/* .spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50h;
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.322);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: rgb(0, 60, 255);
+  animation: spin 1s ease infinite;
+  top: 20%; 
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.322);
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border-left-color: rgb(0, 60, 255);
-    animation: spin 1s ease infinite;
-    top: 20%; 
+  100% {
+    transform: rotate(360deg);
   }
-  
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
+} */
 
 
 /* ----------------------------------stock search styles------------------------------------- */
 
 .input-group {
-    border-radius: 3rem;
-    overflow: hidden;
-    border: 3.9px solid #282cb4; 
+  border-radius: 3rem;
+  overflow: hidden;
+  border: 3.9px solid #282cb4; 
 }
 
 .input-group-text {
-    background-color: white;
-    border: none; 
-    color: #495057;
+  background-color: white;
+  border: none; 
+  color: #495057;
 }
 
 .input-group .form-control {
-    border: none; 
+  border: none; 
 }
 
 
 .btn-outline-primary {
-    border-color:white;  
-    color: black;
+  border-color:white;  
+  color: black;
 }
 
 .btn-outline-primary:hover {
-    background-color:white;
-    color: black;
+  background-color:white;
+  color: black;
 }
 
 .btn:focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
 .form-control:focus {
-    outline: none;
-    box-shadow: none;
+  outline: none;
+  box-shadow: none;
 }
 
 /* Responsive styles */
 @media (max-width: 575.98px) {
-    .navbar .nav-link.active {
-        border-radius: 0.5rem;
-        padding: 0.375rem 0.75rem; 
-    }
+  .navbar .nav-link.active {
+      border-radius: 0.5rem;
+      padding: 0.375rem 0.75rem; 
+  }
 }
-
 
 
 

@@ -5,7 +5,12 @@ import { SearchStateService } from '../services/SearchState.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressSpinner } from "@angular/material/progress-spinner";
+
 
 @Component({
   selector: 'app-home',
@@ -57,7 +62,6 @@ export class HomeComponent implements OnInit{
       this.emptyTicker = true;
     }
     this.router.navigate(['/', 'search', this.control.value]);
-
   }
 
   onSearch(): void {
