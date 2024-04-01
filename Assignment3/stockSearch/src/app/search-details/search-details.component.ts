@@ -99,14 +99,14 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
   ) {
     this.tickerNotFound = false;
-    this.setCurrentTime();
+    // this.setCurrentTime();
   }
 
-  setCurrentTime() {
-    const now = new Date();
-    this.todayDate = now;
-    ///this.lastUpdatedTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
-  }
+  // setCurrentTime() {
+  //   const now = new Date();
+  //   this.todayDate = now;
+  //   this.lastUpdatedTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+  // }
 
   //BEFORE IMPLEMENTING AUTO UPDATE
   // ngOnChanges(): void {
@@ -158,6 +158,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       }
       else {
         this.stockQuote = this.state.stockQuote;
+        this.lastUpdatedTime=this.state.lastUpdatedTime;
         this.stockProfile = this.state.stockProfile;
         this.topNews = this.state.topNews;
         this.companyPeers = this.state.companyPeers;
@@ -200,7 +201,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
     this.stockService.getStockQuote(ticker).subscribe(data => {
       this.stockQuote = data;
+      const lastUpdate = new Date(this.stockQuote.t * 1000);
+      this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       this.state.stockQuote = this.stockQuote;
+      this.state.lastUpdatedTime= formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       this.stockService.setState(this.state);
       this.determineMarketStatus();
     });
@@ -671,12 +675,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       const lastUpdate = new Date(this.stockQuote.t * 1000);
       const now = new Date();
       const difference = now.getTime() - lastUpdate.getTime();
-
-      console.log(`Last update: ${lastUpdate}`);
-      console.log(`Current time: ${now}`);
-      console.log(`Difference in minutes: ${difference / 60000}`);
-
-      this.marketOpen = difference > 5 * 60 * 1000;
+      this.marketOpen = difference < 5 * 60 * 1000;
       if (this.marketOpen == false) {
         this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       }
@@ -687,7 +686,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   //FOR AUTO UPDATE
   fetchAllDetails(ticker: string) {
     console.log("fetching all details again for auto-update")
-    this.setCurrentTime();
+    // this.setCurrentTime();
     return this.stockService.getStockQuote(ticker).pipe(
       switchMap(stockQuote => {
         this.stockQuote = stockQuote;
@@ -709,7 +708,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   startAutoUpdate(ticker: string): void {
-    console.log("starting auto update")
+    // console.log("starting auto update")
     const fifteenSecondsInterval$ = interval(15000).pipe(
       startWith(0), 
       filter(() => this.marketOpen), 
