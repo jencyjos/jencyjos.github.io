@@ -21,7 +21,8 @@
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect()">
                 <mat-option *ngIf="acLoading" class="spinner-option">
                   <mat-spinner diameter="30" mode="indeterminate"></mat-spinner>
-                </mat-option>
+                </mat-option> 
+               
                 
                 <ng-container *ngIf="!acLoading && autocompleteResults">
                   <mat-option *ngFor="let suggestion of autocompleteResults" [value]="suggestion.symbol">

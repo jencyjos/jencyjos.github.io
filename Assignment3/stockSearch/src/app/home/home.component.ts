@@ -5,6 +5,7 @@ import { SearchStateService } from '../services/SearchState.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-home',
