@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
     private stateData: any = {}
 
     getState() {
-      console.log("I am here 1", this.stateData);
+      // console.log("I am here 1", this.stateData);
       return this.stateData;
     }
 
@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
     }
 
     setState(obj: any){
-      console.log("I am here", obj);
+      // console.log("I am here", obj);
       this.stateData = obj;
     }
 

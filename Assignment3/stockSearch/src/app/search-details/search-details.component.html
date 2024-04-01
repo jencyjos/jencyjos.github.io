@@ -53,14 +53,23 @@
 
 
       <!-- Right side for stock quote details -->
-      <div class="col-md-5 col-5">
-        <p>{{ stockQuote.c }}</p>
+      <!-- <div class="col-md-5 col-5">
+        <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">{{ stockQuote.c | number: '1.2-2'}}</p>
         <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
-          {{ stockQuote.d }} ({{ stockQuote.dp | number: '1.2-2' }}%)
+          {{ stockQuote.d | number: '1.2-2'}} ({{ stockQuote.dp | number: '1.2-2' }}%)
         </p>
-        <p>{{ lastUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</p>
+        <p>{{ lastUpdatedTime  }}</p>
 
-      </div>
+      </div> -->
+      <div class="col-md-5 col-5">
+        <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">{{ stockQuote.c | number: '1.2-2'}}</p>
+        <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
+          <ng-container *ngIf="stockQuote.d > 0"> &#x25B2;</ng-container>
+          <ng-container *ngIf="stockQuote.d < 0"> &#x25BC;</ng-container>
+          {{ stockQuote.d | number: '1.2-2'}} ({{ stockQuote.dp | number: '1.2-2' }}%)
+        </p>
+        <p>{{ lastUpdatedTime  }}</p>
+    </div>
     </div>
   </div>
 

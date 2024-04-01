@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PortfolioService } from '../services/portfolio.service';
-import { interval, Subscription } from 'rxjs';
-import { switchMap, filter, startWith } from 'rxjs/operators';
+import { interval, of, Subscription } from 'rxjs';
+import { switchMap, filter, startWith, catchError, tap } from 'rxjs/operators';
 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -19,6 +19,7 @@ import HC_stock from 'highcharts/modules/stock';
 import indicators from "highcharts/indicators/indicators";
 import vbpa from "highcharts/indicators/volume-by-price";
 import { Stock } from '../../../../backend/models/stock.model';
+import { ReturnStatement, TaggedTemplateExpr } from '@angular/compiler';
 
 HC_stock(Highcharts);
 indicators(Highcharts);
@@ -178,8 +179,11 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.searchStateService.searchResults$.subscribe(results => {
       this.searchResults = results;
+      // this.state.searchResults = this.searchResults;
+      // this.stockService.setState(this.state);
 
     });
     this.state.searchResults = this.searchResults;
@@ -194,6 +198,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
 
   fetchStockDetails(ticker: string): void {
+    // if(ticker==null){return};
     this.checkIfFavorite(ticker);
     this.checkInPortfolio(ticker);
     this.startAutoUpdate(ticker);
@@ -211,6 +216,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
 
     this.stockService.getStockProfile(ticker).subscribe(data => {
+      // if (data==null) {return};
       this.stockProfile = data;
       this.state.stockProfile = this.stockProfile;
       this.stockService.setState(this.state);
@@ -677,9 +683,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       const now = new Date();
       const difference = now.getTime() - lastUpdate.getTime();
       this.marketOpen = difference < 5 * 60 * 1000;
-      if (this.marketOpen == false) {
+      // if (this.marketOpen == false) {
         this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
-      }
+      // }
     }
   }
 
@@ -688,12 +694,16 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   fetchAllDetails(ticker: string) {
     console.log("fetching all details again for auto-update")
     // this.setCurrentTime();
-    return this.stockService.getStockQuote(ticker).pipe(
+    return this.stockService.getStockQuote(ticker).pipe
+    (
       switchMap(stockQuote => {
+        console.log("hellooooo freaka", stockQuote);
         this.stockQuote = stockQuote;
         this.state.stockQuote = this.stockQuote;
         this.stockService.setState(this.state);
         this.determineMarketStatus();
+        this.lastUpdatedTime = formatDate(stockQuote.t * 1000, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+        this.state.lastUpdatedTime = this.lastUpdatedTime;
         return this.stockService.getStockProfile(ticker);
       }),
       switchMap(stockProfile => {
@@ -706,6 +716,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         return this.stockService.getHighCharts(ticker);
       })
     );
+    
   }
 
   startAutoUpdate(ticker: string): void {
@@ -715,7 +726,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       filter(() => this.marketOpen),
       switchMap(() => this.fetchAllDetails(ticker))
     );
-    this.autoUpdateInterval = fifteenSecondsInterval$.subscribe();
+    if(fifteenSecondsInterval$ != null){
+      this.autoUpdateInterval = fifteenSecondsInterval$?.subscribe();
+    }
   }
 
   openNewsModal(newsArticle: NewsArticle): void {
