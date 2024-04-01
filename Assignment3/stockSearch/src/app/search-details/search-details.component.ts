@@ -60,10 +60,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   @Input() searchQuery: string = '';
   @Input() stockProfile: any;
   @Input() stockQuote: any;
-  inPortfolio: boolean = false; 
-  marketOpen: boolean = false; 
+  inPortfolio: boolean = false;
+  marketOpen: boolean = false;
   topNews: any[] = [];
-  Highcharts: typeof Highcharts = Highcharts; 
+  Highcharts: typeof Highcharts = Highcharts;
   chartOptions?: Highcharts.Options = {};
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
   isFavorite: boolean = false;
@@ -86,6 +86,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   smaChartOptions!: Highcharts.Options;
   earningsChartOptions!: Highcharts.Options;
   recommendationChartOptions!: Highcharts.Options;
+
+  boughtSuccessfully: boolean = false;
+  soldSuccessfully: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -158,7 +161,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       }
       else {
         this.stockQuote = this.state.stockQuote;
-        this.lastUpdatedTime=this.state.lastUpdatedTime;
+        this.lastUpdatedTime = this.state.lastUpdatedTime;
         this.stockProfile = this.state.stockProfile;
         this.topNews = this.state.topNews;
         this.companyPeers = this.state.companyPeers;
@@ -204,7 +207,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       const lastUpdate = new Date(this.stockQuote.t * 1000);
       this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       this.state.stockQuote = this.stockQuote;
-      this.state.lastUpdatedTime= formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
+      this.state.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       this.stockService.setState(this.state);
       this.determineMarketStatus();
     });
@@ -306,7 +309,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     console.log("checkInPortfolio ticker 11", ticker)
     this.portfolioService.checkStockInPortfolio(ticker).subscribe({
       next: (isInPortfolio: boolean) => {
-        this.inPortfolio = isInPortfolio; 
+        this.inPortfolio = isInPortfolio;
         // console.log(this.inPortfolio)
       },
       error: (error) => {
@@ -376,7 +379,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   drawRecommendationChart(recommendationData: RecommendationData[]) {
     const categories = recommendationData.map(data => data.period);
 
-    
+
     const series: Highcharts.SeriesOptionsType[] = [
       {
         name: 'Strong Sell',
@@ -415,7 +418,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       },
     ];
 
-  
+
     this.recommendationChartOptions = {
       chart: {
         type: 'column'
@@ -506,12 +509,12 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         name: 'Actual',
         type: 'spline',
         data: actualData,
-        color: 'blue' 
+        color: 'blue'
       }, {
         name: 'Estimate',
         type: 'spline',
         data: estimateData,
-        color: 'lightblue' 
+        color: 'lightblue'
       }]
     };
 
@@ -702,7 +705,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         if (JSON.stringify(this.stockProfile) === '{}') {
           this.tickerNotFound = true;
         }
-        return this.stockService.getHighCharts(ticker); 
+        return this.stockService.getHighCharts(ticker);
       })
     );
   }
@@ -710,8 +713,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   startAutoUpdate(ticker: string): void {
     // console.log("starting auto update")
     const fifteenSecondsInterval$ = interval(15000).pipe(
-      startWith(0), 
-      filter(() => this.marketOpen), 
+      startWith(0),
+      filter(() => this.marketOpen),
       switchMap(() => this.fetchAllDetails(ticker))
     );
     this.autoUpdateInterval = fifteenSecondsInterval$.subscribe();
@@ -721,7 +724,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(NewsDetailModalComponent, {
       width: '340px',
       height: '300px',
-      data: newsArticle 
+      data: newsArticle
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -758,7 +761,51 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
 
+  // openBuyModal() {
+  //   const buyModalRef = this.modalService.open(BuyModalComponent);
+  //   buyModalRef.componentInstance.stock = { ticker: this.stockProfile.ticker, name: this.stockProfile.name, currentPrice: this.stockQuote.c }
+  //   console.log(buyModalRef.componentInstance.stock)
+  //   buyModalRef.result.then((result) => {
+  //     if (result && result.success == true) {
+  //       console.log("bought ", this.stockProfile.ticker)
+  //       this.loadPortfolio();
+  //       this.loadWalletBalance();
+  //     }
+  //   }, (reason) => {
+  //     console.log("oh crap", reason)
+  //   });
+  // }
+
+  // openSellModal(): void {
+  //   const modalRef = this.modalService.open(SellModalComponent);
+  //   this.portfolioService.getStockByTicker(this.stockProfile.ticker).subscribe({
+  //     next: (stock: Stock | null) => {
+  //       if (stock) {
+  //         console.log("In sell", stock)
+  //         modalRef.componentInstance.stock = { ticker: stock.ticker, name: stock.name, averageCost: stock.averageCost, currentPrice: this.stockQuote.c, shares: stock.shares }
+  //         modalRef.result.then((result) => {
+  //           if (result && result.success == true) {
+  //             console.log("sold ", this.stockProfile.ticker)
+  //             this.loadPortfolio();
+  //             this.loadWalletBalance(); 
+  //           }
+  //         }, (reason) => {
+  //           console.log("reason due to we coulnt sell", reason)
+  //         });
+  //       } else {
+  //         console.error('Stock not found: ', this.stockProfile.ticker);
+  //         modalRef.close();
+  //       }
+
+  //     },
+  //     error: (error) => {
+  //       console.error('Error checking if stock is in portfolio', error);
+  //     }
+  //   });
+  // }
+
   openBuyModal() {
+    // Logic to open the Buy Modal
     const buyModalRef = this.modalService.open(BuyModalComponent);
     buyModalRef.componentInstance.stock = { ticker: this.stockProfile.ticker, name: this.stockProfile.name, currentPrice: this.stockQuote.c }
     console.log(buyModalRef.componentInstance.stock)
@@ -767,6 +814,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         console.log("bought ", this.stockProfile.ticker)
         this.loadPortfolio();
         this.loadWalletBalance();
+        this.boughtSuccessfully = true;
+        setTimeout(() => {
+          this.boughtSuccessfully = false
+        }, 5000);
       }
     }, (reason) => {
       console.log("oh crap", reason)
@@ -784,13 +835,18 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
             if (result && result.success == true) {
               console.log("sold ", this.stockProfile.ticker)
               this.loadPortfolio();
-              this.loadWalletBalance(); 
+              this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+              this.soldSuccessfully = true;
+              setTimeout(() => {
+                this.soldSuccessfully = false
+              }, 5000);
             }
           }, (reason) => {
             console.log("reason due to we coulnt sell", reason)
           });
         } else {
           console.error('Stock not found: ', this.stockProfile.ticker);
+          // Optionally close the modal if the stock isn't found
           modalRef.close();
         }
 
@@ -802,9 +858,11 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   loadPortfolio(): void {
     this.portfolioService.getPortfolio().subscribe(
-      (data: any) => { 
+      (data: any) => {
         this.stocks = [...data.stocks];;
         this.fetchStockDetails(this.searchQuery);
         this.fetchCurrentPrice();

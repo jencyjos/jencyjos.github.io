@@ -3,27 +3,52 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PortfolioService } from '../services/portfolio.service';
 import { BuyModalComponent } from '../buy-modal/buy-modal.component';
 import { SellModalComponent } from '../sell-modal/sell-modal.component';
-import { Stock } from '../../../../backend/models/stock.model'; 
+import { Stock } from '../../../../backend/models/stock.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StockService } from '../services/stock.service'; 
+import { StockService } from '../services/stock.service';
+import { forkJoin, tap, catchError, of } from 'rxjs';
 
+enum LoadingState {
+  Complete = 'complete',
+  InProgress = 'in_progress',
+}
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.css']
 })
 export class PortfolioComponent implements OnInit {
-  stocks: any[] = []; 
+  stocks: any[] = [];
   walletBalance: number = 25000; // Initial balance
+  LoadingState = LoadingState;
+  loading: LoadingState = LoadingState.InProgress;
+  boughtSuccessfully: boolean = false;
+  soldSuccessfully: boolean = false;
+  stockProcessed: string = ""
 
   constructor(
     private portfolioService: PortfolioService,
     private modalService: NgbModal,
-    private changeDetectorRef: ChangeDetectorRef) {}
+    private changeDetectorRef: ChangeDetectorRef) { }
+
+
+  loadAgain(): void {
+    forkJoin({
+      portfolio: this.loadPortfolio(),
+      walletBalance: this.loadWalletBalance()
+    }).subscribe({
+      next: (results) => {
+        this.loading = LoadingState.Complete;
+      },
+      error: (error) => {
+        console.error('error occurred while loading portfolio and wallet balance', error);
+        this.loading = LoadingState.Complete;
+      }
+    });
+  }
 
   ngOnInit(): void {
-    this.loadPortfolio();
-    this.loadWalletBalance();
+    this.loadAgain()
   }
 
   fetchStockDetails(): void {
@@ -52,29 +77,31 @@ export class PortfolioComponent implements OnInit {
     }
   }
 
-  loadPortfolio(): void {
-    this.portfolioService.getPortfolio().subscribe(
-      (data: any) => { 
+  loadPortfolio(): any {
+    // Adjust this method to return the Observable from the service call
+    return this.portfolioService.getPortfolio().pipe(
+      tap((data: any) => {
         this.stocks = data.stocks;
-        console.log("its an ", typeof(this.stocks))
         this.fetchStockDetails();
         this.fetchCurrentPrice();
-      },
-      (error: any) => {
+      }),
+      catchError((error: any) => {
         console.error('Error fetching portfolio', error);
-      }
+        return of(null); // Ensure this observable doesn't error out completely
+      })
     );
   }
 
-  loadWalletBalance(): void {
-    // Implement this method in your service
-    this.portfolioService.getWalletBalance().subscribe(
-      (data: { balance: number }) => {
+  loadWalletBalance(): any {
+    // Adjust this method to return the Observable from the service call
+    return this.portfolioService.getWalletBalance().pipe(
+      tap((data: { balance: number }) => {
         this.walletBalance = data.balance;
-      },
-      (error: any) => {
+      }),
+      catchError((error: any) => {
         console.error('Error fetching wallet balance', error);
-      }
+        return of(null); // Ensure this observable doesn't error out completely
+      })
     );
   }
 
@@ -85,11 +112,16 @@ export class PortfolioComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result && result.success == true) {
-        this.loadPortfolio();
-        this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+        this.loadAgain(); // Reload balance and portfolio to reflect changes
+        this.boughtSuccessfully = true
+        this.stockProcessed = stock.ticker
+        setTimeout(() => {
+          this.boughtSuccessfully = false;
+          this.stockProcessed = ""
+        }, 5000);
         this.changeDetectorRef.detectChanges();
       }
-    }, (reason) => {});
+    }, (reason) => { });
   }
 
   openSellModal(stock: any): void {
@@ -98,16 +130,23 @@ export class PortfolioComponent implements OnInit {
 
     modalRef.result.then((result) => {
       if (result && result.success == true) {
-        this.loadPortfolio();
-        this.loadWalletBalance(); // Reload balance and portfolio to reflect changes
+        this.loadAgain();
+        this.soldSuccessfully = true
+        this.stockProcessed = stock.ticker
+        setTimeout(() => {
+          this.soldSuccessfully = false;
+          this.stockProcessed = ""
+        }, 5000);
         this.changeDetectorRef.detectChanges();
       }
-    }, (reason) => {});
+    }, (reason) => { });
   }
 
   calculateClass(stock: any): string {
-    if (stock.currentPrice > stock.averageCost) return 'profit';
-    else if (stock.currentPrice < stock.averageCost) return 'loss';
+    const currentPriceRounded = Math.round(stock.currentPrice * 100);
+    const averageCostRounded = Math.round(stock.averageCost * 100);
+    if (currentPriceRounded > averageCostRounded) return 'profit';
+    else if (currentPriceRounded < averageCostRounded) return 'loss';
     return 'unchanged';
   }
 
@@ -115,9 +154,4 @@ export class PortfolioComponent implements OnInit {
   calculateChangeInPrice(stock: any): number {
     return Math.abs(stock.currentPrice - stock.averageCost);
   }
-
-  
-
-
-
 }

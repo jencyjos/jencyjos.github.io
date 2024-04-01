@@ -17,20 +17,12 @@
             <div class="input-group">
               <input type="text" class="form-control" placeholder="Enter stock ticker symbol" matInput aria-label="Stock ticker" [formControl]="control" [matAutocomplete]="auto" (keyup.enter)="onSelect()">
 
-              <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect()">
-                <mat-option *ngIf="acLoading"><mat-spinner diameter="30"></mat-spinner></mat-option>
-                <div *ngIf="autocompleteResults">
-                  <mat-option *ngFor="let suggestion of autocompleteResults" [value]="suggestion.symbol"> <a class="text-black text-decoration-none" >{{suggestion.symbol}} | {{suggestion.description}}</a> </mat-option>
-                </div>
-              </mat-autocomplete> -->
 
               <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelect()">
-                <!-- Spinner shows when acLoading is true -->
                 <mat-option *ngIf="acLoading" class="spinner-option">
                   <mat-spinner diameter="30" mode="indeterminate"></mat-spinner>
                 </mat-option>
                 
-                <!-- Autocomplete results are shown when acLoading is false and autocompleteResults have data -->
                 <ng-container *ngIf="!acLoading && autocompleteResults">
                   <mat-option *ngFor="let suggestion of autocompleteResults" [value]="suggestion.symbol">
                     <span class="text-black text-decoration-none">
