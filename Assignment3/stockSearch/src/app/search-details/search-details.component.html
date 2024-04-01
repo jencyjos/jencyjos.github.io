@@ -1,22 +1,22 @@
-<div class="alert alert-success alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="onFav">
+<div class="alert alert-success alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="onFav">
   {{this.searchQuery}} added to watchlist!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.onFav=false"></button>
 </div>
 
-<div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="onUnfav">
+<div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="onUnfav">
   {{this.searchQuery}} removed from watchlist!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.onUnfav=false"></button>
 </div>
 
-<div class="alert alert-success alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="boughtSuccessfully">
+<div class="alert alert-success alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="boughtSuccessfully">
   {{this.searchQuery}} bought successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.boughtSuccessfully=false"></button>
 </div>
 
-<div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="soldSuccessfully">
+<div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="soldSuccessfully">
   {{this.searchQuery}} sold successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.soldSuccessfully=false"></button>

@@ -28,7 +28,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { MainLayoutComponent } from './main-layout/main-layout.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatProgressSpinner } from "@angular/material/progress-spinner";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
@@ -64,7 +63,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     RouterModule,
     MatSnackBarModule,
     BrowserAnimationsModule,
-    MatProgressSpinner,
     MatProgressSpinnerModule
   ],
   providers: [

@@ -1,9 +1,9 @@
-<div class="alert alert-success alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="boughtSuccessfully">
+<div class="alert alert-success alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="boughtSuccessfully">
   {{ stockProcessed }} bought successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.boughtSuccessfully=false"></button>
 </div>
-<div class="alert alert-danger alert-dismissible fade show mx-auto col-10" role="alert" *ngIf="soldSuccessfully">
+<div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="soldSuccessfully">
   {{ stockProcessed }} sold successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.soldSuccessfully=false"></button>
