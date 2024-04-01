@@ -26,9 +26,3 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
-
-
-
-// import { Routes } from '@angular/router';
-
-// export const routes: Routes = [];

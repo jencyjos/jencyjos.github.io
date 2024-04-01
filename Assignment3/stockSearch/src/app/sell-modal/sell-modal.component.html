@@ -1,38 +1,3 @@
-<!-- 
-<div *ngIf="showAlert && alertMessage" class="alert" [ngClass]="{'green-alert': isSuccess, 'red-alert': !isSuccess}">
-  {{ alertMessage }}
-</div>
-<div class="modal-header">
-  <h5 class="modal-title">{{ stock.ticker }}</h5>
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
-  <p *ngIf="errorMessage" class="text-danger" style="display: block; color: red;">{{ errorMessage }}</p>
-  <form (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="ticker">Stock Ticker</label>
-      <input type="text" id="ticker" class="form-control" [value]="stock.ticker" readonly>
-    </div>
-    <div class="form-group">
-      <label for="currentPrice">Current Price</label>
-      <input type="text" id="currentPrice" class="form-control" [value]="stock.currentPrice" readonly>
-    </div>
-    <div class="form-group">
-      <label for="quantity">Quantity</label>
-      <input type="number" id="quantity" name="quantity" class="form-control" [(ngModel)]="quantity" required min="1" [max]="stock.shares">
-    </div>
-
-    <p *ngIf="errorMessage" class="text-danger">{{ errorMessage }}</p>
-    <div class="form-group">
-      <button type="submit" class="btn btn-danger" [disabled]="!canSell()">Sell</button>
-    </div>
-  </form>
-</div> -->
-
-
-
 <div class="modal-header">
   <h5 class="modal-title">{{ stock.ticker }}</h5>
   <div class="d-flex flex-row-reverse">

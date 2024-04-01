@@ -2,8 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms'; //To use two-way data binding with [(ngModel)] for form inputs
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; //navbar
+import { FormsModule } from '@angular/forms'; 
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap'; 
 import { HttpClientModule } from '@angular/common/http';
 import { MatTabsModule } from '@angular/material/tabs'; 
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -46,7 +46,7 @@ import { MatProgressSpinner } from "@angular/material/progress-spinner";
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule, // make sure AppRoutingModule is listed in imports
+    AppRoutingModule, 
     FormsModule,              
     NgbModule,
     HttpClientModule,

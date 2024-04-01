@@ -25,12 +25,6 @@ HC_stock(Highcharts);
 indicators(Highcharts);
 vbpa(Highcharts);
 
-// HC_exporting(Highcharts);
-// insider-sentiment.model.ts
-// interface Stock {
-//   ticker: string;
-// }
-
 interface RecommendationData {
   buy: number;
   hold: number;
@@ -66,10 +60,10 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   @Input() searchQuery: string = '';
   @Input() stockProfile: any;
   @Input() stockQuote: any;
-  inPortfolio: boolean = false; // Determine if stock is in portfolio
-  marketOpen: boolean = false; // Determine if market is open
+  inPortfolio: boolean = false; 
+  marketOpen: boolean = false; 
   topNews: any[] = [];
-  Highcharts: typeof Highcharts = Highcharts; // required
+  Highcharts: typeof Highcharts = Highcharts; 
   chartOptions?: Highcharts.Options = {};
   @ViewChild('chartContainer') chartContainer!: ElementRef<HTMLDivElement>;
   isFavorite: boolean = false;
@@ -119,10 +113,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   //   if (this.searchQuery) {
   //     this.state = this.stockService.getState();
   //     if (this.state.ticker === null || this.state.ticker === undefined || this.searchQuery !== this.state.ticker){
-  //       console.log("I am here 3", this.state.ticker);
   //       this.fetchStockDetails(this.searchQuery);
   //     } else {
-  //       console.log("I am here 2", this.state.ticker);
   //       this.stockQuote = this.state.stockQuote;
   //       this.stockProfile = this.state.stockProfile;
   //       this.topNews = this.state.topNews;
@@ -193,7 +185,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // Unsubscribe from any subscriptions to prevent memory leaks
     if (this.autoUpdateInterval) {
       this.autoUpdateInterval.unsubscribe();
     }
@@ -245,8 +236,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.insiderSentimentData = data;
       this.state.insiderSentimentData = this.insiderSentimentData;
       this.stockService.setState(this.state);
-      console.log(this.insiderSentimentData);
-      console.log("this", ticker);
+      // console.log(this.insiderSentimentData);
+      // console.log("this", ticker);
     }, error => {
       console.error('Error fetching companys insider sentiments', error);
     });
@@ -312,16 +303,13 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     this.portfolioService.checkStockInPortfolio(ticker).subscribe({
       next: (isInPortfolio: boolean) => {
         this.inPortfolio = isInPortfolio; 
-        console.log("hsdfjsdhfksjdhfsdhfk")
-        console.log(this.inPortfolio)
+        // console.log(this.inPortfolio)
       },
       error: (error) => {
         console.error('Error checking if stock is in portfolio', error);
       }
     });
   }
-
-
 
   drawPriceChart(stockData: any): void {
     this.historicalChartOptions = {
@@ -423,7 +411,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       },
     ];
 
-    // Configure the chart options
+  
     this.recommendationChartOptions = {
       chart: {
         type: 'column'

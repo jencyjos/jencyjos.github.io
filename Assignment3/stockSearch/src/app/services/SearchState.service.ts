@@ -14,7 +14,4 @@ export class SearchStateService {
     this.searchResultsSource.next(results);
   }
 
-  // getSearchResults(): any[] {
-  //   return this.searchResults;
-  // }
 }
