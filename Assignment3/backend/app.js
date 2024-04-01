@@ -1,4 +1,4 @@
-require('dotenv').config(); //load env variables from .env file
+require('dotenv').config(); 
 
 const express = require('express');
 const cors = require('cors');
@@ -18,7 +18,6 @@ client.connect().then((client) => {
 const { buyStock, sellStock } = require('./controllers/stock-controller');
 
 
-// middleware to enable cors and json body parsing
 app.use(cors());
 app.use(express.json());
 
@@ -47,7 +46,6 @@ app.get('/api/stock/details/:ticker', async (req, res) => {
 });
 
 // Autocomplete API for symbol search
-
 app.get('/api/autocomplete/:query', async (req, res) => {
   const query = req.params.query;
   const finnhubApi = `https://finnhub.io/api/v1/search?q=${query}&token=${process.env.FINNHUB_API_KEY}`;
@@ -58,11 +56,9 @@ app.get('/api/autocomplete/:query', async (req, res) => {
       throw new Error(`Error from Finnhub API: ${response.statusText}`);
     }
     const data = await response.json();
-    // Filter the response based on the criteria
     const filteredData = data.result.filter(item =>
       item.type === 'Common Stock' && !item.symbol.includes('.')
     );
-    // Optional: Further filter the response to only include the needed keys
     const filteredResponse = filteredData.map(item => ({
       description: item.description,
       displaySymbol: item.displaySymbol,
@@ -131,11 +127,7 @@ app.get('/api/stock/news/:ticker', async (req, res) => {
         throw new Error(`Error from Finnhub API: ${response.statusText}`);
       }
       let data = await response.json();
-
-      // Filter out news articles without an image
       data = data.filter(article => article.image && article.image.trim() !== '');
-
-      // Limit the number of news articles to 20
       data = data.slice(0, 20);
 
       res.json(data);
@@ -171,7 +163,6 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
     }
     const data = await response.json();
 
-    // Format data for HighCharts if necessary
     const formattedData = {
       stockPriceData: data.results.map(point => [point.t, point.c]),
       volumeData: data.results.map(point => [point.t, point.v])
@@ -209,7 +200,6 @@ app.get('/api/stock/sma/:ticker', async (req, res) => {
     }
     const data = await response.json();
 
-    // Format data for smaChart
     const formattedData = {
       stockPriceData: data.results.map(point => [point.t, point.o, point.h, point.l, point.c]),
       volumeData: data.results.map(point => [point.t, point.v])
@@ -234,7 +224,6 @@ app.get('/api/stock/earnings/:ticker', async (req, res) => {
     }
     let earningsData = await response.json();
     
-    // Replace null values with 0
     earningsData = earningsData.map((item) => ({
       actual: item.actual !== null ? item.actual : 0,
       estimate: item.estimate !== null ? item.estimate : 0,
@@ -276,7 +265,7 @@ app.get('/api/stock/recommendation/:ticker', async (req, res) => {
 // Company Insider Sentiment API call
 app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
-  // Set the 'from' date to '2022-01-01' as the default parameter
+ 
   const fromDate = '2022-01-01';
   const finnhubApi = `https://finnhub.io/api/v1/stock/insider-sentiment?symbol=${ticker}&from=${fromDate}&token=${process.env.FINNHUB_API_KEY}`;
 
@@ -287,9 +276,6 @@ app.get('/api/stock/insider-sentiment/:ticker', async (req, res) => {
     }
     const sentimentData = await response.json();
 
-    // Transform the sentiment data if necessary
-    // For example, if you need to calculate the aggregates as mentioned in the assignment description.
-    // This is just an example of how you might calculate a total, positive, and negative mspr
     const msprData = sentimentData.data.reduce(
       (acc, cur) => {
         acc.totalMspr += cur.mspr;
@@ -357,7 +343,6 @@ app.get('/api/earnings/:ticker', async (req, res) => {
     }
     let data = await response.json();
     
-    // Replace any null values with 0 as per requirement
     data = data.map(item => ({
       actual: item.actual !== null ? item.actual : 0,
       estimate: item.estimate !== null ? item.estimate : 0,
@@ -378,7 +363,7 @@ app.get('/api/earnings/:ticker', async (req, res) => {
 //     if (!db) {
 //       throw new Error('Database connection not established');
 //     }
-//     const portfolio = await db.collection('portfolio').findOne({}); // Assuming single user
+//     const portfolio = await db.collection('portfolio').findOne({}); 
 
 //     if (!portfolio || portfolio.balance === undefined) {
 //       return res.status(404).json({ message: 'Portfolio not found or balance undefined' });
@@ -395,7 +380,6 @@ app.get('/api/earnings/:ticker', async (req, res) => {
 // app.post('/api/buy', async (req, res) => {
 //   try {
 //     const { ticker, quantity, price } = req.body;
-//     // buyStock is a function you should implement that handles the buy operation
 //     const result = await buyStock(ticker, quantity, price);
 //     res.status(200).json(result);
 //   } catch (error) {
@@ -426,8 +410,6 @@ app.post('/api/buy', async (req, res) => {
     // Update wallet
     await db.collection('userWallet').updateOne({}, { $inc: { balance: -totalCost } });
 
-    // Update portfolio (This is conceptual. Adjust based on your schema)
-    // Add logic to update the portfolio here
     const result = await buyStock(ticker, name, quantity, price)
     if (result.success ==  true)
       res.json({ message: 'Transaction successful' });
@@ -441,7 +423,7 @@ app.get('/api/portfolio', async (req, res) => {
   try {
     const portfolio = await db.collection('portfolio').findOne({});
     if (portfolio && portfolio.stocks && portfolio.stocks.length > 0) {
-      res.json({stocks:portfolio.stocks}); // Return array of stocks
+      res.json({stocks:portfolio.stocks}); 
     } else {
       res.json({stocks:[]});
     }
@@ -461,7 +443,6 @@ app.post('/api/sell', async (req, res) => {
     // Update wallet
     await db.collection('userWallet').updateOne({}, { $inc: { balance: +revenue } });
     console.log("updated the wallet")
-    // sellStock is a function you should implement that handles the sell operation
     const result = await sellStock(ticker, quantity, currentPrice);
     res.status(200).json(result);
   } catch (error) {
@@ -479,15 +460,12 @@ app.post('/api/watchlist/toggle', async (req, res) => {
 
   try {
     const watchlistCollection = db.collection('watchlist');
-    // Check if the ticker is already in the watchlist
     const stockExists = await watchlistCollection.findOne({ ticker });
 
     if (stockExists) {
-      // If it exists, remove it
       await watchlistCollection.deleteOne({ ticker });
       res.status(200).json({ message: `Ticker ${ticker} removed from watchlist.` });
     } else {
-      // If not, add it
       await watchlistCollection.insertOne({ ticker });
       res.status(200).json({ message: `Ticker ${ticker} added to watchlist.` });
     }
@@ -517,4 +495,4 @@ app.listen(port, () => {
 
 
 
-module.exports = app; // Export the app for testing purposes
+module.exports = app; 

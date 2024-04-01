@@ -1,27 +1,25 @@
 <div class="modal-header">
   <h5 class="modal-title">{{ stock.ticker }}</h5>
-  <div class="d-flex flex-row-reverse">
-  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()"><i class="bi bi-x"></i></button>
-</div>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss()"></button>
 </div>
 <form (ngSubmit)="onSubmit()">
-
-<div class="modal-body">
-  Current Price: {{ stock.currentPrice | currency:'USD':'symbol' }}
-  <br>
-  Money in Wallet: {{ userWallet | currency:'USD':'symbol' }}
-  <br>
-  Quantity: <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
-  <br>
-  <small *ngIf="sellable" class="text-danger">
-    You cannot sell the stock you don't have!
-  </small>
-</div>
-<div class="modal-footer">
-  <p class="text-center" style="display:inline-block">Total: {{ (quantity * stock.currentPrice) | currency:'USD':'symbol' }}</p>
-  <button type="submit" class="btn btn-success" [disabled]="!canSell()">Sell</button>
-</div>
+  <div class="modal-body">
+    Current Price: {{ stock.currentPrice | currency:'USD':'symbol' }}
+    <br>
+    Money in Wallet: {{ userWallet | currency:'USD':'symbol' }}
+    <br>
+    <div class="row">
+      <label for="quantity" class="col-form-label col-4 col-md-3">Quantity:</label>
+      <div class="col-8 col-md-9">
+        <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
+      </div>
+    </div>
+    <small *ngIf="sellable" class="text-danger">
+      You cannot sell the stock you don't have!
+    </small>
+  </div>
+  <div class="modal-footer justify-content-between">
+    <p>Total: {{ (quantity * stock.currentPrice) | currency:'USD':'symbol' }}</p>
+    <button type="submit" class="btn btn-success" [disabled]="!canSell()">Sell</button>
+  </div>
 </form>
-
-
-

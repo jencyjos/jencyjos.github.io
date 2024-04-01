@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 export class BuyModalComponent implements OnInit {
   @Input() stock!: Stock;
   private _quantity: number = 1;
-  userWallet!: number; // This will now be fetched dynamically
+  userWallet!: number; 
   totalPrice: number = 0;
   quantityChanged : boolean = false;
   showAlert : boolean = false
@@ -40,14 +40,6 @@ export class BuyModalComponent implements OnInit {
   }
   quantity: number = 0;
 
-  // get quantity(): number {
-  //   return this._quantity;
-  // }
-
-  // set quantity(value: number) {
-  //   this._quantity = value;
-  //   this.totalPrice = this.calculateTotalPrice(value);
-  // }
   onQuantityChange(newQuantity: number): void {
     this.quantity = newQuantity;
     this.totalPrice = this.calculateTotalPrice(newQuantity);
@@ -68,20 +60,19 @@ export class BuyModalComponent implements OnInit {
     if (this.canBuy()) {
       console.log('we can buy this!')
       this.portfolioService.buyStock(this.stock.ticker, this.stock.name, this.quantity, this.stock.currentPrice).subscribe({
-        next: (result: any) => { // Consider using a specific type instead of any if possible
-          // Update the user wallet after a successful transaction
+        next: (result: any) => { 
           this.userWallet -= this.totalPrice;
           this.activeModal.close({success: true, stock: this.stock, quantity:this.quantity, totalCost: this.totalPrice});
           // this.alertMessage = 'Stock bought successfully!';
           this.isSuccess = true
-          this.showAlert = true; // Display the alert
-          setTimeout(() => { this.showAlert = false; }, 25000); // Hide the alert after 3 seconds
+          this.showAlert = true; 
+          setTimeout(() => { this.showAlert = false; }, 25000); 
         },
         error: (error: any) => {
           console.error('Error buying stock', error);
           // this.alertMessage = 'Failed to buy stock!';
-          this.showAlert = true; // Display the alert
-          setTimeout(() => { this.showAlert = false; }, 5000); // Hide the alert after 3 seconds
+          this.showAlert = true; 
+          setTimeout(() => { this.showAlert = false; }, 5000); 
         }
       });
     } else {
