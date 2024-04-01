@@ -10,7 +10,6 @@
 </div>
 <div class="justify-content-center">
 
-
   <div class="portfolio-container col-8 mx-auto">
     <h1><b>My Portfolio</b></h1>
     <div *ngIf="loading == LoadingState.Complete;">
@@ -33,7 +32,6 @@
                   <br>
                   Total Cost:
                 </div>
-
                 <div class="col-sm-4">
                   {{ (stock.shares).toFixed(2) }}
                   <br>
@@ -43,10 +41,8 @@
                 </div>
               </div>
             </div>
-
             <div class="col-sm-6">
               <div class="row">
-
                 <div class="col-8">
                   Change:
                   <br>
@@ -65,7 +61,6 @@
                   <br>
                   {{ (stock.currentPrice * stock.shares).toFixed(2) }}
                 </div>
-
               </div>
             </div>
           </div>
