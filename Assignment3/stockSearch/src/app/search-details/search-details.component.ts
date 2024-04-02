@@ -76,7 +76,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   insiderSentimentData: any;
   lastUpdatedTime: string = "";
   tickerNotFound: boolean = false;
-  todayDate: any;
+  currentTime: any;
   walletBalance: number = 0;
   stocks: any[] = [];
   stock: any;
@@ -102,14 +102,14 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
   ) {
     this.tickerNotFound = false;
-    // this.setCurrentTime();
+    this.setCurrentTime();
   }
 
-  // setCurrentTime() {
-  //   const now = new Date();
-  //   this.todayDate = now;
-  //   this.lastUpdatedTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
-  // }
+  setCurrentTime() {
+    const now = new Date();
+    // this.currentTime = now;
+    this.currentTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
+  }
 
   //BEFORE IMPLEMENTING AUTO UPDATE
   // ngOnChanges(): void {
@@ -173,6 +173,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         this.checkIfFavorite(this.stockProfile.ticker);
         this.checkInPortfolio(this.stockProfile.ticker);
         this.determineMarketStatus();
+        this.setCurrentTime();
         this.startAutoUpdate(this.stockProfile.ticker);
       }
     }
@@ -201,6 +202,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     // if(ticker==null){return};
     this.checkIfFavorite(ticker);
     this.checkInPortfolio(ticker);
+    this.setCurrentTime();
     this.startAutoUpdate(ticker);
     this.state.ticker = ticker;
     this.stockService.setState(this.state);
@@ -219,7 +221,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       let tDate =  new Date(todayDate)
       tDate.setDate(todayDate.getDate()-5)
       fromDate.setDate(todayDate.getDate() - 6);
-      
+
       this.stockService.getHighCharts(
         ticker, fromDate.toISOString().split('T')[0], todayDate.toISOString().split('T')[0]).subscribe(data => {
         this.state.priceChartData = data;
@@ -707,7 +709,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       const lastUpdate = new Date(this.stockQuote.t * 1000);
       const now = new Date();
       const difference = now.getTime() - lastUpdate.getTime();
-      this.marketOpen = difference < 5 * 60 * 1000;
+      this.marketOpen = difference > 5 * 60 * 1000;
       // if (this.marketOpen == false) {
         this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       // }
@@ -718,7 +720,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   //FOR AUTO UPDATE
   fetchAllDetails(ticker: string) {
     console.log("fetching all details again for auto-update")
-    // this.setCurrentTime();
+    this.setCurrentTime();
     return this.stockService.getStockQuote(ticker).pipe
     (
       switchMap(stockQuote => {
