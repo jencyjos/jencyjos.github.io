@@ -144,7 +144,6 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
   const timespan = 'hour';
-  // Calculate 6 months and 1 day ago date
   const currentDate = req.query.to;
   const fromDate = req.query.from;
   const finnhubApi = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${fromDate}/${currentDate}?adjusted=true&sort=asc&apiKey=${process.env.POLYGON_API_KEY}`;
@@ -176,12 +175,10 @@ app.get('/api/stock/sma/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
   const timespan = 'day';
-
-  // Calculate 6 months and 1 day ago date
   const currentDate = new Date();
   const fromDate = new Date();
   fromDate.setFullYear(currentDate.getFullYear() - 2);
-  console.log(fromDate)
+  // console.log(fromDate)
   
 
   const toDateString = currentDate.toISOString().split('T')[0];
@@ -227,7 +224,7 @@ app.get('/api/stock/earnings/:ticker', async (req, res) => {
       symbol: item.symbol,
       surprise: ((item.actual !== null && item.estimate !== null) ? item.actual - item.estimate : 0).toFixed(4)
     }));
-    console.log(earningsData);
+    // console.log(earningsData);
     res.json(earningsData);
   } catch (error) {
     console.error(error);
@@ -253,8 +250,6 @@ app.get('/api/stock/recommendation/:ticker', async (req, res) => {
     res.status(500).json({ message: 'Error fetching recommendation trends data' });
   }
 });
-
-
 
 
 //current
@@ -316,8 +311,6 @@ app.get('/api/peers/:ticker', async (req, res) => {
       throw new Error(`Error from Finnhub API: ${response.statusText}`);
     }
     const data = await response.json();
-
-    // Filter out any symbols containing a dot ('.')
     const filteredData = data.filter(symbol => !symbol.includes('.'));
 
     res.json(filteredData);
@@ -353,35 +346,6 @@ app.get('/api/earnings/:ticker', async (req, res) => {
   }
 });
 
-// Endpoint to fetch user wallet balance
-// app.get('/wallet', async (req, res) => {
-//   try {
-//     if (!db) {
-//       throw new Error('Database connection not established');
-//     }
-//     const portfolio = await db.collection('portfolio').findOne({}); 
-
-//     if (!portfolio || portfolio.balance === undefined) {
-//       return res.status(404).json({ message: 'Portfolio not found or balance undefined' });
-//     }
-
-//     res.json({ balance: portfolio.balance });
-//   } catch (error) {
-//     console.error('Error fetching wallet balance:', error);
-//     res.status(500).json({ message: 'Error fetching wallet balance' });
-//   }
-// });
-
-// Endpoint for buying stocks
-// app.post('/api/buy', async (req, res) => {
-//   try {
-//     const { ticker, quantity, price } = req.body;
-//     const result = await buyStock(ticker, quantity, price);
-//     res.status(200).json(result);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
 
 app.get('/api/wallet', async (req, res) => {
   try {
@@ -394,7 +358,7 @@ app.get('/api/wallet', async (req, res) => {
 
 
 app.post('/api/buy', async (req, res) => {
-  const { ticker, name, quantity, price } = req.body; // Ensure validation is in place
+  const { ticker, name, quantity, price } = req.body; 
   const totalCost = price * quantity;
 
   try {
@@ -410,7 +374,7 @@ app.post('/api/buy', async (req, res) => {
     if (result.success ==  true)
       res.json({ message: 'Transaction successful' });
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).json({ message: 'Transaction failed', error });
   }
 });
@@ -424,7 +388,7 @@ app.get('/api/portfolio', async (req, res) => {
       res.json({stocks:[]});
     }
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     res.status(500).json({ message: 'Failed to fetch portfolio', error });
   }
 });
@@ -436,9 +400,8 @@ app.post('/api/sell', async (req, res) => {
     const { ticker, quantity, currentPrice } = req.body;
     const wallet = await db.collection('userWallet').findOne({});
     revenue = quantity*currentPrice
-    // Update wallet
     await db.collection('userWallet').updateOne({}, { $inc: { balance: +revenue } });
-    console.log("updated the wallet")
+    // console.log("updated the wallet")
     const result = await sellStock(ticker, quantity, currentPrice);
     res.status(200).json(result);
   } catch (error) {

@@ -61,7 +61,7 @@ import { Observable } from 'rxjs';
     }
 
     getHighCharts(ticker: string, from: string, to: string): Observable<any[]> {
-      console.log(`${this.chartsUrl}/${ticker}?from=${from}&to=${to}`);
+      // console.log(`${this.chartsUrl}/${ticker}?from=${from}&to=${to}`);
       return this.http.get<any[]>(`${this.chartsUrl}/${ticker}?from=${from}&to=${to}`);
       
     }

@@ -111,44 +111,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     this.currentTime = formatDate(now, 'yyyy-MM-dd HH:mm:ss', 'en-US');
   }
 
-  //BEFORE IMPLEMENTING AUTO UPDATE
-  // ngOnChanges(): void {
-  //   if (this.searchQuery) {
-  //     this.state = this.stockService.getState();
-  //     if (this.state.ticker === null || this.state.ticker === undefined || this.searchQuery !== this.state.ticker){
-  //       this.fetchStockDetails(this.searchQuery);
-  //     } else {
-  //       this.stockQuote = this.state.stockQuote;
-  //       this.stockProfile = this.state.stockProfile;
-  //       this.topNews = this.state.topNews;
-  //       this.companyPeers = this.state.companyPeers;
-  //       this.insiderSentimentData = this.state.insiderSentimentData;
-  //       this.drawPriceChart(this.state.priceChartData);
-  //       this.drawSMAChart(this.state.smaChartData);
-  //       this.drawEarningsChart(this.state.earningsChartData);
-  //       this.drawRecommendationChart(this.state.recommendationChartData);
-  //     }
-  //   }
-  // }
-
-  // ngOnInit() {
-  //   this.searchStateService.searchResults$.subscribe(results => {
-  //     this.searchResults = results;
-
-  //   });
-  //   this.state.searchResults = this.searchResults;
-  //   this.stockService.setState(this.state);
-  //   this.checkIfFavorite(this.stockProfile.ticker);
-  //   this.checkInPortfolio(this.stockProfile.ticker);
-  //   this.ngOnChanges();
-
-  // }
-
-  // ngOnDestroy() {
-  //   if (this.autoUpdateInterval) {
-  //     clearInterval(this.autoUpdateInterval);
-  //   }
-  // }
 
   ngOnChanges(): void {
     if (this.searchQuery) {
@@ -219,8 +181,8 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       let todayDate =  new Date(this.stockQuote.t * 1000)
       let fromDate = new Date(this.stockQuote.t * 1000)
       let tDate =  new Date(todayDate)
-      tDate.setDate(todayDate.getDate()-5)
-      fromDate.setDate(todayDate.getDate() - 6);
+      tDate.setDate(todayDate.getDate()-1);
+      fromDate.setDate(todayDate.getDate() - 1);
 
       this.stockService.getHighCharts(
         ticker, fromDate.toISOString().split('T')[0], todayDate.toISOString().split('T')[0]).subscribe(data => {
@@ -272,12 +234,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
 
     this.stockService.getCompanySentiment(ticker).toPromise()
 
-    // all charts here
-
-    //historical chart - summary tab
-
-
-
+    // some charts here
     //sma chart 
     this.stockService.getSmaCharts(ticker).subscribe(data => {
       this.state.smaChartData = data;
@@ -469,9 +426,9 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
           stacking: 'normal',
 
           dataLabels: {
-            enabled: true, // Enable data labels
+            enabled: true, 
             formatter: function () {
-              return this.y; // This will display the y value (number of recommendations) on each column
+              return this.y; 
             }
         }
       }
@@ -516,7 +473,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         categories: categories,
         labels: {
           style: {
-            fontSize: '11px' // Set your desired font size here
+            fontSize: '11px' 
           }
         }
       
@@ -709,7 +666,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       const lastUpdate = new Date(this.stockQuote.t * 1000);
       const now = new Date();
       const difference = now.getTime() - lastUpdate.getTime();
-      this.marketOpen = difference > 5 * 60 * 1000;
+      this.marketOpen = difference < 5 * 60 * 1000;
       // if (this.marketOpen == false) {
         this.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       // }
@@ -842,7 +799,6 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
           });
         } else {
           console.error('Stock not found: ', this.stockProfile.ticker);
-          // Optionally close the modal if the stock isn't found
           modalRef.close();
         }
 
