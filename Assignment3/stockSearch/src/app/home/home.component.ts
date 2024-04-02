@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit{
     if(!this.searchQuery){
       this.emptyTicker = true;
     }
-    this.router.navigate(['/', 'search', this.control.value]);
+    this.router.navigate(['/', 'search', this.control.value.toUpperCase()]);
   }
 
   onSearch(): void {

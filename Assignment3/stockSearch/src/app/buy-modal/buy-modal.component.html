@@ -11,7 +11,7 @@
     <div class="row">
       <label for="quantity" class="col-form-label col-4 col-md-3">Quantity:</label>
       <div class="col-8 col-md-9">
-        <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" name="quantity">
+        <input type="number" id="quantity" class="form-control" [(ngModel)]="quantity" (ngModelChange)="onQuantityChange($event)" min="0" name="quantity">
       </div>
     </div>
     <small *ngIf="quantityChanged && totalPrice > userWallet" class="text-danger">

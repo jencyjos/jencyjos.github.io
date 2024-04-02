@@ -1,22 +1,26 @@
-<div class="alert alert-success alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="boughtSuccessfully">
+<div class="alert alert-success alert-dismissible fade show mx-auto col-10 text-center" role="alert"
+  *ngIf="boughtSuccessfully">
   {{ stockProcessed }} bought successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.boughtSuccessfully=false"></button>
 </div>
-<div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert" *ngIf="soldSuccessfully">
+<div class="alert alert-danger alert-dismissible fade show mx-auto col-10 text-center" role="alert"
+  *ngIf="soldSuccessfully">
   {{ stockProcessed }} sold successfully!
   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
     (click)="this.soldSuccessfully=false"></button>
 </div>
 <div class="justify-content-center">
 
-  <div class="portfolio-container col-8 mx-auto">
+
+  <div class="portfolio-container col-9 mx-auto">
     <h1><b>My Portfolio</b></h1>
     <div *ngIf="loading == LoadingState.Complete;">
       <h3>My Wallet: {{ (walletBalance) | currency:'USD':'symbol' }}</h3>
       <div class="alert alert-warning text-center" *ngIf="stocks.length == 0" role="alert">
         Currently, you don't have any stock.
       </div>
+
       <div class="card my-3" *ngFor="let stock of stocks">
         <div class="card-header">
           <b>{{ stock.ticker }}</b> {{ stock.name }}
@@ -25,14 +29,15 @@
           <div class="row">
             <div class="col-sm-6">
               <div class="row">
-                <div class="col-sm-8">
+                <div class="col-8">
                   Quantity:
                   <br>
                   Avg Cost/Share:
                   <br>
                   Total Cost:
                 </div>
-                <div class="col-sm-4">
+
+                <div class="col-4">
                   {{ (stock.shares).toFixed(2) }}
                   <br>
                   {{ (stock.averageCost).toFixed(2) }}
@@ -41,8 +46,10 @@
                 </div>
               </div>
             </div>
+
             <div class="col-sm-6">
               <div class="row">
+
                 <div class="col-8">
                   Change:
                   <br>
@@ -52,9 +59,9 @@
                 </div>
                 <div class="col-4" [ngClass]="calculateClass(stock)">
                   <span *ngIf="calculateClass(stock) === 'profit'">&#x25B2;
-                    <!-- Upwards arrow for profit --></span>
+                  </span>
                   <span *ngIf="calculateClass(stock) === 'loss'">&#x25BC;
-                    <!-- Downwards arrow for loss --></span>
+                  </span>
                   {{ (calculateChangeInPrice(stock)).toFixed(2) }}
                   <br>
                   {{ stock.currentPrice }}
@@ -62,16 +69,24 @@
                   {{ (stock.currentPrice * stock.shares).toFixed(2) }}
                 </div>
               </div>
+
+
             </div>
           </div>
+        </div>
+
           <div class="card-footer text-muted">
             <a class="btn btn-primary" (click)="openBuyModal(stock)">Buy</a>
             <a class="btn btn-danger mx-2" (click)="openSellModal(stock)">Sell</a>
           </div>
-        </div>
       </div>
+
+      
     </div>
-    
+
+
+
+
     <div *ngIf="loading == LoadingState.InProgress" class="spinner-container">
       <div class="spinner"></div>
     </div>
