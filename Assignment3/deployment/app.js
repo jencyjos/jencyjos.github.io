@@ -17,13 +17,15 @@ client.connect().then((client) => {
 });
 const { buyStock, sellStock } = require('./controllers/stock-controller');
 
-
-app.use(cors());
+app.use('/',express.static('browser'))
+app.use(cors(
+  {
+    origin:'https://assignment-3-419020.wl.r.appspot.com'
+  }
+));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('backend is running!');
-});
+
 
 
 
@@ -492,5 +494,7 @@ app.get('/api/watchlist', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
+
+
 
 module.exports = app; 

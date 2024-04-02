@@ -62,7 +62,7 @@
 
       </div> -->
       <div class="col-md-5 col-5">
-        <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">{{ stockQuote.c | number: '1.2-2'}}</p>
+        <p [ngClass]="stockQuote.d > 0 ? 'positive fs-4' : 'negative fs-4'">{{ stockQuote.c | number: '1.2-2'}}</p>
         <p [ngClass]="stockQuote.d > 0 ? 'positive' : 'negative'">
           <ng-container *ngIf="stockQuote.d > 0"> &#x25B2;</ng-container>
           <ng-container *ngIf="stockQuote.d < 0"> &#x25BC;</ng-container>
@@ -146,7 +146,7 @@
         <table class="table">
           <tbody>
             <tr>
-              <th>AAPL</th>
+              <th>{{ this.searchQuery }}</th>
               <th>MSPR</th>
               <th>Change</th>
             </tr>

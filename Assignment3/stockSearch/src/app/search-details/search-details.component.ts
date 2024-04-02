@@ -381,29 +381,15 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
   };
 
   drawRecommendationChart(recommendationData: RecommendationData[]) {
-    const categories = recommendationData.map(data => data.period);
+    const categories = recommendationData.map(data => data.period.slice(0,7));
 
 
     const series: Highcharts.SeriesOptionsType[] = [
       {
-        name: 'Strong Sell',
+        name: 'Strong Buy',
         type: 'column',
-        data: recommendationData.map(data => data.strongSell),
-        color: '#800080',
-        stack: 'recommendations'
-      },
-      {
-        name: 'Sell',
-        type: 'column',
-        data: recommendationData.map(data => data.sell),
-        color: 'red',
-        stack: 'recommendations'
-      },
-      {
-        name: 'Hold',
-        type: 'column',
-        data: recommendationData.map(data => data.hold),
-        color: '#a68004',
+        data: recommendationData.map(data => data.strongBuy),
+        color: '#008000',
         stack: 'recommendations'
       },
       {
@@ -414,18 +400,36 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         stack: 'recommendations'
       },
       {
-        name: 'Strong Buy',
+        name: 'Hold',
         type: 'column',
-        data: recommendationData.map(data => data.strongBuy),
-        color: '#008000',
+        data: recommendationData.map(data => data.hold),
+        color: '#a68004',
         stack: 'recommendations'
       },
+      {
+        name: 'Sell',
+        type: 'column',
+        data: recommendationData.map(data => data.sell),
+        color: 'red',
+        stack: 'recommendations'
+      },
+      {
+        name: 'Strong Sell',
+        type: 'column',
+        data: recommendationData.map(data => data.strongSell),
+        color: '#800080',
+        stack: 'recommendations'
+      },
+
+
+
     ];
 
 
     this.recommendationChartOptions = {
       chart: {
-        type: 'column'
+        type: 'column',
+        backgroundColor: 'rgba(0, 0, 0, 0.05)'
       },
       title: {
         text: 'Recommendation Trends'
@@ -436,7 +440,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       yAxis: {
         min: 0,
         title: {
-          text: 'Number of Analyst Recommendations'
+          text: '#Analysis'
         },
         stackLabels: {
           enabled: true,
@@ -451,10 +455,15 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       plotOptions: {
         column: {
           stacking: 'normal',
+
           dataLabels: {
-            enabled: false
-          }
+            enabled: true, // Enable data labels
+            formatter: function () {
+              return this.y; // This will display the y value (number of recommendations) on each column
+            }
         }
+      }
+        
       },
       series: series,
       legend: {
@@ -479,7 +488,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       }
     }));
 
-    const categories = earningsData.map(item => `${item.period}\nSurprise: ${item.surprise}`);
+    const categories = earningsData.map(item => `${item.period} <br> Surprise: ${item.surprise}`);
 
     this.earningsChartOptions = {
       chart: {
@@ -492,7 +501,13 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       },
       xAxis: {
         crosshair: true,
-        categories: categories
+        categories: categories,
+        labels: {
+          style: {
+            fontSize: '11px' // Set your desired font size here
+          }
+        }
+      
       },
       yAxis: {
         title: {
