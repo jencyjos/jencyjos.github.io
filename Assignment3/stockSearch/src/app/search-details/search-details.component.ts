@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PortfolioService } from '../services/portfolio.service';
-import { interval, of, Subscription } from 'rxjs';
+import { interval, Observable, of, Subscription } from 'rxjs';
 import { switchMap, filter, startWith, catchError, tap } from 'rxjs/operators';
 
 import { NewsDetailModalComponent } from '../news-detail-modal-component/news-detail-modal-component.component';
@@ -166,7 +166,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         this.topNews = this.state.topNews;
         this.companyPeers = this.state.companyPeers;
         this.insiderSentimentData = this.state.insiderSentimentData;
-        this.drawPriceChart(this.state.priceChartData);
+        this.drawPriceChart(this.state.priceChartData,this.state.stockQuote);
         this.drawSMAChart(this.state.smaChartData);
         this.drawEarningsChart(this.state.earningsChartData);
         this.drawRecommendationChart(this.state.recommendationChartData);
@@ -213,6 +213,21 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.state.lastUpdatedTime = formatDate(lastUpdate.getTime(), 'yyyy-MM-dd HH:mm:ss', 'en-US');
       this.stockService.setState(this.state);
       this.determineMarketStatus();
+
+      let todayDate =  new Date(this.stockQuote.t * 1000)
+      let fromDate = new Date(this.stockQuote.t * 1000)
+      let tDate =  new Date(todayDate)
+      tDate.setDate(todayDate.getDate()-5)
+      fromDate.setDate(todayDate.getDate() - 6);
+      
+      this.stockService.getHighCharts(
+        ticker, fromDate.toISOString().split('T')[0], todayDate.toISOString().split('T')[0]).subscribe(data => {
+        this.state.priceChartData = data;
+        this.stockService.setState(this.state);
+        this.drawPriceChart(this.state.priceChartData, this.stockQuote);
+      }, error => {
+        console.error('Error fetching hourly chart', error);
+      });
     });
 
     this.stockService.getStockProfile(ticker).subscribe(data => {
@@ -258,13 +273,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     // all charts here
 
     //historical chart - summary tab
-    this.stockService.getHighCharts(ticker).subscribe(data => {
-      this.state.priceChartData = data;
-      this.stockService.setState(this.state);
-      this.drawPriceChart(this.state.priceChartData);
-    }, error => {
-      console.error('Error fetching top news', error);
-    });
+
 
 
     //sma chart 
@@ -273,7 +282,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.stockService.setState(this.state);
       this.drawSMAChart(this.state.smaChartData);
     }, error => {
-      console.error('Error fetching top news', error);
+      console.error('Error fetching sma chart', error);
     });
 
     this.stockService.getEarningsData(ticker).subscribe((data: EarningsData[]) => {
@@ -291,7 +300,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
       this.stockService.setState(this.state);
       this.drawRecommendationChart(this.state.recommendationChartData);
     }, error => {
-      console.error('Error fetching top news', error);
+      console.error('Error fetching recommendation charts', error);
     });
 
   }
@@ -322,7 +331,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  drawPriceChart(stockData: any): void {
+  drawPriceChart(stockData: any, stockQuote: any): void {
     this.historicalChartOptions = {
       chart: {
         backgroundColor: 'rgba(0, 0, 0, 0.05)'
@@ -370,6 +379,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
           type: 'line',
           name: this.stockProfile.ticker,
           data: stockData["stockPriceData"],
+          color: stockQuote.c >= 0? "green": "red",
           yAxis: 0,
           threshold: null,
           tooltip: {
@@ -728,7 +738,7 @@ export class SearchDetailsComponent implements OnInit, OnDestroy {
         if (JSON.stringify(this.stockProfile) === '{}') {
           this.tickerNotFound = true;
         }
-        return this.stockService.getHighCharts(ticker);
+        return new Observable();
       })
     );
     

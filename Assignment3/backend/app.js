@@ -144,29 +144,25 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
   const ticker = req.params.ticker;
   const multiplier = 1;
   const timespan = 'hour';
-
   // Calculate 6 months and 1 day ago date
-  const currentDate = new Date();
-  const fromDate = new Date();
-  fromDate.setMonth(currentDate.getMonth() - 6);
-  fromDate.setDate(fromDate.getDate() - 1);
-
-  const toDateString = currentDate.toISOString().split('T')[0];
-  const fromDateString = fromDate.toISOString().split('T')[0];
-
-  const finnhubApi = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${fromDateString}/${toDateString}?adjusted=true&sort=asc&apiKey=${process.env.POLYGON_API_KEY}`;
-
+  const currentDate = req.query.to;
+  const fromDate = req.query.from;
+  const finnhubApi = `https://api.polygon.io/v2/aggs/ticker/${ticker}/range/${multiplier}/${timespan}/${fromDate}/${currentDate}?adjusted=true&sort=asc&apiKey=${process.env.POLYGON_API_KEY}`;
   try {
     const response = await fetch(finnhubApi);
     if (!response.ok) {
       throw new Error(`Error from Polygon API: ${response.statusText}`);
     }
     const data = await response.json();
-
-    const formattedData = {
+    let formattedData = {
+    }
+    if(data.results){
+    formattedData = {
       stockPriceData: data.results.map(point => [point.t, point.c]),
       volumeData: data.results.map(point => [point.t, point.v])
-    };
+    }
+  }
+
 
     res.json(formattedData);
   } catch (error) {

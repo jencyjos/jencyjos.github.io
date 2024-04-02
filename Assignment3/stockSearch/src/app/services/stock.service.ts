@@ -60,8 +60,10 @@ import { Observable } from 'rxjs';
       return this.http.get<any[]>(`${this.apiUrl}/api/watchlist`);
     }
 
-    getHighCharts(ticker: string): Observable<any[]> {
-      return this.http.get<any[]>(`${this.chartsUrl}/${ticker}`);
+    getHighCharts(ticker: string, from: string, to: string): Observable<any[]> {
+      console.log(`${this.chartsUrl}/${ticker}?from=${from}&to=${to}`);
+      return this.http.get<any[]>(`${this.chartsUrl}/${ticker}?from=${from}&to=${to}`);
+      
     }
 
     getSmaCharts(ticker: string): Observable<any[]> {
