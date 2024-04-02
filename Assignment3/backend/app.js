@@ -161,9 +161,7 @@ app.get('/api/stock/historical/:ticker', async (req, res) => {
       volumeData: data.results.map(point => [point.t, point.v])
     }
   }
-
-
-    res.json(formattedData);
+res.json(formattedData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
